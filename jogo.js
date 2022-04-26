@@ -20,6 +20,7 @@ const infoMusica = document.querySelector('#infoMusica');
 const play = document.querySelector('#play');
 const modalAjuda = document.querySelector('#modalAjuda');
 const opcaoAjuda = document.querySelector('#opcaoAjuda');
+const opcaoMenu = document.querySelector('#opcaoMenu');
 const btnEntendi = document.querySelector('#btnEntendi');
 
 let elementosLinhasPagina = ['linha-central-vertical', 'linha-central-horizontal', 'linha-lateral-direita', 'linha-lateral-esquerda', 'linha-recentralizadora-direita', 'linha-recentralizadora-esquerda', 'primeiro-canto', 'segundo-canto', 'terceiro-canto', 'quarto-canto', 'cruz', 'cruz-quebrada-direita', 'cruz-quebrada-esquerda', 't'];
@@ -785,3 +786,8 @@ btnEntendi.addEventListener('click', () => {
     modalAjuda.style.setProperty('display', 'none');
     temporizador();
 })
+
+opcaoMenu.addEventListener('click', () => {
+    modalInicial.style.setProperty('display', 'flex');
+    clearInterval(intervaloTemporizador);
+});

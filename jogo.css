@@ -144,7 +144,7 @@ button:hover {
 	display: none;
 }
 
-#opcaoAjuda:hover {
+#opcaoAjuda:hover, #opcaoMenu:hover {
 	cursor: pointer;
 	text-decoration: underline;
 }
