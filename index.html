@@ -24,89 +24,9 @@
 
 <div id="toast"></div>
 
-<div class="bg-modal" id="modalAjuda">
-	<div class="modal">
-		<div class="texto">
-			<h2>Como jogar?</h2>
-			<p>O objetivo do jogo é tornar o circuito verdadeiro. Para isso, você deve fazer a corrente elétrica chegar até o final.</p>
-			<p>Clique no 1 para ativar a linha acima e clique no 0 para desativá-la.</p>
-			<p>A porta <strong>AND</strong>, ilustrada abaixo, exige que as duas linhas que se conectam a ela estejam ativas.</p>
-			<img class="ilustracao" src="media/elementos/and-preto.png">
-			<table>
-				<caption>Tabela Verdade - AND</caption>
-				<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-				<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
-				<tr><td>0</td><td>0</td><td>Falso</td></tr>
-				<tr><td>0</td><td>1</td><td>Falso</td></tr>
-				<tr><td>1</td><td>0</td><td>Falso</td></tr>
-			</table>
-			<p>A porta <strong>OR</strong>, ilustrada abaixo, exige que pelo menos uma linha que se conecta a ela esteja ativa.</p>
-			<img class="ilustracao" src="media/elementos/or-preto.png">
-			<table>
-				<caption>Tabela Verdade - OR</caption>
-				<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-				<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
-				<tr><td>0</td><td>0</td><td>Falso</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
-			</table>
-			<p>A porta <strong>NOT</strong> inverte o valor da linha conectada a ela. Se estiver ativa, então ela ficará desativada. Se estiver desativada, então ela ficará ativada.</p>
-			<img class="ilustracao" src="media/elementos/not-preto.png">
-			<table>
-				<caption>Tabela Verdade - NOT</caption>
-				<tr><th>Entrada</th><th>Saída</th></tr>
-				<tr class="linha-verdadeira-tabela"><td>0</td><td>Verdadeiro</td></tr>
-				<tr><td>1</td><td>Falso</td></tr>
-			</table>
-			<p>A porta <strong>XOR</strong> exige que só uma conexão esteja ativa.</p>
-			<img class="ilustracao" src="media/elementos/xor-preto.png">
-			<table>
-				<caption>Tabela Verdade - XOR</caption>
-				<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-				<tr><td>1</td><td>1</td><td>Falso</td></tr>
-				<tr><td>0</td><td>0</td><td>Falso</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
-			</table>
-			<p>A porta <strong>NOR</strong> exige que nenhuma conexão esteja ativa.</p>
-			<img class="ilustracao" src="media/elementos/nor-preto.png">
-			<table>
-				<caption>Tabela Verdade - NOR</caption>
-				<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-				<tr><td>1</td><td>1</td><td>Falso</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
-				<tr><td>0</td><td>1</td><td>Falso</td></tr>
-				<tr><td>1</td><td>0</td><td>Falso</td></tr>
-			</table>
-			<p>A porta <strong>XNOR</strong> exige que ou ambas as conexões estejam ativas ou ambas estejam falsas.</p>
-			<img class="ilustracao" src="media/elementos/xnor-preto.png">
-			<table>
-				<caption>Tabela Verdade - XNOR</caption>
-				<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-				<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
-				<tr><td>0</td><td>1</td><td>Falso</td></tr>
-				<tr><td>1</td><td>0</td><td>Falso</td></tr>
-			</table>
-			<p>A porta <strong>NAND</strong> só será falsa se ambas as suas conexões forem verdadeiras.</p>
-			<img class="ilustracao" src="media/elementos/xnor-preto.png">
-			<table>
-				<caption>Tabela Verdade - NAND</caption>
-				<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-				<tr><td>1</td><td>1</td><td>Falso</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
-				<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
-			</table>
-			<p>Cada circuito possui um tempo determinado <i class="tempo bi bi-hourglass-split"></i>. Se o tempo acabar, você perde. Além disso, eles também possuem uma quantidade de bateria disponível <i class="bateria bi bi-battery-charging"></i>. Isso significa que a cada clique dado, você perde uma bateria. Se as baterias acabarem você perde.</p>
-			<p>A ideia é resolver o circuito no menor tempo possível e com a menor quantidade de cliques. Boa sorte.</p>
-			<button id="btnEntendi">Entendi</button>
-		</div>		
-	</div>
-</div>
-
 <div class="bg-modal" id="modalInicial">
 	<div class="modal">
+		<i id="iconeFecharModalInicial" class="bi bi-x icone-fechar-modal"></i>
 		<img id="logo" src="media/logo.png">
 		<div class="texto">
 			<details>
@@ -196,12 +116,16 @@
 				<h3>Modo de jogo:</h3>
 				<p><input type="radio" name="radioModoJogo" id="modoProgressivo" value="progressivo" checked><label for="modoProgressivo"> Progressivo <span class="explicacao">(até onde você consegue chegar)</span></label></p>
 				<p><input type="radio" name="radioModoJogo" id="modoInfinito" value="infinito"><label for="modoInfinito"> Infinito</label></p>
-				<p><input type="radio" name="radioModoJogo" id="modoTreino" value="treino"><label for="modoTreino"> Treino <span class="explicacao">(exibe os portões individualmente, sem limite de bateria)</span></label></p>
+				<p><input type="radio" name="radioModoJogo" id="modoTreino" value="treino"><label for="modoTreino"> Treino <span class="explicacao">(exibe os portões individualmente, com muita bateria e tempo disponíveis)</span></label></p>
 				<p>Personalizado <span class="explicacao">(<a href="criador.html">clique aqui</a> para criar seu próprio conjunto de circuitos)</span></p>
 			</div>
 
-			<button id="btnJogar">Jogar!</button>
+			<div id="divDesativarEfeitosSonoros">
+				<p><input type="checkbox" name="checkboxDesativarEfeitosSonoros" id="checkboxDesativarEfeitosSonoros"> <label for="checkboxDesativarEfeitosSonoros">Desativar efeitos sonoros</label></p>
+			</div>
 
+			<button id="btnJogar">Novo jogo!</button><br>
+			<button id="btnVoltar">Voltar à partida</button>
 
 			<div id="creditos">
 				<p>Créditos pela foto de fundo para <a href="https://www.instagram.com/frankconephotos/" target="_blank">Frank Cone</a> no <a href="https://www.pexels.com/pt-br" target="_blank">Pexels</a></p>
@@ -231,9 +155,6 @@
 			<p class="pGenerico" id="pPontuacao"><i class="pontuacao bi bi-hand-thumbs-up"></i> <span id="pontuacao" title="pontuação">0</span></p>
 			<p class="pGenerico"><i class="bateria bi bi-battery-charging"></i> <span id="bateria" title="bateria">0</span></p>
 			<p class="pGenerico"><i class="tempo bi bi-hourglass-split"></i> <span id="tempo" title="tempo">...</span></p>
-		</div>
-		<div>
-			<p class="pGenerico" id="opcaoAjuda"><i class="bi bi-info-circle"></i> Ajuda</p>
 		</div>
 	</div>
 	<div id="jogo">

@@ -141,6 +141,15 @@ button:hover {
 	position: relative;
 }
 
+.icone-fechar-modal {
+	display: block;
+	position: absolute;
+	top: 5%;
+	right: 5%;
+	font-size: 2rem;
+	cursor: pointer;
+}
+
 .modal p {
 	max-width: 65ch;
 	text-align: justify;
@@ -168,7 +177,14 @@ button:hover {
 	display: none;
 }
 
-#modalAjuda {
+#divDesativarEfeitosSonoros {
+	background-color: lightyellow;
+	padding: 1rem;
+	border-radius: 1rem;
+}
+
+#btnVoltar {
+	background-color: dodgerblue;
 	display: none;
 }
 
@@ -203,6 +219,13 @@ h3 {
 #modalInicial input, #modalInicial label {
 	color: #212121;
 	cursor: pointer;
+}
+
+#modalInicial #iconeModalInicial {
+	position: fixed;
+	top: 5%;
+	right: 5%;
+	font-size: 2rem;
 }
 
 #creditos {
@@ -505,10 +528,11 @@ span.explicacao {
 	}
 
 	#jogo {
-		margin-top: 1rem;
+		margin-top: 2.5rem;
 	}
 
 	#informacoesSuperiores {
+		margin-top: 2.5rem;
 		display: flex;
 		justify-content: space-around;
 		align-items: space-around;
