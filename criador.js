@@ -289,8 +289,7 @@ function estadosIguais(estado1, estado2) {
 function criaTodasPossibilidadesSolucao(posicaoElementosIniciais) {
 	let quantidadeNecessaria = Math.pow(2, posicaoElementosIniciais.length);
 	let respostasPossiveisValidas = [];
-	console.log('QUANTIDADE NECESSÁRIA:');
-	console.log(quantidadeNecessaria);
+	
 	do {
 		let estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
 	    for (let i = 0; i < posicaoElementosIniciais.length; i++) {
