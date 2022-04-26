@@ -242,6 +242,7 @@ for (let i = 0; i < espacosElementos.length; i++) {
 			}
 			limpaElementos();
 			exibeToast('Elemento inserido e conexão informada com sucesso.', 'purple');
+			verificarSolucoesPossiveis();
 		} else {
 			const music = new Audio('efeitos-sonoros/1.wav'); music.play(); music.loop = false;
 			exibeToast('Primeiro selecione um elemento para inserir no espaço vazio.', 'brown');
@@ -335,8 +336,7 @@ function defineInputsCircuito(estadoInicial) {
 	});
 }
 
-const btnVerificarSolucoesPossiveis = document.querySelector('#btnVerificarSolucoesPossiveis');
-btnVerificarSolucoesPossiveis.addEventListener('click', () => {
+function verificarSolucoesPossiveis() {
 	let respostasPossiveisValidas = criaTodasPossibilidadesSolucao(posicaoElementosIniciais);
 	let solucoesPossiveis = [];
 	for (let i = 0; i < respostasPossiveisValidas.length; i++) {
@@ -358,8 +358,7 @@ btnVerificarSolucoesPossiveis.addEventListener('click', () => {
 
 	codigoFinal.solucoesPossiveis = solucoesPossiveis;
 	codigo.value = JSON.stringify(codigoFinal);
-	exibeToast('Soluções possíveis geradas com sucesso.', 'purple');
-});
+}
 
 function propaga(circuitoJSON) {
 	const inputs = [... document.querySelectorAll('.input')];
