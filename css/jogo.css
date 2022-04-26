@@ -1,0 +1,569 @@
+:root {
+	--dimensaoElemento: 35px;
+	--elementosPorColuna: 10;
+}
+
+* {
+	font-family: monospace;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: seagreen;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: tomato;
+}
+
+::-moz-selection { /* para Firefox */
+    background-color: seagreen;
+    color: white;
+  }
+  
+::selection {
+	background-color: seagreen;
+    color: white;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	background-color: #111;
+	background: url('../media/bg.jpg');
+	overflow: hidden;
+	background-size: 250%;
+	animation: moveBg 10s infinite;
+}
+
+table {
+	border-collapse: collapse;
+	color: #fff;
+	margin: 0 auto;
+}
+
+table caption {
+	margin-top: 2rem;
+	color: #606060;
+	font-weight: bolder;
+}
+
+table td, th {
+	border: 1px solid #fff;
+	padding: .5rem;
+}
+
+tr {
+	background-color: tomato;
+}
+
+th {
+	background-color: #212121;
+}
+
+.linha-verdadeira-tabela {
+	background-color: seagreen;
+}
+
+#elementosPagina {
+	display: none;
+}
+
+#toast {
+	position: fixed;
+	top: 2.5%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 75%;
+	padding: 1rem;
+	border-radius: 1rem;
+	background-color: #000;
+	box-shadow: 0 0 100px #fff;
+	z-index: 100;
+	display: none;
+	text-align: center;
+	color: #fff;
+	font-size: 1.5rem;
+}
+
+#toast img {
+	width: 25px;
+	height: auto;
+}
+
+.alinhados {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+button {
+	background-color: seagreen;
+	color: #fff;
+	padding: 1rem;
+	border: none;
+	border-radius: 1rem;
+	font-size: 3rem;
+}
+
+button:hover {
+	cursor: pointer;
+	opacity: .75;
+	transform: scale(1.1);
+	transition: 1s;
+}
+
+.ilustracao {
+	width: 100px;
+}
+
+.bg-modal {
+	z-index: 100;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100vw;
+	background-color: rgba(0, 0, 0, .75);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal {
+	background-color: #fff;
+	padding: 2rem;
+	border-radius: 1rem;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 75vh;
+	width: 75%;
+	position: relative;
+}
+
+.modal p {
+	max-width: 65ch;
+	text-align: justify;
+	font-size: 1.2rem;
+}
+
+.modal .texto {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal #logo {
+	max-width: 100%;
+	display: block;
+	margin: 0 auto;
+}
+
+.bg-modal #btnJogar {
+	margin-top: 2rem;
+}
+
+#modalFinal {
+	display: none;
+}
+
+#modalAjuda {
+	display: none;
+}
+
+#opcaoAjuda:hover, #opcaoMenu:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+summary {
+	background-color: seagreen;
+	padding: 1rem;
+	text-align: center;
+	font-size: 1.5rem;
+	border-radius: 1rem;
+	color: #fff;
+	cursor: pointer;
+}
+
+details {
+	margin-top: 2rem;
+	padding: 1rem;
+	border: 1px dashed #ccc;
+	text-align: center;
+}
+
+h3 {
+	padding: 1rem;
+	background-color: tomato;
+	color: #fff;
+}
+
+#modalInicial input, #modalInicial label {
+	color: #212121;
+	cursor: pointer;
+}
+
+#creditos {
+	font-size: .75rem;
+	margin: 3rem 0 0 0;
+	color: #606060;
+}
+
+#creditos p {
+	margin: 0;
+}
+
+#creditos a {
+	color: seagreen;
+	text-decoration: none;
+	font-weight: bolder;
+}
+
+span.explicacao {
+	color: #606060;
+}
+
+@keyframes moveBg {
+	0% {
+		background-position: 0% 0%;
+	}
+	50% {
+		background-position: 0% 50%;
+	}
+	75% {
+		background-position: 50% 75%;
+	}
+	90% {
+		background-position: 75% 50%;
+	}
+	100% {
+		background-position: 0% 0%;
+	}
+}
+
+#jogo {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, .9);
+	overflow: hidden;
+	border-radius: 1rem;
+	width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
+	font-size: 1.5rem;
+	margin-top: 1rem;
+}
+
+.infoJogo {
+	font-size: 3rem;
+}
+
+.infoJogo #estrelas span {
+	font-size: 3rem;
+	display: block;
+	margin-bottom: 1rem;
+	text-align: center;
+}
+
+.infoJogo i.tempo {
+	color: tomato;
+	animation: moveTempo 2s infinite;
+	display: inline-block;
+}
+
+.infoJogo i.pontuacao {
+	color: seagreen;
+}
+
+@keyframes moveTempo {
+	0% {
+		transform: rotateX(0deg);
+	}
+	50% {
+		transform: rotateX(180deg);
+	}
+	100% {
+		transform: rotateX(360deg);
+	}
+}
+
+.infoJogo i.estrela {
+	color: yellow;
+}
+
+.bi-star-fill {
+	display: inline-block;
+	animation: pulso 1s infinite;	
+}
+
+@keyframes pulso {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.25);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.infoJogo i.bateria {
+	color: dodgerblue;
+}
+
+.infoJogo p {
+	color: #fff;
+	margin: 5px;
+}
+
+#output, #input, #solucaoPerfeita {
+	width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
+	background-color: #aaa;
+	text-align: center;
+	font-weight: bolder;
+	line-height: 200%;
+}
+
+#input, #solucaoPerfeita {
+	display: grid;
+	grid-template-columns: repeat(var(--elementosPorColuna), 1fr);
+}
+
+.input, .input-solucao-perfeita {
+	cursor: pointer;
+	user-select: none;
+}
+
+#input {
+	background-color: #000;
+	color: tomato;
+	border-top: 1px solid white;
+}
+
+.input {
+	border-right: 1px solid white;
+}
+
+.input:last-child {
+	border: none;
+}
+
+#output {
+	text-transform: uppercase;
+	background-color: #000;
+	color: #fff;
+}
+
+#circuito {
+	display: grid;
+	grid-template-columns: repeat(var(--elementosPorColuna), 1fr);
+	width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
+	text-align: center;
+}
+
+#circuito div, #circuito img {
+	height: var(--dimensaoElemento);
+	width: var(--dimensaoElemento);
+	color: #aaa;
+}
+
+.espacoElemento {
+	background-size: cover;
+}
+
+#btnProximo, #estrelas {
+	display: none;
+}
+
+#btnProximo {
+	position: fixed;
+	bottom: 2%;
+	right: 2%;
+}
+
+#mensagem {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: brown;
+	color: #fff;
+	padding: 1.5rem;
+	font-size: 2rem;
+	border-radius: 1rem;
+	width: 75%;
+	text-align: center;
+	box-shadow: 0 0 100px black;
+	border: 5px solid #fff;
+	z-index: 10;
+}
+
+#infoMusica {
+	z-index: 5;
+	background-color: seagreen;
+	color: #fff;
+	padding: 1rem;
+	border-radius: 1rem;
+	border: 2px solid #fff;
+	position: fixed;
+	top: 50%;
+	left: 90%;
+	transform: translate(-90%, -50%);
+	width: 10vw;
+	display: none;
+}
+
+#pMusica, #pFase, #pDesempenho, .pGenerico {
+	color: #fff;
+	padding: .75rem;
+	border-radius: 1rem;	
+}
+
+#pMusica {
+	background-color: dodgerblue;
+}
+
+#pFase {
+	background-color: seagreen;
+}
+
+#pDesempenho {
+	background-color: orange;
+}
+
+.pGenerico {
+	outline: 1px solid white;
+	text-align: center;
+}
+
+#opcaoMenu {
+	background-color: #000;
+	color: #fff;
+	padding: 1rem;
+	margin: 0;
+	font-size: 2rem;
+	text-align: center;
+	position: fixed;
+	top: 0;
+	right: 0;
+	border-radius: 0 0 0 1rem;
+}
+
+#play {
+	cursor: pointer;
+}
+
+@media (min-width: 1500px) {
+	:root {
+		--dimensaoElemento: 50px;
+	}
+	.infoJogo {
+		font-size: 5rem;
+	}
+
+	#output, .input {
+		height: 50px;
+		font-size: 3rem;
+		line-height: 150%;
+	}
+
+	.input, #ouput {
+		font-size: 3rem !important;
+	}
+}
+
+@media (max-width: 1000px) {
+	:root {
+		--dimensaoElemento: 35px;
+	}
+
+	body {
+		overflow: scroll;
+	}
+
+	#opcaoMenu {
+		background-color: #000;
+		color: #fff;
+		padding: 1rem;
+		margin: 0;
+		font-size: 2rem;
+		text-align: center;
+		position: relative;
+		top: 0;
+		right: 0;
+		border-radius: 0;
+	}
+
+	.alinhados {
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	#jogo {
+		margin-top: 1rem;
+	}
+
+	#informacoesSuperiores {
+		display: flex;
+		justify-content: space-around;
+		align-items: space-around;
+		width: 100%;
+	}
+
+	#estrelas {
+		position: fixed;
+		width: 75%;
+		font-size: 2rem;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: rgba(0, 0, 0, .9);
+		padding: 1rem;
+		border-radius: 1rem;
+		border: 2px solid #fff;
+		text-align: center;
+	}
+
+	#infoMusica {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: auto;
+	}
+
+	.infoJogo {
+		font-size: 1.25rem;
+	}
+
+	#output, .input {
+		height: 35px;
+		font-size: 1.25rem;
+		line-height: 250%;
+	}
+
+}
+
+@media (max-width: 500px) {
+	:root {
+		--dimensaoElemento: 25px;
+	}
+	.infoJogo {
+		font-size: 1rem;
+	}
+
+	.input, #ouput {
+		font-size: 1rem !important;
+	}
+
+	.alinhados {
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+		height: auto;
+	}
+}
