@@ -59,20 +59,14 @@ function objetoElemento() {
 	};
 }
 
-let conexaoInformada = true;
 elementos.forEach(elemento => {
 	elemento.addEventListener('click', () => {
-		if (conexaoInformada) {
-			houveElementoAutomatico = false;
-			const music = new Audio('efeitos-sonoros/0.wav'); music.play(); music.loop = false;
-			limpaElementos();
-			elementoClicado = elemento.getAttribute('title');
-			elementoCriado = objetoElemento();
-			elemento.style.border = '2px solid seagreen';
-		} else {
-			const music = new Audio('efeitos-sonoros/fracasso.wav'); music.play(); music.loop = false;
-			exibeToast('Primeiro informe a conexão ou as conexões para o elemento inserido.', 'brown');
-		}
+		houveElementoAutomatico = false;
+		const music = new Audio('efeitos-sonoros/0.wav'); music.play(); music.loop = false;
+		limpaElementos();
+		elementoClicado = elemento.getAttribute('title');
+		elementoCriado = objetoElemento();
+		elemento.style.border = '2px solid seagreen';
 	})
 });
 
@@ -80,17 +74,12 @@ document.addEventListener("keypress", function(event) {
 	if (event.keyCode === 49) {
 		elementos.forEach(elemento => {
 			if (elemento.getAttribute('title') === 'linha-central-vertical') {
-				if (conexaoInformada) {
-					houveElementoAutomatico = false;
-					const music = new Audio('efeitos-sonoros/0.wav'); music.play(); music.loop = false;
-					limpaElementos();
-					elementoClicado = elemento.getAttribute('title');
-					elementoCriado = objetoElemento();
-					elemento.style.border = '2px solid seagreen';
-				} else {
-					const music = new Audio('efeitos-sonoros/fracasso.wav'); music.play(); music.loop = false;
-					exibeToast('Primeiro informe a conexão ou as conexões para o elemento inserido.', 'brown');
-				}				
+				houveElementoAutomatico = false;
+				const music = new Audio('efeitos-sonoros/0.wav'); music.play(); music.loop = false;
+				limpaElementos();
+				elementoClicado = elemento.getAttribute('title');
+				elementoCriado = objetoElemento();
+				elemento.style.border = '2px solid seagreen';				
 			}
 		});		
 	}
@@ -122,11 +111,47 @@ function criaElementoAutomatico(indice) {
 	houveElementoAutomatico = true;
 }
 
+function criaConexaoElemento(indice, nomeElemento) {
+	if (indice < 140) {
+		// elementos que se conectam no elemento abaixo e tão somente no elemento abaixo
+		if (nomeElemento === 'linha-central-vertical' || nomeElemento === 'cruz' || nomeElemento === 'cruz-quebrada-esquerda' || nomeElemento === 'cruz-quebrada-direita' || nomeElemento === 't' || nomeElemento === 'not') {
+			return [indice + 10];
+		}
+		// elementos que se conectam a algum elemento ao lado
+		if (nomeElemento === 'linha-central-horizontal') {
+			if (espacosElementos[indice - 1].classList.contains('elemento-presente')) {
+				return [indice - 1];
+			} else {
+				return [indice + 1];
+			}
+		}
+
+		// elementos que se conectam à esquerda
+		if (nomeElemento === 'primeiro-canto' || nomeElemento === 'quarto-canto') {
+			return [indice - 1];
+		}
+
+		// elementos que se conectam à direita
+		if (nomeElemento === 'segundo-canto' || nomeElemento === 'terceiro-canto') {
+			return [indice + 1];
+		}
+
+
+		// elementos que se conectam a dois outros elementos imediatamente abaixo (isto é, elementos complexos)
+		if (nomeElemento === 'and' || nomeElemento === 'or' || nomeElemento === 'xor' || nomeElemento === 'xnor' || nomeElemento === 'nor' || nomeElemento === 'nand') {
+			return [indice + 10, indice + 10 + 1];
+		}
+	} else {
+		return [];
+	}
+}
+
 let posicaoElementosIniciais = [];
 for (let i = 0; i < espacosElementos.length; i++) {
 	espacosElementos[i].addEventListener('click', () => {
 		if (elementoClicado) {
 			const music = new Audio('efeitos-sonoros/1.wav'); music.play(); music.loop = false;
+			let conexao = criaConexaoElemento(i, elementoClicado);
 			switch(elementoClicado) {
 				case 'and':
 					espacosElementos[i].style.backgroundImage = "url('elementos/primeiro-and.png')";
@@ -201,8 +226,9 @@ for (let i = 0; i < espacosElementos.length; i++) {
 					break;
 			}
 			espacosElementos[i].classList.add('elemento-presente');
-			elementoCriado['elemento'] = elementoClicado;
-			elementoCriado['posicao'] = i;
+			elementoCriado.elemento = elementoClicado;
+			elementoCriado.posicao = i;
+			elementoCriado.conexao = conexao;
 			if (elementoClicado !== 'remove') {
 				listaElementos.push(elementoCriado);
 
@@ -210,29 +236,15 @@ for (let i = 0; i < espacosElementos.length; i++) {
 					listaElementos.push(elementoAutomatico);
 				}
 
-				if (i < 140) {
-					conexaoInformada = false;
-					exibeToast('Informe a conexão ou as conexões para esse elemento.', 'brown');
-				} else {
-					exibeToast('Não é preciso informar conexão para esse elemento.', 'darkblue');
+				if (i >= 140) {
 					posicaoElementosIniciais.push(i);
 				}				
 			}
 			limpaElementos();
+			exibeToast('Elemento inserido e conexão informada com sucesso.', 'purple');
 		} else {
 			const music = new Audio('efeitos-sonoros/1.wav'); music.play(); music.loop = false;
-			if (espacosElementos[i].classList.contains('elemento-presente')) {
-				if (houveElementoAutomatico) {
-					listaElementos[listaElementos.length - 2]['conexao'].push(i);
-					exibeToast(`Conexão informada para ${formataNomes(listaElementos[listaElementos.length - 2]['elemento'])}.`);
-				} else {
-					listaElementos[listaElementos.length - 1]['conexao'].push(i);
-					exibeToast(`Conexão informada para ${formataNomes(listaElementos[listaElementos.length - 1]['elemento'])}.`);
-				}
-				conexaoInformada = true;
-			} else {
-				exibeToast('Primeiro selecione um elemento para inserir no espaço vazio.', 'purple');
-			}
+			exibeToast('Primeiro selecione um elemento para inserir no espaço vazio.', 'brown');
 		}
 		codigoFinal.listaElementos = listaElementos;
 		codigoFinal.posicaoElementosIniciais = posicaoElementosIniciais;
@@ -272,7 +284,7 @@ function exibeToast(conteudo, bg = 'seagreen') {
 	toast.innerText = conteudo;
 	setTimeout(() => {
 		toast.style.setProperty('display', 'none');
-	}, 1000);
+	}, 3000);
 }
 
 function estadosIguais(estado1, estado2) {
