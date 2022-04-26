@@ -693,24 +693,11 @@ function alteraOutput() {
             exibeEstrelas();
             calculaDesempenho();
             lidaTotalPerfeitos(false);
-            switch(totalPerfeitos) {
-                case 3:
-                    exibeToast('Impressionante. 3 perfeitos seguidos!', 3);
-                    break;
-                case 5:
-                    exibeToast('Uau! 5 perfeitos seguidos!', 5);
-                    break;
-                case 10:
-                    exibeToast('Incrível! 10 perfeitos seguidos!', 10);
-                    break;
-                case 15:
-                    exibeToast('Fabuloso! 15 perfeitos seguidos!', 15);
-                    break;
-                case 25:
-                    exibeToast('Estou sem palavras. 25 perfeitos seguidos!', 25);
-                    break;
-                case 50:
-                    exibeToast('Você é mesmo humano? 50 perfeitos seguidos!', 50);
+
+            let elogios = ['Uau!', 'Incrível!', 'Fabuloso!', 'Impressionante.', 'Estou sem palavras.', 'Você é mesmo humano?'];
+            if (totalPerfeitos % 3 === 0) {
+                let elogio = elogios[getRandomIntInclusive(0, elogios.length - 1)];
+                exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos);
             }
         }
 	} else {
@@ -765,6 +752,10 @@ function exibeToast(mensagem, valor) {
 	} else {
 		const music = new Audio('efeitos-sonoros/fogo-2.wav'); music.play(); music.loop = false;
 	}
+
+    if (valor > 10) {
+        valor = 10;
+    }
 
 	for (let i = 0; i < valor; i++) {
 		let img = document.createElement('img');
