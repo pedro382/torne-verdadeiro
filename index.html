@@ -88,7 +88,7 @@
 				<p><input type="radio" name="radioModoJogo" id="modoProgressivo" value="progressivo" checked><label for="modoProgressivo"> Progressivo <span class="explicacao">(até onde você consegue chegar)</span></label></p>
 				<p><input type="radio" name="radioModoJogo" id="modoInfinito" value="infinito"><label for="modoInfinito"> Infinito</label></p>
 				<p><input type="radio" name="radioModoJogo" id="modoTreino" value="treino"><label for="modoTreino"> Treino <span class="explicacao">(exibe os portões individualmente, sem limite de bateria)</span></label></p>
-				<p><input type="radio" name="radioModoJogo" id="modoPersonalizado" value="personalizado"><label for="modoPersonalizado"> Personalizado <span class="explicacao">(insira seu próprio conjunto de circuitos)</span></label></p>
+				<p>Personalizado <span class="explicacao">(<a href="criador.html" target="_blank">clique aqui</a> para criar seu próprio conjunto de circuitos)</span></p>
 			</div>
 
 			<button id="btnJogar">Jogar!</button>
@@ -114,10 +114,10 @@
 		<div>
 			<p><i id="play" class="bi bi-pause"></i> <span title="música">Música</span></p>
 			<p id="pFase"><i class="bi bi-boxes"></i> Fase <span id="fase" title="fase"></span></p>
-			<p><i class="bi bi-graph-up-arrow"></i> <span id="desempenho" title="desempenho">0.00%</span></p>
+			<p id="pDesempenho"><i class="bi bi-graph-up-arrow"></i> <span id="desempenho" title="desempenho">0.00%</span></p>
 		</div>
 		<div>
-			<p><i class="pontuacao bi bi-hand-thumbs-up"></i> <span id="pontuacao" title="pontuação">0</span></p>
+			<p id="pPontuacao"><i class="pontuacao bi bi-hand-thumbs-up"></i> <span id="pontuacao" title="pontuação">0</span></p>
 			<p><i class="bateria bi bi-battery-charging"></i> <span id="bateria" title="bateria">0</span></p>
 			<p><i class="tempo bi bi-hourglass-split"></i> <span id="tempo" title="tempo">...</span></p>
 		</div>

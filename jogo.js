@@ -133,12 +133,14 @@ btnJogar.addEventListener('click', () => {
     }
 
  	if (modoJogo === 'treino') {
- 		tempoInicial = 60;
+        document.querySelector('#pPontuacao').style.setProperty('display', 'none');
+        document.querySelector('#pDesempenho').style.setProperty('display', 'none');
+
+ 		tempoInicial = 1000;
  	}
 
     if (modoJogo === 'infinito' || modoJogo === 'treino') {
-        const pFase = document.querySelector('#pFase');
-        pFase.style.setProperty('display', 'none');
+        document.querySelector('#pFase').style.setProperty('display', 'none');
     }
 
     if (modoJogo === 'progressivo' || modoJogo === 'infinito') {
@@ -218,6 +220,7 @@ play.addEventListener('click', () => {
 	}
 });
 
+let circuitoAnterior;
 btnProximo.addEventListener('click', () => {
     if (modoJogo === 'progressivo') {
         if (circuitoAtual < circuitosFeitos.length - 1) {
@@ -255,7 +258,12 @@ btnProximo.addEventListener('click', () => {
             }
         }
     } else {
-        circuitoAtual = getRandomIntInclusive(0, circuitosFeitos.length - 1);
+        let circuitoSorteado;
+        do {
+            circuitoSorteado = getRandomIntInclusive(0, circuitosFeitos.length - 1);
+        } while(circuitoSorteado === circuitoAnterior);
+        circuitoAtual = circuitoSorteado;
+        circuitoAnterior = circuitoSorteado;
     }
 
     if (!fimJogo) {
@@ -680,28 +688,30 @@ function alteraOutput() {
 		vitoria = true;
 		clearInterval(intervaloTemporizador);
 		exibeBtnProximo();
-		exibeEstrelas();
-		calculaDesempenho();
-		lidaTotalPerfeitos(false);
-		switch(totalPerfeitos) {
-			case 3:
-				exibeToast('Impressionante. 3 perfeitos seguidos!', 3);
-				break;
-			case 5:
-				exibeToast('Uau! 5 perfeitos seguidos!', 5);
-				break;
-			case 10:
-				exibeToast('Incrível! 10 perfeitos seguidos!', 10);
-				break;
-			case 15:
-				exibeToast('Fabuloso! 15 perfeitos seguidos!', 15);
-				break;
-			case 25:
-				exibeToast('Estou sem palavras. 25 perfeitos seguidos!', 25);
-				break;
-			case 50:
-				exibeToast('Você é mesmo humano? 50 perfeitos seguidos!', 50);
-		}
+        if (modoJogo !== 'treino') {
+            exibeEstrelas();
+            calculaDesempenho();
+            lidaTotalPerfeitos(false);
+            switch(totalPerfeitos) {
+                case 3:
+                    exibeToast('Impressionante. 3 perfeitos seguidos!', 3);
+                    break;
+                case 5:
+                    exibeToast('Uau! 5 perfeitos seguidos!', 5);
+                    break;
+                case 10:
+                    exibeToast('Incrível! 10 perfeitos seguidos!', 10);
+                    break;
+                case 15:
+                    exibeToast('Fabuloso! 15 perfeitos seguidos!', 15);
+                    break;
+                case 25:
+                    exibeToast('Estou sem palavras. 25 perfeitos seguidos!', 25);
+                    break;
+                case 50:
+                    exibeToast('Você é mesmo humano? 50 perfeitos seguidos!', 50);
+            }
+        }
 	} else {
 		output.innerText = 'Falso';
 		output.style.backgroundColor = 'tomato';
@@ -714,7 +724,7 @@ function alteraOutput() {
 const inputs = document.querySelectorAll('.input');
 for (let i = 0; i < inputs.length; i++) {
 	inputs[i].addEventListener('click', () => {
-		if (qtdeBateria > 0 && !vitoria && !derrota) {
+		if ((qtdeBateria > 0 && !vitoria && !derrota) || modoJogo === 'treino') {
 			if (inputs[i].innerText === '0') {
 				const music = new Audio('efeitos-sonoros/1.wav'); music.play(); music.loop =false;
 				inputs[i].innerText = '1';
@@ -727,7 +737,7 @@ for (let i = 0; i < inputs.length; i++) {
 			atualizaBateria();
 			propaga(JSON.parse(circuitosFeitos[circuitoAtual]).listaElementos);
 			alteraOutput();
-		} else if (qtdeBateria === 0 && !derrota && !vitoria) {
+		} else if (qtdeBateria === 0 && !derrota && !vitoria && modoJogo !== 'treino') {
 			exibeBtnProximo()
 			const music = new Audio('efeitos-sonoros/bateria.mp3'); music.play(); music.loop = false;
 			mensagem.innerText = 'A sua bateria acabou :(';
