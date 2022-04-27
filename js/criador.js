@@ -82,6 +82,17 @@ document.addEventListener("keypress", function(event) {
 				elemento.style.border = '2px solid seagreen';				
 			}
 		});		
+	} else if (event.keyCode === 50) {
+		elementos.forEach(elemento => {
+			if (elemento.getAttribute('title') === 'remove') {
+				houveElementoAutomatico = false;
+				const music = new Audio('media/efeitos-sonoros/0.wav'); music.play(); music.loop = false;
+				limpaElementos();
+				elementoClicado = elemento.getAttribute('title');
+				elementoCriado = objetoElemento();
+				elemento.style.border = '2px solid seagreen';				
+			}
+		});		
 	}
 });
 
@@ -128,12 +139,20 @@ function criaConexaoElemento(indice, nomeElemento) {
 
 		// elementos que se conectam à esquerda
 		if (nomeElemento === 'primeiro-canto' || nomeElemento === 'quarto-canto') {
-			return [indice - 1];
+			if (!espacosElementos[indice - 1].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			} else {
+				return [indice - 1];
+			}
 		}
 
 		// elementos que se conectam à direita
 		if (nomeElemento === 'segundo-canto' || nomeElemento === 'terceiro-canto') {
-			return [indice + 1];
+			if (!espacosElementos[indice + 1].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			} else {
+				return [indice + 1];
+			}
 		}
 
 
@@ -146,106 +165,132 @@ function criaConexaoElemento(indice, nomeElemento) {
 	}
 }
 
+let primeiroElementoInformado = false;
 let posicaoElementosIniciais = [];
 for (let i = 0; i < espacosElementos.length; i++) {
 	espacosElementos[i].addEventListener('click', () => {
-		if (elementoClicado) {
+		if ((elementoClicado && !espacosElementos[i].classList.contains('elemento-presente')) || elementoClicado === 'remove') {
 			const music = new Audio('media/efeitos-sonoros/1.wav'); music.play(); music.loop = false;
 			let conexao = criaConexaoElemento(i, elementoClicado);
-			switch(elementoClicado) {
-				case 'and':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-and.png')";
-					espacosElementos[i+1].style.backgroundImage = "url('media/elementos/segundo-and.png')";
-					criaElementoAutomatico(i);
-					break;
-				case 'or':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-or.png')";
-					espacosElementos[i+1].style.backgroundImage = "url('media/elementos/segundo-or.png')";
-					criaElementoAutomatico(i);
-					break;
-				case 'xor':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-xor.png')";
-					espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-xor.png')";
-					criaElementoAutomatico(i);
-					break;
-				case 'xnor':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-xnor.png')";
-					espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-xnor.png')";
-					criaElementoAutomatico(i);
-					break;
-				case 'nor':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-nor.png')";
-					espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-nor.png')";
-					criaElementoAutomatico(i);
-					break;
-				case 'nand':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-nand.png')";
-					espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-nand.png')";
-					criaElementoAutomatico(i);
-					break;
-				case 'not':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/not.png')";
-					break;
-				case 'linha-central-vertical':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/linha-central-vertical.png')";
-					break;
-				case 'primeiro-canto':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-canto.png')";
-					break;
-				case 'segundo-canto':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/segundo-canto.png')";
-					break;	
-				case 'terceiro-canto':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/terceiro-canto.png')";
-					break;	
-				case 'quarto-canto':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/quarto-canto.png')";
-					break;	
-				case 'linha-central-horizontal':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/linha-central-horizontal.png')";
-					break;
-				case 'cruz':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/cruz.png')";
-					break;
-				case 'cruz-quebrada-esquerda':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/cruz-quebrada-esquerda.png')";
-					break;
-				case 'cruz-quebrada-direita':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/cruz-quebrada-direita.png')";
-					break;
-				case 't':
-					espacosElementos[i].style.backgroundImage = "url('media/elementos/t.png')";
-					break;
-				case 'remove':
-					espacosElementos[i].style.backgroundImage = "none";
-					for (let j = 0; j < listaElementos.length; j++) {
-						if (listaElementos[j].posicao === i) {
-							listaElementos.splice(j, 1);
+
+			let erro;
+			if (i >= 140 && elementoClicado !== 'linha-central-vertical') {
+				erro = 'O primeiro elemento informado deve ser necessariamente uma linha central vertical.';
+			} else if (i < 10) {
+				erro = 'O último elemento informado deve ser necessariamente uma linha central vertical.';
+			}
+
+			if (!primeiroElementoInformado && i < 140) {
+				erro = 'Você deve começar o circuito pelos espaços imediatamente acima dos inputs.';
+			}
+
+			if (erro) {
+				exibeToast(erro, 'brown');
+			}
+
+			if (!erro) {
+				primeiroElementoInformado = true;
+				switch(elementoClicado) {
+					case 'and':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-and.png')";
+						espacosElementos[i+1].style.backgroundImage = "url('media/elementos/segundo-and.png')";
+						criaElementoAutomatico(i);
+						break;
+					case 'or':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-or.png')";
+						espacosElementos[i+1].style.backgroundImage = "url('media/elementos/segundo-or.png')";
+						criaElementoAutomatico(i);
+						break;
+					case 'xor':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-xor.png')";
+						espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-xor.png')";
+						criaElementoAutomatico(i);
+						break;
+					case 'xnor':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-xnor.png')";
+						espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-xnor.png')";
+						criaElementoAutomatico(i);
+						break;
+					case 'nor':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-nor.png')";
+						espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-nor.png')";
+						criaElementoAutomatico(i);
+						break;
+					case 'nand':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-nand.png')";
+						espacosElementos[i + 1].style.backgroundImage = "url('media/elementos/segundo-nand.png')";
+						criaElementoAutomatico(i);
+						break;
+					case 'not':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/not.png')";
+						break;
+					case 'linha-central-vertical':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/linha-central-vertical.png')";
+						break;
+					case 'primeiro-canto':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/primeiro-canto.png')";
+						break;
+					case 'segundo-canto':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/segundo-canto.png')";
+						break;	
+					case 'terceiro-canto':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/terceiro-canto.png')";
+						break;	
+					case 'quarto-canto':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/quarto-canto.png')";
+						break;	
+					case 'linha-central-horizontal':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/linha-central-horizontal.png')";
+						break;
+					case 'cruz':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/cruz.png')";
+						break;
+					case 'cruz-quebrada-esquerda':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/cruz-quebrada-esquerda.png')";
+						break;
+					case 'cruz-quebrada-direita':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/cruz-quebrada-direita.png')";
+						break;
+					case 't':
+						espacosElementos[i].style.backgroundImage = "url('media/elementos/t.png')";
+						break;
+					case 'remove':
+						espacosElementos[i].style.setProperty('background-image', 'none');
+						espacosElementos[i].classList.remove('elemento-presente');
+						for (let j = 0; j < listaElementos.length; j++) {
+							if (listaElementos[j].posicao === i) {
+								listaElementos.splice(j, 1);
+							}
 						}
-					}
-					break;
-			}
-			espacosElementos[i].classList.add('elemento-presente');
-			elementoCriado.elemento = elementoClicado;
-			elementoCriado.posicao = i;
-			elementoCriado.conexao = conexao;
-			if (elementoClicado !== 'remove') {
-				listaElementos.push(elementoCriado);
-
-				if (houveElementoAutomatico) {
-					listaElementos.push(elementoAutomatico);
+						for (let j = 0; j < posicaoElementosIniciais.length; j++) {
+							if (posicaoElementosIniciais[j] === i) {
+								posicaoElementosIniciais.splice(j, 1);
+							}
+						}
+						break;
 				}
+				if (elementoClicado !== 'remove') {
+					espacosElementos[i].classList.add('elemento-presente');
+					elementoCriado.elemento = elementoClicado;
+					elementoCriado.posicao = i;
+					elementoCriado.conexao = conexao;
+					listaElementos.push(elementoCriado);
 
-				if (i >= 140) {
-					posicaoElementosIniciais.push(i);
-				}				
+					if (houveElementoAutomatico) {
+						listaElementos.push(elementoAutomatico);
+					}
+
+					if (i >= 140) {
+						posicaoElementosIniciais.push(i);
+					}				
+				}
+				limpaElementos();
+				exibeToast('Elemento inserido e conexão informada com sucesso.', 'purple');
+				verificarSolucoesPossiveis();
 			}
-			limpaElementos();
-			exibeToast('Elemento inserido e conexão informada com sucesso.', 'purple');
-			verificarSolucoesPossiveis();
 		} else {
 			const music = new Audio('media/efeitos-sonoros/1.wav'); music.play(); music.loop = false;
-			exibeToast('Primeiro selecione um elemento para inserir no espaço vazio.', 'brown');
+			exibeToast('Você não selecionou um elemento ou este espaço está indisponível.', 'brown');
 		}
 		codigoFinal.listaElementos = listaElementos;
 		codigoFinal.posicaoElementosIniciais = posicaoElementosIniciais;
@@ -300,26 +345,38 @@ function estadosIguais(estado1, estado2) {
 }
 
 function criaTodasPossibilidadesSolucao(posicaoElementosIniciais) {
-	let quantidadeNecessaria = Math.pow(2, posicaoElementosIniciais.length);
+	let quantidadeNecessaria;;
+	if (posicaoElementosIniciais.length > 0) {
+		quantidadeNecessaria = Math.pow(2, posicaoElementosIniciais.length);
+	} else {
+		quantidadeNecessaria = 0;
+	}
 	let respostasPossiveisValidas = [];
+
+	console.log('Posição dos elementos iniciais:');
+	console.log(posicaoElementosIniciais);
+	console.log('Quantidade de respostas possíveis ao circuito:');
+	console.log(quantidadeNecessaria);
 	
-	do {
-		let estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
-	    for (let i = 0; i < posicaoElementosIniciais.length; i++) {
-	        estadoInicial[posicaoElementosIniciais[i] - 140] = getRandomIntInclusive(0, 1).toString();
-	    }
+	if (quantidadeNecessaria > 0) {
+		do {
+			let estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
+		    for (let i = 0; i < posicaoElementosIniciais.length; i++) {
+		        estadoInicial[posicaoElementosIniciais[i] - 140] = getRandomIntInclusive(0, 1).toString();
+		    }
 
-		let jaTem = false;
-		for (let j = 0; j < respostasPossiveisValidas.length; j++) {
-			if (estadosIguais(respostasPossiveisValidas[j], estadoInicial)) {
-				jaTem = true;
+			let jaTem = false;
+			for (let j = 0; j < respostasPossiveisValidas.length; j++) {
+				if (estadosIguais(respostasPossiveisValidas[j], estadoInicial)) {
+					jaTem = true;
+				}
 			}
-		}
 
-		if (!jaTem) {
-			respostasPossiveisValidas.push(estadoInicial);
-		}
-	} while(respostasPossiveisValidas.length < quantidadeNecessaria);
+			if (!jaTem) {
+				respostasPossiveisValidas.push(estadoInicial);
+			}
+		} while(respostasPossiveisValidas.length < quantidadeNecessaria);
+	}
 
     return respostasPossiveisValidas;
 }
@@ -366,10 +423,10 @@ function propaga(circuitoJSON) {
 		if (inputs[i].innerText === '1' && (espacosElementos[i + 140].classList.contains('elementoPresente') || espacosElementos[i + 140].classList.contains('elemento-presente'))) {
 			espacosElementos[i + 140].classList.add('on');
 			espacosElementos[i + 140].style.backgroundImage = 'url("media/elementos/linha-central-vertical-on.png")';
-		} else if (espacosElementos[i + 140].classList.contains('elemento-presente')) {
+		} else if (espacosElementos[i + 140].classList.contains('elemento-presente') || espacosElementos[i + 140].classList.contains('elementoPresente')) {
 			espacosElementos[i + 140].classList.remove('on');
 			espacosElementos[i + 140].style.backgroundImage = 'url("media/elementos/linha-central-vertical.png")';
-		}	
+		}
 	}
 
 	for (let i = 0; i < circuitoJSON.length; i++) { 

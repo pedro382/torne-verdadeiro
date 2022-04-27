@@ -572,7 +572,7 @@ span.explicacao {
 
 }
 
-@media (max-width: 500px) {
+@media (max-width: 300px) {
 	:root {
 		--dimensaoElemento: 25px;
 	}
