@@ -177,10 +177,30 @@ button:hover {
 	display: none;
 }
 
-#divDesativarEfeitosSonoros {
+#configPrevias {
 	background-color: lightyellow;
 	padding: 1rem;
 	border-radius: 1rem;
+	margin: 2rem 0;
+	border: 1px dashed #606060;
+	text-align: center;
+}
+
+#configPrevias label {
+	font-weight: bolder;
+}
+
+#configPrevias input[type="number"] {
+	width: 100%;
+	border: none;
+	border-bottom: 1px solid #ccc;
+	background: transparent;
+}
+
+#configPrevias input[type="number"]:focus {
+	outline: none;
+	border: none;
+	border-bottom: 1px solid #ccc;
 }
 
 #btnVoltar {

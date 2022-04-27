@@ -176,7 +176,7 @@ for (let i = 0; i < espacosElementos.length; i++) {
 			let erro;
 			if (i >= 140 && elementoClicado !== 'linha-central-vertical') {
 				erro = 'O primeiro elemento informado deve ser necessariamente uma linha central vertical.';
-			} else if (i < 10) {
+			} else if (i < 10 && elementoClicado !== 'linha-central-vertical') {
 				erro = 'O último elemento informado deve ser necessariamente uma linha central vertical.';
 			}
 
