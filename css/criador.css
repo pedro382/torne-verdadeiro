@@ -5,6 +5,7 @@
 body {
 	background-color: black;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	padding: 0;
 	margin: 0;
 }
@@ -14,11 +15,11 @@ h1, h2, h3 {
 }
 
 h2 {
-	background-color: seagreen;
+	background-color: #000;
 	color: #fff;
 	padding: 1rem;
 	border-radius: 1rem;
-	width: 75%;
+	width: 100%;
 	margin: 2rem auto;
 }
 
@@ -36,6 +37,7 @@ h2 {
 	color: #fff;
 	text-align: center;
 	display: none;
+	text-shadow: 0 0 5px black;
 }
 
 #jogo p {
@@ -112,6 +114,38 @@ button a {
 	text-decoration: none;
 }
 
+.grupo-botoes {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	outline: 1px dashed #606060;
+	padding: 1rem;
+	margin: 5rem auto;
+	width: 75%;
+}
+
+.grupo-botoes button {
+	margin-top: 1rem;
+	padding: 1rem;
+	border-radius: 1rem;
+	font-size: 1rem;
+	text-shadow: 0 0 5px black;
+}
+
+#btnFinalizarCriacaoCircuito {
+	background-color: seagreen;
+}
+#btnExplorarCircuito {
+	background-color: orange;
+}
+#btnCriarNovoCircuito {
+	background-color: tomato;
+}
+
+#divCodigo {
+	display: none;
+}
+
 @media (max-width: 1000px) {
 	.alinhados-criador {
 		display: flex;
@@ -130,5 +164,13 @@ button a {
 
 	#jogo {
 		margin-top: 1rem;
+	}
+
+	.grupo-botoes {
+		width: 90%;
+	}
+
+	.grupo-botoes button {
+		max-width: 30%;
 	}
 }

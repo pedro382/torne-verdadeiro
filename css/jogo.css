@@ -191,16 +191,17 @@ button:hover {
 }
 
 #configPrevias input[type="number"] {
-	width: 100%;
+	width: 50%;
 	border: none;
 	border-bottom: 1px solid #ccc;
-	background: transparent;
+	border-radius: 1rem;
+	padding: 1rem;
+	font-size: 1rem;
 }
 
 #configPrevias input[type="number"]:focus {
 	outline: none;
-	border: none;
-	border-bottom: 1px solid #ccc;
+	border: 1px solid #ccc;
 }
 
 #btnVoltar {
@@ -258,7 +259,7 @@ h3 {
 	margin: 0;
 }
 
-#creditos a {
+a {
 	color: seagreen;
 	text-decoration: none;
 	font-weight: bolder;
@@ -516,6 +517,10 @@ span.explicacao {
 
 	.input, #ouput {
 		font-size: 3rem !important;
+	}
+
+	#modalInicial {
+		font-size: 2rem;
 	}
 }
 

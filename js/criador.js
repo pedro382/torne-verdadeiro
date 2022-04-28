@@ -1,3 +1,10 @@
+const loader = document.getElementById('loader');
+const mensagemLoader = document.getElementById('mensagemLoader');
+
+window.addEventListener('load', () => {
+	loader.style.display = 'none';
+});
+
 const circuito = document.querySelector('#circuito');
 const solucaoPerfeita = document.querySelector('#solucaoPerfeita');
 const output = document.querySelector('#output');
@@ -5,6 +12,11 @@ const output = document.querySelector('#output');
 const DIMENSAO_ELEMENTO = '35px';
 const ELEMENTOS_POR_COLUNA = 10;
 const QUANTIDADE_ELEMENTOS = 150;
+
+const divCodigo = document.querySelector('#divCodigo');
+const btnFinalizarCriacaoCircuito = document.querySelector('#btnFinalizarCriacaoCircuito');
+const btnExplorarCircuito = document.querySelector('#btnExplorarCircuito');
+const btnCriarNovoCircuito = document.querySelector('#btnCriarNovoCircuito');
 
 document.documentElement.style.setProperty('--dimensaoElemento', DIMENSAO_ELEMENTO);
 document.documentElement.style.setProperty('--elementosPorColuna', ELEMENTOS_POR_COLUNA);
@@ -83,6 +95,28 @@ document.addEventListener("keypress", function(event) {
 			}
 		});		
 	} else if (event.keyCode === 50) {
+		elementos.forEach(elemento => {
+			if (elemento.getAttribute('title') === 'not') {
+				houveElementoAutomatico = false;
+				const music = new Audio('media/efeitos-sonoros/0.wav'); music.play(); music.loop = false;
+				limpaElementos();
+				elementoClicado = elemento.getAttribute('title');
+				elementoCriado = objetoElemento();
+				elemento.style.border = '2px solid seagreen';				
+			}
+		});		
+	} else if (event.keyCode === 51) {
+		elementos.forEach(elemento => {
+			if (elemento.getAttribute('title') === 'and') {
+				houveElementoAutomatico = false;
+				const music = new Audio('media/efeitos-sonoros/0.wav'); music.play(); music.loop = false;
+				limpaElementos();
+				elementoClicado = elemento.getAttribute('title');
+				elementoCriado = objetoElemento();
+				elemento.style.border = '2px solid seagreen';				
+			}
+		});		
+	} else if (event.keyCode === 52) {
 		elementos.forEach(elemento => {
 			if (elemento.getAttribute('title') === 'remove') {
 				houveElementoAutomatico = false;
@@ -174,9 +208,9 @@ for (let i = 0; i < espacosElementos.length; i++) {
 			let conexao = criaConexaoElemento(i, elementoClicado);
 
 			let erro;
-			if (i >= 140 && elementoClicado !== 'linha-central-vertical') {
+			if (i >= 140 && elementoClicado !== 'linha-central-vertical' && elementoClicado !== 'remove') {
 				erro = 'O primeiro elemento informado deve ser necessariamente uma linha central vertical.';
-			} else if (i < 10 && elementoClicado !== 'linha-central-vertical') {
+			} else if (i < 10 && elementoClicado !== 'linha-central-vertical' && elementoClicado !== 'remove') {
 				erro = 'O último elemento informado deve ser necessariamente uma linha central vertical.';
 			}
 
@@ -286,7 +320,6 @@ for (let i = 0; i < espacosElementos.length; i++) {
 				}
 				limpaElementos();
 				exibeToast('Elemento inserido e conexão informada com sucesso.', 'purple');
-				verificarSolucoesPossiveis();
 			}
 		} else {
 			const music = new Audio('media/efeitos-sonoros/1.wav'); music.play(); music.loop = false;
@@ -296,13 +329,6 @@ for (let i = 0; i < espacosElementos.length; i++) {
 		codigoFinal.posicaoElementosIniciais = posicaoElementosIniciais;
 		codigo.value = JSON.stringify(codigoFinal);
 	})
-}
-
-function formataNomes(nome) {
-	nome = nome.replaceAll('-', ' ');
-	nome = nome.toUpperCase();
-
-	return nome;
 }
 
 // event listeners nos inputs de solução perfeita
@@ -330,7 +356,7 @@ function exibeToast(conteudo, bg = 'seagreen') {
 	toast.innerText = conteudo;
 	setTimeout(() => {
 		toast.style.setProperty('display', 'none');
-	}, 3000);
+	}, 5000);
 }
 
 function estadosIguais(estado1, estado2) {
@@ -344,7 +370,7 @@ function estadosIguais(estado1, estado2) {
     return iguais;
 }
 
-function criaTodasPossibilidadesSolucao(posicaoElementosIniciais) {
+function criaTodasPossibilidadesResposta(posicaoElementosIniciais) {
 	let quantidadeNecessaria;;
 	if (posicaoElementosIniciais.length > 0) {
 		quantidadeNecessaria = Math.pow(2, posicaoElementosIniciais.length);
@@ -352,11 +378,6 @@ function criaTodasPossibilidadesSolucao(posicaoElementosIniciais) {
 		quantidadeNecessaria = 0;
 	}
 	let respostasPossiveisValidas = [];
-
-	console.log('Posição dos elementos iniciais:');
-	console.log(posicaoElementosIniciais);
-	console.log('Quantidade de respostas possíveis ao circuito:');
-	console.log(quantidadeNecessaria);
 	
 	if (quantidadeNecessaria > 0) {
 		do {
@@ -381,7 +402,7 @@ function criaTodasPossibilidadesSolucao(posicaoElementosIniciais) {
     return respostasPossiveisValidas;
 }
 
-function defineInputsCircuito(estadoInicial) {
+function defineInputsCircuito(estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']) {
 	const inputs = [... document.querySelectorAll('.input')];
 	inputs.forEach((input, index) => {
 		if (estadoInicial[index] === '0') {
@@ -393,8 +414,8 @@ function defineInputsCircuito(estadoInicial) {
 	});
 }
 
-function verificarSolucoesPossiveis() {
-	let respostasPossiveisValidas = criaTodasPossibilidadesSolucao(posicaoElementosIniciais);
+function verificaSolucoesPossiveis() {
+	let respostasPossiveisValidas = criaTodasPossibilidadesResposta(posicaoElementosIniciais);
 	let solucoesPossiveis = [];
 	for (let i = 0; i < respostasPossiveisValidas.length; i++) {
 		defineInputsCircuito(respostasPossiveisValidas[i]);
@@ -528,3 +549,281 @@ function alteraOutput() {
 
 	return verdadeiro;
 }
+
+function limpaCircuito() {
+	listaElementos = [];
+	codigoFinal = {
+		listaElementos: [],
+		posicaoElementosIniciais: [],
+		solucoesPossiveis: []
+	};
+	codigo.value = '';
+	posicaoElementosIniciais = [];
+	for (let i = 0; i < espacosElementos.length; i++) {
+		espacosElementos[i].style.backgroundImage = "none";
+		espacosElementos[i].classList.remove('elemento-presente');
+		espacosElementos[i].classList.remove('elementoPresente');
+		espacosElementos[i].classList.remove('on');
+	}
+	defineInputsCircuito();
+	divCodigo.style.setProperty('display', 'none');
+}
+
+// apenas lê o array com os objetos do circuito e insere os backgrounds nas devidas posições
+function leCircuito(circuitoJSON, limpa = true) {
+	if (limpa) {
+		limpaCircuito();
+	}
+	if (!circuitoJSON.listaElementos) {
+		circuitoJSON = JSON.parse(circuitoJSON);
+	}
+	circuitoJSON = circuitoJSON.listaElementos;
+	listaElementos = circuitoJSON;
+
+	for (let i = 0; i < circuitoJSON.length; i++) {
+		let simples = false;
+		if (circuitoJSON[i].elemento === 'and') {
+			espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = "url('media/elementos/primeiro-and.png')";
+			espacosElementos[circuitoJSON[i].posicao + 1].style.backgroundImage = "url('media/elementos/segundo-and.png')";
+		} else if (circuitoJSON[i].elemento === 'or') {
+			espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = "url('media/elementos/primeiro-or.png')";
+			espacosElementos[circuitoJSON[i].posicao + 1].style.backgroundImage = "url('media/elementos/segundo-or.png')";
+		} else if (circuitoJSON[i].elemento === 'nand') {
+            espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = "url('media/elementos/primeiro-nand.png')";
+            espacosElementos[circuitoJSON[i].posicao + 1].style.backgroundImage = "url('media/elementos/segundo-nand.png')";
+        } else if (circuitoJSON[i].elemento === 'nor') {
+            espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = "url('media/elementos/primeiro-nor.png')";
+            espacosElementos[circuitoJSON[i].posicao + 1].style.backgroundImage = "url('media/elementos/segundo-nor.png')";
+        } else if (circuitoJSON[i].elemento === 'xor') {
+            espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = "url('media/elementos/primeiro-xor.png')";
+            espacosElementos[circuitoJSON[i].posicao + 1].style.backgroundImage = "url('media/elementos/segundo-xor.png')";
+        } else if (circuitoJSON[i].elemento === 'xnor') {
+            espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = "url('media/elementos/primeiro-xnor.png')";
+            espacosElementos[circuitoJSON[i].posicao + 1].style.backgroundImage = "url('media/elementos/segundo-xnor.png')";
+        } else {
+			espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = `url('media/elementos/${circuitoJSON[i].elemento}.png')`;
+			simples = true;
+		}
+
+		if (simples) {
+			espacosElementos[circuitoJSON[i].posicao].classList.add('elemento-presente');
+		} else {
+			espacosElementos[circuitoJSON[i].posicao].classList.add('elemento-presente');
+			espacosElementos[circuitoJSON[i].posicao + 1].classList.add('elemento-presente');
+		}
+	}
+	propaga(circuitoJSON);
+	alteraOutput();
+}
+
+btnFinalizarCriacaoCircuito.addEventListener('click', () => {
+	loader.style.display = 'flex';
+	setTimeout(() => {
+		verificaSolucoesPossiveis();
+		loader.style.display = 'none';
+		if (codigoFinal.solucoesPossiveis.length > 0) {
+			divCodigo.style.setProperty('display', 'block');
+			exibeToast('Circuito finalizado com sucesso.', 'seagreen');
+		} else {
+			exibeToast('Não existe solução para esse circuito.', 'tomato');
+		}
+	}, 1000);
+})
+
+function criaCombinacoesPortoes(quantidade) {
+	let portoesLogicos = ['or', 'nor', 'nand', 'xor', 'xnor'];
+	let combinacoes = [];
+	switch(quantidade) {
+		case 1:
+			combinacoes = portoesLogicos;
+			break;
+		case 2:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					combinacoes.push([portoesLogicos[i], portoesLogicos[j]]);
+				}
+			}
+			break;
+		case 3:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k]]);
+					}
+				}
+			}
+			break;
+		case 4:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						for (let l = 0; l < portoesLogicos.length; l++) {
+							combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l]]);
+						}
+					}
+				}
+			}
+			break;
+		case 5:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						for (let l = 0; l < portoesLogicos.length; l++) {
+							for (let m = 0; m < portoesLogicos.length; m++) {
+								combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m]]);
+							}
+						}
+					}
+				}
+			}
+			break;
+		case 6:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						for (let l = 0; l < portoesLogicos.length; l++) {
+							for (let m = 0; m < portoesLogicos.length; m++) {
+								for (let n = 0; n < portoesLogicos.length; n++) {
+									combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n]]);
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+		case 7:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						for (let l = 0; l < portoesLogicos.length; l++) {
+							for (let m = 0; m < portoesLogicos.length; m++) {
+								for (let n = 0; n < portoesLogicos.length; n++) {
+									for (let o = 0; o < portoesLogicos.length; o++) {
+										combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+		case 8:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						for (let l = 0; l < portoesLogicos.length; l++) {
+							for (let m = 0; m < portoesLogicos.length; m++) {
+								for (let n = 0; n < portoesLogicos.length; n++) {
+									for (let o = 0; o < portoesLogicos.length; o++) {
+										for (let p = 0; p < portoesLogicos.length; p++) {
+											combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+		case 9:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						for (let l = 0; l < portoesLogicos.length; l++) {
+							for (let m = 0; m < portoesLogicos.length; m++) {
+								for (let n = 0; n < portoesLogicos.length; n++) {
+									for (let o = 0; o < portoesLogicos.length; o++) {
+										for (let p = 0; p < portoesLogicos.length; p++) {
+											for (let q = 0; q < portoesLogicos.length; q++) {
+												combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+		case 10:
+			for (let i = 0; i < portoesLogicos.length; i++) {
+				for (let j = 0; j < portoesLogicos.length; j++) {
+					for (let k = 0; k < portoesLogicos.length; k++) {
+						for (let l = 0; l < portoesLogicos.length; l++) {
+							for (let m = 0; m < portoesLogicos.length; m++) {
+								for (let n = 0; n < portoesLogicos.length; n++) {
+									for (let o = 0; o < portoesLogicos.length; o++) {
+										for (let p = 0; p < portoesLogicos.length; p++) {
+											for (let q = 0; q < portoesLogicos.length; q++) {
+												for (let r = 0; r < portoesLogicos.length; r++) {
+													combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+	}
+
+	return combinacoes;	
+}
+
+let circuitosFeitos = [];
+btnExplorarCircuito.addEventListener('click', () => {
+	let erro;
+	let teste = JSON.stringify(codigoFinal);
+	teste = teste.replaceAll('and', '');
+
+	let totalAnds = 0;
+	for (let i = 0; i < codigoFinal.listaElementos.length; i++) {
+		if (codigoFinal.listaElementos[i].elemento === 'and') {
+			totalAnds++;
+		}
+	}
+
+	if (totalAnds > 10) {
+		erro = 'O máximo de ANDs permitidos é 10';
+	}
+
+	if (teste === JSON.stringify(codigoFinal)) {
+		erro = 'É preciso que os portões do circuito sejam apenas ANDs';
+	}
+
+	if (!erro) {
+		loader.style.display = 'flex';
+		setTimeout(() => {
+			verificaSolucoesPossiveis();
+			circuitosFeitos.push(codigoFinal);
+			let combinacoesPortoes = criaCombinacoesPortoes(totalAnds);
+			for (let i = 0; i < combinacoesPortoes.length; i++) {
+				// realiza as substituições
+				// ...
+				// encontra as soluções para o circuito feito
+				leCircuito(codigoFinal, false);
+				verificaSolucoesPossiveis();
+				circuitosFeitos.push(codigoFinal);
+			}
+
+			codigo.value = JSON.stringify(circuitosFeitos);
+			divCodigo.style.setProperty('display', 'block');
+			loader.style.display = 'none';
+		}, 1000);		
+	} else {
+		exibeToast(erro, 'brown');
+	}
+
+});
+
+btnCriarNovoCircuito.addEventListener('click', () => {
+	limpaCircuito();
+	exibeToast('Pronto, você já pode criar um novo circuito.', 'dodgerblue');
+})
