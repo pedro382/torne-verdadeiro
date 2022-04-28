@@ -138,20 +138,23 @@ function getRandomIntInclusive(min, max) {
 
 let elementoAutomatico;
 let houveElementoAutomatico = false;
+let ultimoElementoComplexo = 1;
 function criaElementoAutomatico(indice) {
 	elementoAutomatico = objetoElemento();
 	elementoAutomatico['conexao'].push(indice);
 
-	if (getRandomIntInclusive(0, 1) === 1) {
+	if (ultimoElementoComplexo % 2 === 0) {
 		elementoAutomatico['posicao'] = indice - 10;
 		espacosElementos[indice - 10].classList.add('elemento-presente');
 		elementoAutomatico['elemento'] = 'linha-recentralizadora-esquerda';
 		espacosElementos[indice - 10].style.backgroundImage = "url('media/elementos/linha-recentralizadora-esquerda.png')";
+		ultimoElementoComplexo++;
 	} else {
 		elementoAutomatico['posicao'] = indice+1 - 10;
 		espacosElementos[indice+1 - 10].classList.add('elemento-presente');
 		elementoAutomatico['elemento'] = 'linha-recentralizadora-direita';
-		espacosElementos[indice+1 - 10].style.backgroundImage = "url('media/elementos/linha-recentralizadora-direita.png')";						
+		espacosElementos[indice+1 - 10].style.backgroundImage = "url('media/elementos/linha-recentralizadora-direita.png')";
+		ultimoElementoComplexo++;						
 	}
 	houveElementoAutomatico = true;
 }
@@ -434,8 +437,7 @@ function verificaSolucoesPossiveis() {
 		}
 	}
 
-	codigoFinal.solucoesPossiveis = solucoesPossiveis;
-	codigo.value = JSON.stringify(codigoFinal);
+	return solucoesPossiveis;
 }
 
 function propaga(circuitoJSON) {
@@ -619,9 +621,10 @@ function leCircuito(circuitoJSON, limpa = true) {
 btnFinalizarCriacaoCircuito.addEventListener('click', () => {
 	loader.style.display = 'flex';
 	setTimeout(() => {
-		verificaSolucoesPossiveis();
+		codigoFinal.solucoesPossiveis = verificaSolucoesPossiveis();
 		loader.style.display = 'none';
 		if (codigoFinal.solucoesPossiveis.length > 0) {
+			codigo.value = JSON.stringify(codigoFinal);
 			divCodigo.style.setProperty('display', 'block');
 			exibeToast('Circuito finalizado com sucesso.', 'seagreen');
 		} else {
@@ -631,7 +634,7 @@ btnFinalizarCriacaoCircuito.addEventListener('click', () => {
 })
 
 function criaCombinacoesPortoes(quantidade) {
-	let portoesLogicos = ['or', 'nor', 'nand', 'xor', 'xnor'];
+	let portoesLogicos = ['and', 'or', 'nor', 'nand', 'xor', 'xnor'];
 	let combinacoes = [];
 	switch(quantidade) {
 		case 1:
@@ -800,22 +803,33 @@ btnExplorarCircuito.addEventListener('click', () => {
 
 	if (!erro) {
 		loader.style.display = 'flex';
+		let copiaCodigoFinal = JSON.stringify(codigoFinal);
+		copiaCodigoFinal = JSON.parse(copiaCodigoFinal);
 		setTimeout(() => {
-			verificaSolucoesPossiveis();
-			circuitosFeitos.push(codigoFinal);
 			let combinacoesPortoes = criaCombinacoesPortoes(totalAnds);
+			console.log(combinacoesPortoes);
 			for (let i = 0; i < combinacoesPortoes.length; i++) {
 				// realiza as substituições
-				// ...
+				let posicaoAnd = 0;
+				for (let j = 0; j < codigoFinal.listaElementos.length; j++) {
+					if (codigoFinal.listaElementos[j].elemento === 'and') {
+						copiaCodigoFinal.listaElementos[j].elemento = combinacoesPortoes[i][posicaoAnd];
+						posicaoAnd++;
+					}
+				}
+
 				// encontra as soluções para o circuito feito
-				leCircuito(codigoFinal, false);
-				verificaSolucoesPossiveis();
-				circuitosFeitos.push(codigoFinal);
+				leCircuito(copiaCodigoFinal, false);
+				copiaCodigoFinal.solucoesPossiveis = verificaSolucoesPossiveis();
+				let ultimaCopiaCircuitosFeitos = JSON.stringify(copiaCodigoFinal);
+				ultimaCopiaCircuitosFeitos = JSON.parse(ultimaCopiaCircuitosFeitos);
+				circuitosFeitos.push(ultimaCopiaCircuitosFeitos);
 			}
 
 			codigo.value = JSON.stringify(circuitosFeitos);
 			divCodigo.style.setProperty('display', 'block');
 			loader.style.display = 'none';
+			console.log(circuitosFeitos);
 		}, 1000);		
 	} else {
 		exibeToast(erro, 'brown');
