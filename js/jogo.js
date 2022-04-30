@@ -87,7 +87,97 @@ const todosCircuitos = [
             '{"listaElementos":[{"elemento":"linha-central-vertical","posicao":141,"conexao":[]},{"elemento":"linha-central-vertical","posicao":142,"conexao":[]},{"elemento":"not","posicao":131,"conexao":[141]},{"elemento":"not","posicao":132,"conexao":[142]},{"elemento":"linha-central-vertical","posicao":121,"conexao":[131]},{"elemento":"linha-central-vertical","posicao":122,"conexao":[132]},{"elemento":"or","posicao":111,"conexao":[121,122]},{"elemento":"linha-recentralizadora-esquerda","posicao":101,"conexao":[111]},{"elemento":"not","posicao":91,"conexao":[101]},{"elemento":"linha-central-vertical","posicao":81,"conexao":[91]},{"elemento":"linha-central-vertical","posicao":143,"conexao":[]},{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"not","posicao":134,"conexao":[144]},{"elemento":"linha-central-vertical","posicao":133,"conexao":[143]},{"elemento":"linha-central-vertical","posicao":124,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":123,"conexao":[133]},{"elemento":"or","posicao":113,"conexao":[123,124]},{"elemento":"linha-recentralizadora-esquerda","posicao":103,"conexao":[113]},{"elemento":"linha-central-vertical","posicao":93,"conexao":[103]},{"elemento":"linha-central-vertical","posicao":83,"conexao":[93]},{"elemento":"linha-central-vertical","posicao":71,"conexao":[81]},{"elemento":"quarto-canto","posicao":73,"conexao":[83]},{"elemento":"segundo-canto","posicao":72,"conexao":[73]},{"elemento":"and","posicao":61,"conexao":[71,72]},{"elemento":"linha-recentralizadora-esquerda","posicao":51,"conexao":[61]},{"elemento":"linha-central-vertical","posicao":41,"conexao":[51]},{"elemento":"linha-central-vertical","posicao":31,"conexao":[41]},{"elemento":"linha-central-vertical","posicao":21,"conexao":[31]},{"elemento":"linha-central-vertical","posicao":11,"conexao":[21]},{"elemento":"linha-central-vertical","posicao":1,"conexao":[11]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"linha-central-vertical","posicao":146,"conexao":[]},{"elemento":"or","posicao":135,"conexao":[145,146]},{"elemento":"linha-recentralizadora-esquerda","posicao":125,"conexao":[135]},{"elemento":"linha-central-vertical","posicao":147,"conexao":[]},{"elemento":"linha-central-vertical","posicao":148,"conexao":[]},{"elemento":"and","posicao":137,"conexao":[147,148]},{"elemento":"linha-recentralizadora-direita","posicao":128,"conexao":[137]},{"elemento":"quarto-canto","posicao":118,"conexao":[128]},{"elemento":"terceiro-canto","posicao":115,"conexao":[125]},{"elemento":"primeiro-canto","posicao":116,"conexao":[115]},{"elemento":"segundo-canto","posicao":117,"conexao":[118]},{"elemento":"not","posicao":107,"conexao":[117]},{"elemento":"linha-central-vertical","posicao":106,"conexao":[116]},{"elemento":"linha-central-vertical","posicao":97,"conexao":[107]},{"elemento":"linha-central-vertical","posicao":96,"conexao":[106]},{"elemento":"and","posicao":86,"conexao":[96,97]},{"elemento":"linha-recentralizadora-direita","posicao":77,"conexao":[86]},{"elemento":"linha-central-vertical","posicao":67,"conexao":[77]},{"elemento":"not","posicao":57,"conexao":[67]},{"elemento":"linha-central-vertical","posicao":47,"conexao":[57]},{"elemento":"linha-central-vertical","posicao":37,"conexao":[47]},{"elemento":"linha-central-vertical","posicao":27,"conexao":[37]},{"elemento":"linha-central-vertical","posicao":17,"conexao":[27]},{"elemento":"linha-central-vertical","posicao":7,"conexao":[17]},{"elemento":"linha-central-vertical","posicao":149,"conexao":[]},{"elemento":"linha-central-vertical","posicao":139,"conexao":[149]},{"elemento":"linha-central-vertical","posicao":129,"conexao":[139]},{"elemento":"linha-central-vertical","posicao":119,"conexao":[129]},{"elemento":"linha-central-vertical","posicao":109,"conexao":[119]},{"elemento":"linha-central-vertical","posicao":99,"conexao":[109]},{"elemento":"not","posicao":89,"conexao":[99]},{"elemento":"linha-central-vertical","posicao":79,"conexao":[89]},{"elemento":"linha-central-vertical","posicao":69,"conexao":[79]},{"elemento":"not","posicao":59,"conexao":[69]},{"elemento":"linha-central-vertical","posicao":49,"conexao":[59]},{"elemento":"linha-central-vertical","posicao":39,"conexao":[49]},{"elemento":"not","posicao":29,"conexao":[39]},{"elemento":"linha-central-vertical","posicao":19,"conexao":[29]},{"elemento":"linha-central-vertical","posicao":9,"conexao":[19]}],"posicaoElementosIniciais":[141,142,143,144,145,146,147,148,149],"solucoesPossiveis":[["0","1","1","1","0","0","0","0","1","0"],["0","1","1","1","1","0","1","1","1","0"],["0","1","1","0","0","1","1","1","1","0"],["0","1","1","1","0","0","0","0","0","0"],["0","1","1","1","1","0","0","1","1","0"],["0","1","1","1","1","0","0","1","0","0"],["0","1","1","0","0","0","0","0","0","0"],["0","1","1","1","0","1","1","1","1","0"],["0","1","1","1","0","0","0","1","0","0"],["0","1","1","1","1","1","1","1","1","0"],["0","1","1","1","0","0","1","1","1","0"],["0","1","1","1","0","0","0","1","1","0"],["0","1","1","0","0","1","0","1","1","0"],["0","1","1","1","1","0","0","0","0","0"],["0","1","1","0","0","0","0","0","1","0"],["0","1","1","0","0","0","0","1","0","0"],["0","1","1","0","0","0","0","1","1","0"],["0","1","1","0","0","0","1","1","1","0"],["0","1","1","1","1","1","0","1","1","0"],["0","1","1","1","0","1","0","1","1","0"],["0","1","1","1","1","0","0","0","1","0"]]}'
 
         ];
-document.querySelector('#totalFasesJogo').innerText = todosCircuitos.length;
+
+let perfilJogador = JSON.parse(localStorage.getItem('perfilJogador'));
+
+if (!perfilJogador) {
+    perfilJogador = {
+        nome: 'Jogador',
+        genero: 'm',
+        nivel: 0,
+        expAtual: 0,
+        expProximoNivel: 25,
+        itensInventario: [{categoria: 'titulo', valor: 'Pessoa comum', equipado: true}, {categoria: 'foto', valor: 'media/fogo.png', equipado: true}],
+        quintetosDia: [], 
+        conquistas: [],
+        recordeFases: [0, 'facil'],
+        recordeEstrelas: [0, 'facil'],
+        recordeImpossivel: []
+    };    
+}
+
+function salvaPerfilJogador() {
+    localStorage.setItem('perfilJogador', JSON.stringify(perfilJogador));
+}
+
+function lidaNivelJogador(xp) {
+    perfilJogador.expAtual += xp;
+    if (perfilJogador.expAtual >= perfilJogador.expProximoNivel) {
+        let valorSobressalente = 0;
+        if (perfilJogador.expAtual > perfilJogador.expProximoNivel) {
+            valorSobressalente = perfilJogador.expAtual - perfilJogador.expProximoNivel;
+        }
+        perfilJogador.nivel++;
+        perfilJogador.expProximoNivel = (perfilJogador.nivel + 1) * 25;
+        perfilJogador.expAtual = 0 + valorSobressalente;
+        const mensagemUpou = document.getElementById('mensagemUpou');
+        mensagemUpou.style.setProperty('display', 'block');
+        mensagemUpou.innerText = 'Parabéns, você passou de nível!';
+        executaEfeitoSonoro('fogo-1');
+        setTimeout(() => {
+            mensagemUpou.style.setProperty('display', 'none');
+        }, 1500);
+    }
+    // salvaPerfilJogador();
+    atualizaExibicaoPerfilJogador();
+}
+
+const btnSalvarPerfil = document.getElementById('btnSalvarPerfil');
+btnSalvarPerfil.addEventListener('click', () => {
+    atualizaNomeGeneroJogador();
+});
+
+function atualizaNomeGeneroJogador() {
+    const inputNome = document.getElementById('inputNome');
+    const selectGenero = document.getElementById('selectGenero');
+    perfilJogador.nome = inputNome.value;
+    perfilJogador.genero = selectGenero.value;
+    atualizaExibicaoPerfilJogador();
+    exibeToast('Perfil salvo com sucesso.', 0);
+}
+
+function atualizaExibicaoPerfilJogador() {
+    const nomeJogador = document.getElementById('nomeJogador');
+    const fotoJogador = document.getElementById('fotoJogador');
+    const tituloJogador = document.getElementById('tituloJogador');
+    const nivelJogador = document.getElementById('nivelJogador');
+    const totalConquistasJogador = document.getElementById('totalConquistasJogador');
+    const recordeFasesJogador = document.getElementById('recordeFasesJogador');
+    const recordeEstrelasJogador = document.getElementById('recordeEstrelasJogador');
+    const expAtualJogador = document.getElementById('expAtualJogador');
+    const expProximoNivelJogador = document.getElementById('expProximoNivelJogador');
+    const barraExpAtual = document.getElementById('barraExpAtual');
+
+    nomeJogador.innerText = perfilJogador.nome;
+    nivelJogador.innerText = perfilJogador.nivel;
+    expAtualJogador.innerText = perfilJogador.expAtual;
+    expProximoNivelJogador.innerText = perfilJogador.expProximoNivel;
+    barraExpAtual.style.setProperty('width', `${(perfilJogador.expAtual / perfilJogador.expProximoNivel) * 100}%`);
+    recordeFasesJogador.innerText = `${perfilJogador.recordeFases[0]} (no ${perfilJogador.recordeFases[1]})`;
+    recordeEstrelasJogador.innerText = `${perfilJogador.recordeEstrelas[0]} (no ${perfilJogador.recordeEstrelas[1]})`;
+
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        if (perfilJogador.itensInventario[i].categoria === 'titulo' && perfilJogador.itensInventario[i].equipado) {
+            tituloJogador.innerText = perfilJogador.itensInventario[i].valor;
+        }
+        if (perfilJogador.itensInventario[i].categoria === 'foto' && perfilJogador.itensInventario[i].equipado) {
+            fotoJogador.setAttribute('src', perfilJogador.itensInventario[i].valor);
+        }
+    }
+}
+
+atualizaExibicaoPerfilJogador(perfilJogador);
+
 let circuitosFeitos;
 
 const body = document.querySelector('body');
@@ -207,28 +297,18 @@ function temporizador() {
 				tempo.innerText = `${--tempoCorrente}`;
 			}
 		} else {
-			clearInterval(intervaloTemporizador);
-			exibeBtnProximo();
-			mensagem.innerText = 'O seu tempo acabou :(';
-			mensagem.style.setProperty('display', 'block');
-			derrota = true;
-			lidaTotalPerfeitos();
-            const music = new Audio('media/efeitos-sonoros/fracasso.wav'); music.loop = false;
-			if (!desativarEfeitosSonoros) {
-                music.play();
-            }
-			calculaDesempenho();
+            lidaDerrota('tempo');
 		}
 	}, 1000);
 }
 
 btnJogar.addEventListener('click', () => {
+    executaEfeitoSonoro('fogo-0');
     limiteFases = parseInt(document.querySelector('#limiteFases').value);
 
     if (limiteFases == 0 || !limiteFases) {
         limiteFases = Number.POSITIVE_INFINITY;
     }
-
     circuitoAtual = 0; 
     circuitosPassados = 0;
     tempoInicial = 0;
@@ -244,7 +324,8 @@ btnJogar.addEventListener('click', () => {
     fimJogo = false;
 	modalInicial.style.setProperty('display', 'none');
     dificuldade = document.querySelector('input[name="radioDificuldade"]:checked').value;
-    modoJogo = document.querySelector('input[name="radioModoJogo"]:checked').value
+    modoJogo = document.querySelector('input[name="radioModoJogo"]:checked').value;
+    desempenho.innerText = '0.00%'
     limpaEstrelas();
     limpaCircuito();
     btnProximo.style.setProperty('display', 'none');
@@ -285,9 +366,9 @@ btnJogar.addEventListener('click', () => {
 	];
     }
 
-	if (!desativarEfeitosSonoros) {
-        musicaFundo.play(); musicaFundo.loop = true;
-    }
+    play.classList.remove('bi-play');
+    play.classList.add('bi-pause');
+    musicaFundo.play(); musicaFundo.loop = true;
 
 	infoMusica.style.setProperty('display', 'block');
 	setTimeout(() => {
@@ -307,9 +388,7 @@ play.addEventListener('click', () => {
 	} else {
 		play.classList.remove('bi-play');
 		play.classList.add('bi-pause');
-		if (!desativarEfeitosSonoros) {
-            musicaFundo.play();
-        }
+        musicaFundo.play();
 	}
 });
 
@@ -318,7 +397,29 @@ btnProximo.addEventListener('click', () => {
     tempo.innerText = tempoInicial;
     if (modoJogo === 'progressivo') {
         if (circuitoAtual < circuitosFeitos.length - 1 && circuitoAtual < limiteFases - 1) {
-            circuitoAtual++;
+            if (derrota) {
+                if (dificuldade === 'normal') {
+                    circuitoAtual = circuitoAtual;
+                } else if (dificuldade === 'dificil') {
+                    if (circuitoAtual > 0) {
+                        circuitoAtual--;
+                    } else {
+                        circuitoAtual = 0;
+                    }
+                } else if (dificuldade === 'muito-dificil') {
+                     if (circuitoAtual > 1) {
+                        circuitoAtual -= 2;
+                    } else {
+                        circuitoAtual = 0;
+                    }                   
+                }
+            } else {
+                circuitoAtual++;
+                if (circuitoAtual > perfilJogador.recordeFases[0]) {
+                    perfilJogador.recordeFases[0] = circuitoAtual;
+                    perfilJogador.recordeFases[1] = dificuldade;
+                }
+            }
             fase.innerText = circuitoAtual + 1;
         } else {
             if (!fimJogo) {
@@ -330,26 +431,26 @@ btnProximo.addEventListener('click', () => {
                     mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Você chegou ao fim com certa dificuldade, mas não desanime. Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeito(s) seguidos.`;
                     if (!desativarEfeitosSonoros) {
-                        const music = new Audio('media/efeitos-sonoros/fracasso.wav'); music.play(); music.loop = false;
+                        executaEfeitoSonoro('fracasso');
                     }
                 } else if (valorDesempenho > 33.33 && valorDesempenho <= 66.66) {
                     mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Olha, você não foi mal! Continue praticando! Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
                     if (!desativarEfeitosSonoros) {
-                        const music = new Audio('media/efeitos-sonoros/fogo-0.wav'); music.play(); music.loop = false;
+                        executaEfeitoSonoro('fogo-0');
                     }
                 } else if (valorDesempenho > 66.66 && valorDesempenho < 99.99) {
                     mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Impressionante! Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
                     if (!desativarEfeitosSonoros) {
-                        const music = new Audio('media/efeitos-sonoros/super-sucesso.wav'); music.play(); music.loop = false;
+                        executaEfeitoSonoro('super-sucesso');
                     }
                 } else {
                     mensagem.style.setProperty('background-color', 'darkgreen');
                     mensagem.style.setProperty('box-shadow', '0 0 100px green');
                     textoFinal = `Você é mesmo humano? Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
                     if (!desativarEfeitosSonoros) {
-                        const music = new Audio('media/efeitos-sonoros/fogo-2.wav'); music.play(); music.loop = false;
+                        executaEfeitoSonoro('fogo-2');
                     }
                 }
 
@@ -470,18 +571,26 @@ function exibeEstrelas() {
 
 	if (totalEstrelas >= 3) {
 		if (!desativarEfeitosSonoros) {
-            const music = new Audio(`media/efeitos-sonoros/completou-${getRandomIntInclusive(0, 0)}.wav`); music.play(); music.loop = false;
+            executaEfeitoSonoro('completou');
         }
 
 	} else {
 		if (!desativarEfeitosSonoros) {
-            const music = new Audio('media/efeitos-sonoros/gelo.mp3'); music.play(); music.loop = false;
+            executaEfeitoSonoro('gelo', 'mp3');
         }
 	}
 
 	valorPontuacao += totalEstrelas;
+
+    if (valorPontuacao > perfilJogador.recordeEstrelas[0]) {
+        perfilJogador.recordeEstrelas[0] = valorPontuacao;
+        perfilJogador.recordeEstrelas[1] = dificuldade;
+    }
+
 	pontuacao.innerText = valorPontuacao;
 	estrelas.style.setProperty('display', 'block');
+
+    return totalEstrelas;
 }
 
 function lidaTotalPerfeitos(reseta = true) {
@@ -780,6 +889,49 @@ function calculaDesempenho() {
 	desempenho.innerText = `${ (( valorPontuacao / (circuitosPassados * 5)) * 100).toFixed(2) }%`;
 }
 
+function lidaVitoria() {
+    jogo.style.setProperty('box-shadow', '2px 2px 100px seagreen');
+    btnProximo.style.setProperty('background-color', 'seagreen');
+    vitoria = true;
+    clearInterval(intervaloTemporizador);
+    exibeBtnProximo();
+    if (modoJogo !== 'treino') {
+        let xp = exibeEstrelas();
+        lidaNivelJogador(xp);
+        calculaDesempenho();
+        lidaTotalPerfeitos(false);
+
+        let elogios = ['Uau!', 'Incrível!', 'Fabuloso!', 'Impressionante.', 'Estou sem palavras.', 'Você é mesmo humano?'];
+        if (totalPerfeitos % 3 === 0) {
+            let elogio = elogios[getRandomIntInclusive(0, elogios.length - 1)];
+            exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos);
+        }
+    }
+}
+
+function lidaDerrota(tipo) {
+    if (tipo === 'bateria') {
+        mensagem.innerText = 'A sua bateria acabou :(';
+        if (!desativarEfeitosSonoros) {
+            executaEfeitoSonoro('bateria', 'mp3');
+        }
+    } else if (tipo === 'tempo') {
+        mensagem.innerText = 'O seu tempo acabou :(';
+        if (!desativarEfeitosSonoros) {
+            executaEfeitoSonoro('fracasso');
+        }
+    }
+
+    mensagem.style.setProperty('background-color', 'brown');
+    mensagem.style.setProperty('box-shadow', 'none');
+    mensagem.style.setProperty('display', 'block');
+    clearInterval(intervaloTemporizador);
+    derrota = true;
+    lidaTotalPerfeitos();
+    calculaDesempenho();
+    exibeBtnProximo();
+}
+
 function alteraOutput() {
 	let verdadeiro = true;
 	for (let i = 0; i < 10; i++) {
@@ -793,22 +945,7 @@ function alteraOutput() {
 	if (verdadeiro) {
 		output.innerText = 'Verdadeiro';
 		output.style.backgroundColor = 'seagreen';
-		jogo.style.setProperty('box-shadow', '2px 2px 100px seagreen');
-		btnProximo.style.setProperty('background-color', 'seagreen');
-		vitoria = true;
-		clearInterval(intervaloTemporizador);
-		exibeBtnProximo();
-        if (modoJogo !== 'treino') {
-            exibeEstrelas();
-            calculaDesempenho();
-            lidaTotalPerfeitos(false);
-
-            let elogios = ['Uau!', 'Incrível!', 'Fabuloso!', 'Impressionante.', 'Estou sem palavras.', 'Você é mesmo humano?'];
-            if (totalPerfeitos % 3 === 0) {
-                let elogio = elogios[getRandomIntInclusive(0, elogios.length - 1)];
-                exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos);
-            }
-        }
+        lidaVitoria();
 	} else {
 		output.innerText = 'Falso';
 		output.style.backgroundColor = 'tomato';
@@ -824,13 +961,13 @@ for (let i = 0; i < inputs.length; i++) {
 		if ((qtdeBateria > 0 && !vitoria && !derrota) || modoJogo === 'treino') {
 			if (inputs[i].innerText === '0') {
 				if (!desativarEfeitosSonoros) {
-                    const music = new Audio('media/efeitos-sonoros/1.wav'); music.play(); music.loop =false;
+                    executaEfeitoSonoro('1');
                 }
 				inputs[i].innerText = '1';
 				inputs[i].style.setProperty('color', 'seagreen');
 			} else if (inputs[i].innerText === '1') {
 				if (!desativarEfeitosSonoros) {
-                    const music = new Audio('media/efeitos-sonoros/0.wav'); music.play(); music.loop =false;
+                    executaEfeitoSonoro('0');
                 }
 				inputs[i].style.setProperty('color', 'tomato');
 				inputs[i].innerText = '0';
@@ -839,23 +976,12 @@ for (let i = 0; i < inputs.length; i++) {
 			propaga(JSON.parse(circuitosFeitos[circuitoAtual]).listaElementos);
 			alteraOutput();
 		} else if (qtdeBateria === 0 && !derrota && !vitoria && modoJogo !== 'treino') {
-			exibeBtnProximo()
-			if (!desativarEfeitosSonoros) {
-                const music = new Audio('media/efeitos-sonoros/bateria.mp3'); music.play(); music.loop = false;
-            }
-            mensagem.style.setProperty('background-color', 'brown');
-            mensagem.style.setProperty('box-shadow', 'none');
-			mensagem.innerText = 'A sua bateria acabou :(';
-			mensagem.style.setProperty('display', 'block');
-			clearInterval(intervaloTemporizador);
-			derrota = true;
-			lidaTotalPerfeitos();
-			calculaDesempenho();
+            lidaDerrota('bateria');
 		}
 	});
 }
 
-function exibeToast(mensagem, valor) {
+function exibeToast(mensagem, valor = -1) {
 	const toast = document.getElementById('toast');
 	toast.style.setProperty('display', 'block');
 	toast.innerText = mensagem;
@@ -863,13 +989,7 @@ function exibeToast(mensagem, valor) {
 	let imagem = 'media/fogo.png';;
 
     if (!desativarEfeitosSonoros) {
-        if (valor <= 5) {
-            const music = new Audio('media/efeitos-sonoros/fogo-0.wav'); music.play(); music.loop = false;
-        } else if (valor > 5 && valor <= 10) {
-            const music = new Audio('media/efeitos-sonoros/fogo-1.wav'); music.play(); music.loop = false;
-        } else {
-            const music = new Audio('media/efeitos-sonoros/fogo-2.wav'); music.play(); music.loop = false;
-        }
+        executaEfeitoSonoro('fogo-0');
     }
 
     if (valor > 10) {
@@ -899,19 +1019,77 @@ btnVoltar.addEventListener('click', () => {
 
 opcaoMenu.addEventListener('click', () => {
     modalInicial.style.setProperty('display', 'flex');
+    atualizaExibicaoPerfilJogador();
+    // salvaPerfilJogador();
     clearInterval(intervaloTemporizador);
 });
 
 checkboxDesativarEfeitosSonoros.addEventListener('click', () => {
     if (desativarEfeitosSonoros) {
         desativarEfeitosSonoros = false;
-        musicaFundo.play();
-        play.classList.remove('bi-play');
-        play.classList.add('bi-pause');
     } else {
         desativarEfeitosSonoros = true;
-        musicaFundo.pause();
-        play.classList.remove('bi-pause');
-        play.classList.add('bi-play');
     }
 })
+
+const abrirComoJogar = document.querySelector('#abrirComoJogar');
+const abrirConfiguracoes = document.querySelector('#abrirConfiguracoes');
+const abrirQuintetoDia = document.querySelector('#abrirQuintetoDia');
+const abrirLoja = document.querySelector('#abrirLoja');
+const abrirEditarPerfil = document.querySelector('#abrirEditarPerfil');
+const abrirConquista = document.querySelector('#abrirConquista');
+const abrirCriador = document.querySelector('#abrirCriador');
+
+const divsAbertura = [... document.querySelectorAll('.divsAbertura')];
+const abridores = [... document.querySelectorAll('.abridores')];
+
+const divComoJogar = document.querySelector('#divComoJogar');
+const divConfiguracoes = document.querySelector('#divConfiguracoes');
+const divLoja = document.querySelector('#divLoja');
+const divEditarPerfil = document.querySelector('#divEditarPerfil');
+const divConquistas = document.querySelector('#divConquistas');
+
+function fechaDivsAbertura(excecao) {
+    divsAbertura.forEach(div => {
+        if (div != excecao) {
+            div.classList.add('esconde');
+        }
+    });
+}
+
+function executaEfeitoSonoro(nome, extensao = 'wav', loop = false) {
+    const efeitoSonoro = new Audio(`media/efeitos-sonoros/${nome}.${extensao}`);
+    efeitoSonoro.loop = loop;
+    efeitoSonoro.play();
+}
+
+abridores.forEach(abridor => {
+    abridor.addEventListener('click', () => {
+        executaEfeitoSonoro('1');
+    })
+});
+
+abrirComoJogar.addEventListener('click', () => {
+    fechaDivsAbertura(divComoJogar);
+    divComoJogar.classList.toggle('esconde');
+});
+
+abrirConfiguracoes.addEventListener('click', () => {
+    fechaDivsAbertura(divConfiguracoes);
+    divConfiguracoes.classList.toggle('esconde');
+});
+
+abrirLoja.addEventListener('click', () => {
+    fechaDivsAbertura(divLoja);
+    divLoja.classList.toggle('esconde');
+});
+
+abrirEditarPerfil.addEventListener('click', () => {
+    fechaDivsAbertura(divEditarPerfil);
+    divEditarPerfil.classList.toggle('esconde');
+});
+
+abrirConquistas.addEventListener('click', () => {
+    fechaDivsAbertura(divConquistas);
+    divConquistas.classList.toggle('esconde');
+});

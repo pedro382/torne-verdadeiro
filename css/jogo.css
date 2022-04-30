@@ -5,6 +5,7 @@
 
 * {
 	font-family: monospace;
+	box-sizing: border-box;
 }
 
 ::-webkit-scrollbar {
@@ -36,10 +37,25 @@ body {
 	animation: moveBg 10s infinite;
 }
 
+.alinhados-verticalmente {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	min-height: 200px;
+}
+
+.alinhados-horizontalmente {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 100%;
+	height: 100px;
+}
+
 table {
 	border-collapse: collapse;
 	color: #fff;
-	margin: 0 auto;
 }
 
 table caption {
@@ -79,7 +95,7 @@ th {
 	border-radius: 1rem;
 	background-color: #000;
 	box-shadow: 0 0 100px #fff;
-	z-index: 100;
+	z-index: 10000;
 	display: none;
 	text-align: center;
 	color: #fff;
@@ -95,22 +111,6 @@ th {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-}
-
-button {
-	background-color: seagreen;
-	color: #fff;
-	padding: 1rem;
-	border: none;
-	border-radius: 1rem;
-	font-size: 3rem;
-}
-
-button:hover {
-	cursor: pointer;
-	opacity: .75;
-	transform: scale(1.1);
-	transition: 1s;
 }
 
 .ilustracao {
@@ -136,8 +136,8 @@ button:hover {
 	border-radius: 1rem;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	height: 75vh;
-	width: 75%;
+	height: 90vh;
+	width: 90%;
 	position: relative;
 }
 
@@ -150,62 +150,13 @@ button:hover {
 	cursor: pointer;
 }
 
-.modal p {
-	max-width: 65ch;
-	text-align: justify;
-	font-size: 1.2rem;
-}
-
-.modal .texto {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
 .modal #logo {
 	max-width: 100%;
 	display: block;
 	margin: 0 auto;
 }
 
-.bg-modal #btnJogar {
-	margin-top: 2rem;
-}
-
 #modalFinal {
-	display: none;
-}
-
-#configPrevias {
-	background-color: lightyellow;
-	padding: 1rem;
-	border-radius: 1rem;
-	margin: 2rem 0;
-	border: 1px dashed #606060;
-	text-align: center;
-}
-
-#configPrevias label {
-	font-weight: bolder;
-}
-
-#configPrevias input[type="number"] {
-	width: 50%;
-	border: none;
-	border-bottom: 1px solid #ccc;
-	border-radius: 1rem;
-	padding: 1rem;
-	font-size: 1rem;
-}
-
-#configPrevias input[type="number"]:focus {
-	outline: none;
-	border: 1px solid #ccc;
-}
-
-#btnVoltar {
-	background-color: dodgerblue;
 	display: none;
 }
 
@@ -214,27 +165,220 @@ button:hover {
 	text-decoration: underline;
 }
 
-summary {
-	background-color: seagreen;
-	padding: 1rem;
+.container-modal {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
 	text-align: center;
-	font-size: 1.5rem;
-	border-radius: 1rem;
-	color: #fff;
-	cursor: pointer;
 }
 
-details {
-	margin-top: 2rem;
-	padding: 1rem;
+.container-modal .divsAbertura {
+	width: 100%;
+}
+
+.container-modal div table {
+	margin: 0 auto;
+}
+
+.div-inputs-configuracao {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	width: 25%;
 	border: 1px dashed #ccc;
+	margin: 1rem auto;
+}
+
+.conquista {
+	background-color: lightgoldenrodyellow;
+	padding: 1rem;
+	border-radius: 1rem;
+	color: #606060;
+	text-transform: uppercase;
+	text-shadow: 0 0 50px black;
+	font-weight: bolder;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+	grid-gap: 1rem;
+	margin: 1rem;
+}
+
+.item-loja, .item-perfil {
+	outline: 2px solid #ccc;
+	padding: 1rem;
+	border-radius: 1rem;
+}
+
+.titulo-item-loja {
+	margin-bottom: 0;
+	color: seagreen;
+	text-transform: uppercase;
+	font-size: 1.25rem;
+}
+
+.img-item-loja {
+	height: 150px;
+	width: auto;
+	border-radius: 1rem;
+	margin: 1rem 0;
+}
+
+.descricao-item-loja {
+	margin-top: 0;
+	color: #606060;
+}
+
+.preco, #saldo span {
+	color: darkorange;
+	font-weight: bolder;
+}
+
+#saldo {
+	font-size: 2rem;
+}
+
+.grupo-conquistas {
+	outline: 2px dashed #ccc;
+	padding: 1rem;
+	margin: 1rem auto;
+}
+
+/* info do usuário */
+
+#infoJogador {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	outline: 3px dashed tomato;
+	padding: 1rem;
+	margin: 1rem;
+}
+
+#infoJogador p {
+	margin: 0;
+}
+
+#infoJogador p {
+	font-weight: bolder;
+}
+
+#infoJogador p span {
+	color: #606060;
+}
+
+#nomeFotoJogador {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #eee;
+	padding: 1rem;
+	margin-bottom: 2rem;
+}
+
+#fotoJogador {
+	max-height: 100px;
+	width: 100px;
+	border-radius: 50%;
+	margin-right: 1rem;
+	outline: 5px solid seagreen;
+}
+
+#nomeJogador {
+	text-transform: uppercase;
+	font-weight: bolder;
+}
+
+#tituloJogador {
+	color: #606060;
+}
+
+.container-barra-progresso {
+	margin-top: 2rem;
+	outline: 1px solid #ccc;
+	height: 25px;
+	width: 50%;
+	border-radius: 1rem;
+	overflow: hidden;
+}
+
+.barra-progresso {
+	width: 50%;
+	height: 100%;
+	background-color: seagreen;
+}
+
+#mensagemUpou {
+	position: fixed;
+	bottom: 1%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: seagreen;
+	box-shadow: 0 0 100px green;
+	padding: 1rem;
 	text-align: center;
+	width: 75%;
+	border-radius: 1rem;
+	display: none;
+	color: #fff;
+	font-size: 2rem;
+	border: 2px solid #fff;
+}
+
+input[type="number"], input[type="text"] {
+	border: none;
+	border-bottom: 1px solid #ccc;
+	font-size: 1.25rem;
+	width: 25%;
+	color: seagreen !important;
+	font-weight: bolder !important;
+}
+
+input[type="number"]:focus, input[type="text"]:focus {
+	outline: none;
+	border: none;
+	border-bottom: 1px solid #ccc;
+}
+
+.explicacao {
+	color: #606060;
+	font-size: .75rem;
+}
+
+h2#abrirComoJogar {
+	margin-top: 3rem;
+}
+
+h2, h3 {
+	padding: 1rem;
+	color: #fff;
+	margin: 0;
+	text-align: center;
+	border-left: 3px solid #eee;
+	border-bottom: 3px solid #fff;
+	width: 100%;
+}
+
+h2:hover {
+	opacity: .75;
+	cursor: pointer;
+	border-left: 3px solid tomato;
+	border-bottom: 3px solid tomato;
+}
+
+h2 {
+	background-color: seagreen;
 }
 
 h3 {
-	padding: 1rem;
 	background-color: tomato;
-	color: #fff;
+	margin-top: 1rem;
 }
 
 #modalInicial input, #modalInicial label {
@@ -263,10 +407,6 @@ a {
 	color: seagreen;
 	text-decoration: none;
 	font-weight: bolder;
-}
-
-span.explicacao {
-	color: #606060;
 }
 
 @keyframes moveBg {
@@ -418,16 +558,6 @@ span.explicacao {
 	background-size: cover;
 }
 
-#btnProximo, #estrelas {
-	display: none;
-}
-
-#btnProximo {
-	position: fixed;
-	bottom: 2%;
-	right: 2%;
-}
-
 #mensagem {
 	display: none;
 	position: fixed;
@@ -501,6 +631,67 @@ span.explicacao {
 	cursor: pointer;
 }
 
+/* botões */
+button {
+	background-color: seagreen;
+	color: #fff;
+	padding: 1rem;
+	border: none;
+	border-radius: 1rem;
+	margin-top: .5rem;
+}
+
+button:hover {
+	cursor: pointer;
+	transition: 1s;
+	opacity: .75;
+}
+
+#btnProximo, #estrelas {
+	display: none;
+}
+
+#btnProximo {
+	position: fixed;
+	bottom: 2%;
+	right: 2%;
+}
+
+#btnJogar, #btnProximo {
+	background: linear-gradient(to right, tomato, seagreen);
+	font-size: 3rem;
+}
+
+#btnJogar:hover, #btnProximo:hover {
+	background: linear-gradient(to left, tomato, seagreen);
+	transform: scale(1.1);
+	opacity: 1;
+}
+
+.btnComprar {
+	background: none;
+	background-color: dodgerblue;
+	box-shadow: none;
+	font-size: 1rem;
+}
+
+.btnComprar:hover {
+	background: none;
+	background-color: dodgerblue;
+	opacity: .75;
+}
+
+#btnJogar {
+	margin-top: 2rem;
+}
+
+#btnVoltar {
+	background-color: dodgerblue;
+	display: none;
+	font-size: 3rem;
+	margin-left: 1rem;
+}
+
 @media (min-width: 1500px) {
 	:root {
 		--dimensaoElemento: 50px;
@@ -553,11 +744,11 @@ span.explicacao {
 	}
 
 	#jogo {
-		margin-top: 2.5rem;
+		margin-top: .5rem;
 	}
 
 	#informacoesSuperiores {
-		margin-top: 2.5rem;
+		margin-top: .5rem;
 		display: flex;
 		justify-content: space-around;
 		align-items: space-around;
@@ -595,6 +786,10 @@ span.explicacao {
 		line-height: 250%;
 	}
 
+}
+
+.esconde {
+	display: none;
 }
 
 @media (max-width: 300px) {

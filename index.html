@@ -28,9 +28,27 @@
 	<div class="modal">
 		<i id="iconeFecharModalInicial" class="bi bi-x icone-fechar-modal"></i>
 		<img id="logo" src="media/logo.png">
-		<div class="texto">
-			<details>
-				<summary>Como jogar?</summary>
+		<div class="container-modal">
+			<div id="infoJogador">
+				<div id="nomeFotoJogador">
+					<img id="fotoJogador" src="https://picsum.photos/200/300">
+					<div>
+						<p id="nomeJogador">Nome jogador</p>
+						<p id="tituloJogador">Título do jogador</p>
+					</div>					
+				</div>
+				<p>Nível: <span id="nivelJogador">0</span></p>
+				<p>Total conquistas: <span id="totalConquistasJogador">0</span></p>
+				<p>Recorde de fases: <span id="recordeFasesJogador">0</span></p>
+				<p>Recorde de estrelas: <span id="recordeEstrelasJogador">0</span></p>
+				<p>Exp atual: <span id="expAtualJogador">0</span></p>
+				<p>Exp para o próximo nível: <span id="expProximoNivelJogador">50</span></p>
+				<div class="container-barra-progresso">
+					<div class="barra-progresso" id="barraExpAtual"></div>
+				</div>
+			</div>
+			<h2 id="abrirComoJogar" class="abridores">Como jogar?</h2>
+			<div id="divComoJogar" class="divsAbertura esconde">
 				<p>O objetivo do jogo é tornar o circuito verdadeiro. Para isso, você deve fazer a corrente elétrica chegar até o final.</p>
 				<p>Clique no 1 para ativar a linha acima e clique no 0 para desativá-la.</p>
 				<p>A porta <strong>AND</strong>, ilustrada abaixo, exige que as duas linhas que se conectam a ela estejam ativas.</p>
@@ -103,33 +121,90 @@
 				</table>
 				<p>Cada circuito possui um tempo determinado <i class="tempo bi bi-hourglass-split"></i>. Se o tempo acabar, você perde. Além disso, eles também possuem uma quantidade de bateria disponível <i class="bateria bi bi-battery-charging"></i>. Isso significa que a cada clique dado, você perde uma bateria. Se as baterias acabarem você perde.</p>
 				<p>A ideia é resolver o circuito no menor tempo possível e com a menor quantidade de cliques. Boa sorte.</p>
-			</details>
-
-			<div class="inputs-iniciais" id="divDificuldade">
-				<h3>Dificuldade:</h3>
-				<p><input type="radio" name="radioDificuldade" id="dificuldadeNormal" value="normal" checked><label for="dificuldadeNormal"> Normal <span class="explicacao">(1 bateria extra para cada fase)</span></label></p>
-				<p><input type="radio" name="radioDificuldade" id="dificuldadeDificil" value="dificil"><label for="dificuldadeDificil"> Difícil <span class="explicacao">(nenhuma bateria extra e 20 segundos de tempo)</span></label></p>
-				<p><input type="radio" name="radioDificuldade" id="dificuldadeMuitoDificil" value="muito-dificil"><label for="dificuldadeMuitoDificil"> Muito difícil <span class="explicacao">(nenhuma bateria extra, 10 segundos de tempo e sem cor verde nos fios)</span></label></p>
 			</div>
 
-			<div class="inputs-iniciais" id="divModoJogo">
-				<h3>Modo de jogo:</h3>
-				<p><input type="radio" name="radioModoJogo" id="modoProgressivo" value="progressivo" checked><label for="modoProgressivo"> Progressivo <span class="explicacao">(até onde você consegue chegar)</span></label></p>
-				<p><input type="radio" name="radioModoJogo" id="modoInfinito" value="infinito"><label for="modoInfinito"> Infinito</label></p>
-				<p><input type="radio" name="radioModoJogo" id="modoTreino" value="treino"><label for="modoTreino"> Treino <span class="explicacao">(exibe os portões individualmente, com muita bateria e tempo disponíveis)</span></label></p>
-				<p>Personalizado <span class="explicacao">(<a href="criador.html">clique aqui</a> para criar seu próprio conjunto de circuitos)</span></p>
+			<h2 id="abrirConfiguracoes" class="abridores">Configurações</h2>
+			<div id="divConfiguracoes" class="divsAbertura esconde">
+				<div>
+					<h3>Dificuldade:</h3>
+					<div class="div-inputs-configuracao">
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeNormal" value="normal" checked><label for="dificuldadeNormal"> Fácil</label></p>
+						<p class="explicacao">Somente 3 tipos de portões lógicos, uma bateria extra por fase, 30 segundos de tempo e penalidade 0 ao perder um circuito</p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeDificil" value="dificil"><label for="dificuldadeDificil"> Normal</label></p>
+						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 30 segundos de tempo e penalidade -1 ao perder um circuito</p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeMuitoDificil" value="muito-dificil"><label for="dificuldadeMuitoDificil"> Difícil</label></p>
+						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 20 segundos de tempo e penalidade -2 ao perder um circuito</p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeMuitoDificil" value="muito-dificil"><label for="dificuldadeMuitoDificil"> Impossível</label></p>
+						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 10 segundos de tempo, penalidade -3 ao perder um circuito e sem cor indicativa nos fios ativos</p>
+					</div>
+				</div>
+
+				<div>
+					<h3>Modo de jogo:</h3>
+					<div class="div-inputs-configuracao">
+						<p><input type="radio" name="radioModoJogo" id="modoProgressivo" value="progressivo" checked><label for="modoProgressivo" title="Até onde você consegue chegar"> Progressivo</label></p>
+						<p><input type="radio" name="radioModoJogo" id="modoInfinito" value="infinito"><label for="modoInfinito"> Infinito</label></p>
+						<p><input type="radio" name="radioModoJogo" id="modoTreino" value="treino"><label for="modoTreino" title="Muita bateria, muito tempo"> Treino</label></p>
+					</div>
+				</div>
+
+				<div>
+					<h3>Limites</h3>
+					<div class="div-inputs-configuracao">
+						<p><input type="checkbox" name="checkboxDesativarEfeitosSonoros" id="checkboxDesativarEfeitosSonoros"> <label for="checkboxDesativarEfeitosSonoros">Desativar efeitos sonoros</label></p>
+						<p><input type="checkbox" name="checkboxDesativarMusica" id="checkboxDesativarMusica"> <label for="checkboxDesativarMusica">Desativar música</label></p>
+						<p><input type="checkbox" name="checkboxDesativarAnimacaoBackground" id="checkboxDesativarAnimacaoBackground"> <label for="checkboxDesativarAnimacaoBackground">Desativar animação do background</label></p>
+						<p><label for="limiteFases">Limite de fases: </label><input type="number" id="limiteFases" value="0"></p>				
+					</div>
+
+				</div>
 			</div>
 
-			<div id="configPrevias">
-				<p>O jogo conta atualmente com <span id="totalFasesJogo"></span> fases diferentes, mas pode ser que você não queira ir tão longe, então...</p>
-				<label for="limiteFases">Limite de fases: </label>
-				<input type="number" id="limiteFases" placeholder="Deixe vazio caso não queira limitar">
-				<p>Nem todo mundo gosta dos efeitos sonoros! Caso queira desativar todos eles, incluindo a música de fundo, marque o checkbox abaixo:</p>
-				<p><input type="checkbox" name="checkboxDesativarEfeitosSonoros" id="checkboxDesativarEfeitosSonoros"> <label for="checkboxDesativarEfeitosSonoros">Desativar efeitos sonoros</label></p>
+			<h2 id="abrirQuintetoDia" class="abridores">Quinteto do dia</h2>
+			<h2 id="abrirEditarPerfil" class="abridores">Editar perfil</h2>
+			<div id="divEditarPerfil" class="divsAbertura esconde">
+				<div class="grid">
+					<div class="alinhados-verticalmente item-perfil">
+						<label for="inputNome">Nome: </label>
+						<input type="text" id="inputNome">
+						<label for="selectGenero">Gênero: </label>
+						<select id="selectGenero">
+							<option value="m">Masculino</option>
+							<option value="f">Feminino</option>
+						</select>
+						<button id="btnSalvarPerfil">Salvar</button>					
+					</div>
+				</div>
+			</div>
+			<h2 id="abrirLoja" class="abridores">Loja</h2>
+			<div id="divLoja" class="divsAbertura esconde">
+				<p id="saldo">Saldo: <span><i class="bi bi-star-fill"></i> 100 estrelas</span></p>
+				<div class="grid">
+					<div class="item-loja">
+						<h4 class="titulo-item-loja">Tema Azul</h4>
+						<img src="https://picsum.photos/200/300" class="img-item-loja">
+						<p class="descricao-item-loja">Você mudará toda a temática do jogo para azul e cinza.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 100 estrelas</p>
+						<button class="btnComprar">Comprar</button>
+					</div>
+				</div>
 			</div>
 
-			<button id="btnJogar">Novo jogo!</button><br>
-			<button id="btnVoltar">Voltar à partida</button>
+			<h2 id="abrirConquistas" class="abridores">Conquistas</h2>
+			<div id="divConquistas" class="divsAbertura esconde">
+				<p>Quando você concluir uma determinada conquista, a cor de fundo ficará verde.</p>
+				<strong>1º grupo de conquistas:</strong>
+				<div class="grupo-conquistas">
+					<p class="conquista"><i class="bi bi-star-fill"></i> Mexer nas configurações do jogo (5 estrelas) <i class="bi bi-star-fill"></i></p>		
+				</div>
+			</div>
+
+			<h2 id="abrirCriador" class="abridores">Criar circuitos</h2>
+
+			<div class="alinhados-horizontalmente">
+				<button id="btnJogar">Novo jogo!</button><br>
+				<button id="btnVoltar">Voltar à partida</button>
+			</div>
 
 			<div id="creditos">
 				<p>Créditos pela foto de fundo para <a href="https://www.instagram.com/frankconephotos/" target="_blank">Frank Cone</a> no <a href="https://www.pexels.com/pt-br" target="_blank">Pexels</a></p>
@@ -142,6 +217,7 @@
 </div>
 
 <p id="mensagem"></p>
+<p id="mensagemUpou"></p>
 
 <div id="infoMusica">
 	Você está ouvindo "Lazy Walk" por Cheel
@@ -154,6 +230,7 @@
 			<p id="pMusica"><i id="play" class="bi bi-pause"></i> <span title="música">Música</span></p>
 			<p id="pFase"><i class="bi bi-boxes"></i> Fase <span id="fase" title="fase"></span></p>
 			<p id="pDesempenho"><i class="bi bi-graph-up-arrow"></i> <span id="desempenho" title="desempenho">0.00%</span></p>
+			<p><img src="media/itens-loja/pocao-tempo.png"> 0 <img src="media/itens-loja/pocao-bateria.png"> 0</p>
 		</div>
 		<div>
 			<p class="pGenerico" id="pPontuacao"><i class="pontuacao bi bi-hand-thumbs-up"></i> <span id="pontuacao" title="pontuação">0</span></p>
