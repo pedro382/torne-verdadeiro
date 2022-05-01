@@ -88,96 +88,6 @@ const todosCircuitos = [
 
         ];
 
-let perfilJogador = JSON.parse(localStorage.getItem('perfilJogador'));
-
-if (!perfilJogador) {
-    perfilJogador = {
-        nome: 'Jogador',
-        genero: 'm',
-        nivel: 0,
-        expAtual: 0,
-        expProximoNivel: 25,
-        itensInventario: [{categoria: 'titulo', valor: 'Pessoa comum', equipado: true}, {categoria: 'foto', valor: 'media/fogo.png', equipado: true}],
-        quintetosDia: [], 
-        conquistas: [],
-        recordeFases: [0, 'facil'],
-        recordeEstrelas: [0, 'facil'],
-        recordeImpossivel: []
-    };    
-}
-
-function salvaPerfilJogador() {
-    localStorage.setItem('perfilJogador', JSON.stringify(perfilJogador));
-}
-
-function lidaNivelJogador(xp) {
-    perfilJogador.expAtual += xp;
-    if (perfilJogador.expAtual >= perfilJogador.expProximoNivel) {
-        let valorSobressalente = 0;
-        if (perfilJogador.expAtual > perfilJogador.expProximoNivel) {
-            valorSobressalente = perfilJogador.expAtual - perfilJogador.expProximoNivel;
-        }
-        perfilJogador.nivel++;
-        perfilJogador.expProximoNivel = (perfilJogador.nivel + 1) * 25;
-        perfilJogador.expAtual = 0 + valorSobressalente;
-        const mensagemUpou = document.getElementById('mensagemUpou');
-        mensagemUpou.style.setProperty('display', 'block');
-        mensagemUpou.innerText = 'Parabéns, você passou de nível!';
-        executaEfeitoSonoro('fogo-1');
-        setTimeout(() => {
-            mensagemUpou.style.setProperty('display', 'none');
-        }, 1500);
-    }
-    // salvaPerfilJogador();
-    atualizaExibicaoPerfilJogador();
-}
-
-const btnSalvarPerfil = document.getElementById('btnSalvarPerfil');
-btnSalvarPerfil.addEventListener('click', () => {
-    atualizaNomeGeneroJogador();
-});
-
-function atualizaNomeGeneroJogador() {
-    const inputNome = document.getElementById('inputNome');
-    const selectGenero = document.getElementById('selectGenero');
-    perfilJogador.nome = inputNome.value;
-    perfilJogador.genero = selectGenero.value;
-    atualizaExibicaoPerfilJogador();
-    exibeToast('Perfil salvo com sucesso.', 0);
-}
-
-function atualizaExibicaoPerfilJogador() {
-    const nomeJogador = document.getElementById('nomeJogador');
-    const fotoJogador = document.getElementById('fotoJogador');
-    const tituloJogador = document.getElementById('tituloJogador');
-    const nivelJogador = document.getElementById('nivelJogador');
-    const totalConquistasJogador = document.getElementById('totalConquistasJogador');
-    const recordeFasesJogador = document.getElementById('recordeFasesJogador');
-    const recordeEstrelasJogador = document.getElementById('recordeEstrelasJogador');
-    const expAtualJogador = document.getElementById('expAtualJogador');
-    const expProximoNivelJogador = document.getElementById('expProximoNivelJogador');
-    const barraExpAtual = document.getElementById('barraExpAtual');
-
-    nomeJogador.innerText = perfilJogador.nome;
-    nivelJogador.innerText = perfilJogador.nivel;
-    expAtualJogador.innerText = perfilJogador.expAtual;
-    expProximoNivelJogador.innerText = perfilJogador.expProximoNivel;
-    barraExpAtual.style.setProperty('width', `${(perfilJogador.expAtual / perfilJogador.expProximoNivel) * 100}%`);
-    recordeFasesJogador.innerText = `${perfilJogador.recordeFases[0]} (no ${perfilJogador.recordeFases[1]})`;
-    recordeEstrelasJogador.innerText = `${perfilJogador.recordeEstrelas[0]} (no ${perfilJogador.recordeEstrelas[1]})`;
-
-    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
-        if (perfilJogador.itensInventario[i].categoria === 'titulo' && perfilJogador.itensInventario[i].equipado) {
-            tituloJogador.innerText = perfilJogador.itensInventario[i].valor;
-        }
-        if (perfilJogador.itensInventario[i].categoria === 'foto' && perfilJogador.itensInventario[i].equipado) {
-            fotoJogador.setAttribute('src', perfilJogador.itensInventario[i].valor);
-        }
-    }
-}
-
-atualizaExibicaoPerfilJogador(perfilJogador);
-
 let circuitosFeitos;
 
 const body = document.querySelector('body');
@@ -205,15 +115,11 @@ const btnEntendi = document.querySelector('#btnEntendi');
 const iconeFecharModalInicial = document.querySelector('#iconeFecharModalInicial');
 const btnVoltar = document.querySelector('#btnVoltar');
 const checkboxDesativarEfeitosSonoros = document.querySelector('#checkboxDesativarEfeitosSonoros');
-
 let desativarEfeitosSonoros = false;
-
 let limiteFases = 3;
 
 let elementosLinhasPagina = ['linha-central-vertical', 'linha-central-horizontal', 'linha-lateral-direita', 'linha-lateral-esquerda', 'linha-recentralizadora-direita', 'linha-recentralizadora-esquerda', 'primeiro-canto', 'segundo-canto', 'terceiro-canto', 'quarto-canto', 'cruz', 'cruz-quebrada-direita', 'cruz-quebrada-esquerda', 't'];
-
 let elementosPortoesPagina = ['primeiro-and', 'segundo-and', 'primeiro-or', 'segundo-or', 'primeiro-nand', 'segundo-nand', 'primeiro-nor', 'segundo-nor', 'primeiro-xor', 'segundo-xor', 'primeiro-xnor', 'segundo-xnor'];
-
 const elementosPagina = document.querySelector('#elementosPagina');
 
 function uneArrays(lista1, lista2) {
@@ -286,6 +192,114 @@ let fimJogo = false;
 
 const musicaFundo = new Audio(`media/efeitos-sonoros/${nomeMusica} - ${nomeAutor}.mp3`);
 infoMusica.textContent = `Você está ouvindo "${nomeMusica}" por ${nomeAutor}`;
+
+let perfilJogador = JSON.parse(localStorage.getItem('perfilJogador'));
+
+if (!perfilJogador) {
+    perfilJogador = {
+        nome: 'Jogador',
+        genero: 'Masculino',
+        nivel: 0,
+        expAtual: 0,
+        expProximoNivel: 25,
+        saldo: 2000,
+        quantidadePocaoTempo: 0,
+        quantidadePocaoBateria: 0,
+        itensInventario: [{categoria: 'titulo', titulo: 'Pessoa comum', descricao: 'Título inicial', img: 'media/fogo.png', equipado: true}, {categoria: 'foto', titulo: 'Foto inicial', descricao: 'Foto inicial', img: 'media/fogo.png', equipado: true}],
+        quintetosDia: [], 
+        conquistas: [],
+        recordeFases: [0, 'facil'],
+        recordeEstrelas: [0, 'facil'],
+        recordeImpossivel: []
+    };    
+}
+
+function salvaPerfilJogador() {
+    localStorage.setItem('perfilJogador', JSON.stringify(perfilJogador));
+}
+
+function lidaNivelJogador(xp) {
+    perfilJogador.expAtual += xp;
+    if (perfilJogador.expAtual >= perfilJogador.expProximoNivel) {
+        let valorSobressalente = 0;
+        if (perfilJogador.expAtual > perfilJogador.expProximoNivel) {
+            valorSobressalente = perfilJogador.expAtual - perfilJogador.expProximoNivel;
+        }
+        perfilJogador.nivel++;
+        perfilJogador.expProximoNivel = (perfilJogador.nivel + 1) * 25;
+        perfilJogador.expAtual = 0 + valorSobressalente;
+        const mensagemUpou = document.getElementById('mensagemUpou');
+        mensagemUpou.style.setProperty('display', 'block');
+        mensagemUpou.innerText = 'Parabéns, você passou de nível!';
+        executaEfeitoSonoro('fogo-1');
+        setTimeout(() => {
+            mensagemUpou.style.setProperty('display', 'none');
+        }, 1500);
+    }
+    // salvaPerfilJogador();
+    atualizaExibicaoPerfilJogador();
+}
+
+const btnSalvarPerfil = document.getElementById('btnSalvarPerfil');
+btnSalvarPerfil.addEventListener('click', () => {
+    atualizaNomeGeneroJogador();
+});
+
+function atualizaNomeGeneroJogador() {
+    const inputNome = document.getElementById('inputNome');
+    const selectGenero = document.getElementById('selectGenero');
+    perfilJogador.nome = inputNome.value;
+    if (selectGenero.value == 'm') {
+         perfilJogador.genero = 'Masculino';
+    } else {
+         perfilJogador.genero = 'Feminino';
+    }
+    atualizaExibicaoPerfilJogador();
+    exibeToast('Perfil salvo com sucesso.', 0);
+}
+
+function atualizaExibicaoPerfilJogador() {
+    const nomeJogador = document.getElementById('nomeJogador');
+    const generoJogador = document.getElementById('generoJogador');
+    const fotoJogador = document.getElementById('fotoJogador');
+    const tituloJogador = document.getElementById('tituloJogador');
+    const nivelJogador = document.getElementById('nivelJogador');
+    const totalConquistasJogador = document.getElementById('totalConquistasJogador');
+    const recordeFasesJogador = document.getElementById('recordeFasesJogador');
+    const recordeEstrelasJogador = document.getElementById('recordeEstrelasJogador');
+    const expAtualJogador = document.getElementById('expAtualJogador');
+    const expProximoNivelJogador = document.getElementById('expProximoNivelJogador');
+    const barraExpAtual = document.getElementById('barraExpAtual');
+
+    nomeJogador.innerText = perfilJogador.nome;
+    generoJogador.innerText = perfilJogador.genero;
+    nivelJogador.innerText = perfilJogador.nivel;
+    expAtualJogador.innerText = perfilJogador.expAtual;
+    expProximoNivelJogador.innerText = perfilJogador.expProximoNivel;
+    barraExpAtual.style.setProperty('width', `${(perfilJogador.expAtual / perfilJogador.expProximoNivel) * 100}%`);
+    recordeFasesJogador.innerText = `${perfilJogador.recordeFases[0]} (no ${perfilJogador.recordeFases[1]})`;
+    recordeEstrelasJogador.innerText = `${perfilJogador.recordeEstrelas[0]} (no ${perfilJogador.recordeEstrelas[1]})`;
+
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        if (perfilJogador.itensInventario[i].categoria === 'titulo' && perfilJogador.itensInventario[i].equipado) {
+            tituloJogador.innerText = perfilJogador.itensInventario[i].titulo;
+        }
+        if (perfilJogador.itensInventario[i].categoria === 'foto' && perfilJogador.itensInventario[i].equipado) {
+            fotoJogador.setAttribute('src', perfilJogador.itensInventario[i].img);
+        }
+    }
+
+    // saldo
+    const saldoJogador = document.querySelectorAll('.saldoJogador');
+    saldoJogador.forEach(saldo => {
+        saldo.innerText = perfilJogador.saldo;
+    });
+    // poções
+    atualizaSpanPocaoTempo(perfilJogador.quantidadePocaoTempo);
+    atualizaSpanPocaoBateria(perfilJogador.quantidadePocaoBateria);
+}
+
+atualizaExibicaoPerfilJogador(perfilJogador);
 
 function temporizador() {
     clearInterval(intervaloTemporizador);
@@ -375,6 +389,29 @@ btnJogar.addEventListener('click', () => {
 		infoMusica.style.setProperty('display', 'none');
 	}, 3000);
 
+    // lida com as poções
+    function lidaPocoes(e) {
+        switch(e.keyCode) {
+            case 49: // tecla 1
+                if (perfilJogador.quantidadePocaoTempo > 0) {
+                    tempoCorrente += 5;
+                    perfilJogador.quantidadePocaoTempo--;
+                    atualizaSpanPocaoTempo(perfilJogador.quantidadePocaoTempo);
+                }
+                break;
+            case 50: // tecla 2
+                if (perfilJogador.quantidadePocaoBateria > 0) {
+                    atualizaBateria(1);
+                    perfilJogador.quantidadePocaoBateria--;
+                    atualizaSpanPocaoBateria(perfilJogador.quantidadePocaoBateria);
+                }
+                break;
+        }
+    }
+
+    document.removeEventListener('keypress', lidaPocoes);
+    document.addEventListener('keypress', lidaPocoes);
+
 	leCircuito(JSON.parse(circuitosFeitos[circuitoAtual]));
 	fase.innerText = circuitoAtual + 1;
 	temporizador();
@@ -415,7 +452,7 @@ btnProximo.addEventListener('click', () => {
                 }
             } else {
                 circuitoAtual++;
-                if (circuitoAtual > perfilJogador.recordeFases[0]) {
+                if (circuitoAtual > perfilJogador.recordeFases[0] && modoJogo !== 'treino' && modoJogo !== 'infinito') {
                     perfilJogador.recordeFases[0] = circuitoAtual;
                     perfilJogador.recordeFases[1] = dificuldade;
                 }
@@ -582,9 +619,12 @@ function exibeEstrelas() {
 
 	valorPontuacao += totalEstrelas;
 
-    if (valorPontuacao > perfilJogador.recordeEstrelas[0]) {
-        perfilJogador.recordeEstrelas[0] = valorPontuacao;
-        perfilJogador.recordeEstrelas[1] = dificuldade;
+    if (modoJogo !== 'treino') {
+        perfilJogador.saldo += totalEstrelas;
+        if (valorPontuacao > perfilJogador.recordeEstrelas[0]) {
+            perfilJogador.recordeEstrelas[0] = valorPontuacao;
+            perfilJogador.recordeEstrelas[1] = dificuldade;
+        }
     }
 
 	pontuacao.innerText = valorPontuacao;
@@ -605,10 +645,27 @@ function lidaTotalPerfeitos(reseta = true) {
 	}
 }
 
-function atualizaBateria() {
-	if (qtdeBateria >= 0 && !vitoria && !derrota) {
-		bateria.innerText = --qtdeBateria;
-	}
+function atualizaSpanPocaoTempo(valor) {
+    const spanQuantidadePocaoTempo = document.querySelector('#quantidadePocaoTempo');
+    spanQuantidadePocaoTempo.innerText = valor;
+}
+
+function atualizaSpanPocaoBateria(valor) {
+    const spanQuantidadePocaoBateria = document.querySelector('#quantidadePocaoBateria');
+    spanQuantidadePocaoBateria.innerText = valor;
+}
+
+function atualizaBateria(valor = 0) {
+    if (!vitoria && !derrota) {
+         if (valor === 0) {
+            if (qtdeBateria >= 0) {
+                bateria.innerText = --qtdeBateria;
+            }
+        } else {
+            qtdeBateria += valor;
+            bateria.innerText = qtdeBateria;
+        }       
+    }
 }
 
 function defineBateria(estadoInicial, solucaoPerfeita) {
@@ -1093,3 +1150,169 @@ abrirConquistas.addEventListener('click', () => {
     fechaDivsAbertura(divConquistas);
     divConquistas.classList.toggle('esconde');
 });
+
+// Loja
+const btnComprar = document.querySelectorAll('.btnComprar');
+btnComprar.forEach(btn => {
+    btn.addEventListener('click', () => {
+        let compraFeita = false;
+        switch(btn.getAttribute('title')) {
+            case 'pocao-tempo':
+                if (perfilJogador.saldo >= 250) {
+                    perfilJogador.saldo -= 250;
+                    perfilJogador.quantidadePocaoTempo++;
+                    compraFeita = true;
+                } 
+                break;
+            case 'pocao-bateria':
+                if (perfilJogador.saldo >= 250) {
+                    perfilJogador.saldo -= 250;
+                    perfilJogador.quantidadePocaoBateria++;
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-guerreiro':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con1.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-bruxa':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con2.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-ladrao':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con3.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-ferreiro':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con4.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-ladra':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con5.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-arqueiro':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con6.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-homem-areia':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con7.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-fada':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con8.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+            case 'foto-ninja':
+                if (perfilJogador.saldo >= 500) {
+                    perfilJogador.saldo -= 500;
+                    perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con9.png', equipado: false});
+                    compraFeita = true;
+                }
+                break;
+        }
+
+        if (!compraFeita) {
+            exibeToast('Saldo insuficiente!', 0);
+        } else {
+            atualizaEditarPerfil();
+            atualizaExibicaoPerfilJogador();
+             exibeToast('Item adquirido com sucesso.', 0);
+        }
+        
+    });
+});
+
+// Editar perfil
+function desequipa(categoria) {
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        if (perfilJogador.itensInventario[i].categoria === categoria) {
+            perfilJogador.itensInventario[i].equipado = false;
+        }
+    }
+}
+
+function equipa(titulo) {
+    console.log(titulo);
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        if (perfilJogador.itensInventario[i].titulo === titulo) {
+            perfilJogador.itensInventario[i].equipado = true;
+        }
+    }
+}
+
+function atualizaEditarPerfil() {
+    let grid = [... divEditarPerfil.children][0];
+    grid.innerHTML = '';
+    perfilJogador.itensInventario.forEach(item => {
+        let divItem = document.createElement('div');
+        divItem.classList.add('item');
+        let titulo = document.createElement('h4');
+        titulo.classList.add('titulo-item');
+        let img = document.createElement('img');
+        img.classList.add('img-item');
+        
+        let descricao = document.createElement('p');
+        descricao.classList.add('descricao-item');
+        let botao = document.createElement('button');
+        botao.classList.add('botao-item', 'btnEquipar');
+        botao.setAttribute('title', item.titulo);
+        botao.setAttribute('categoria', item.categoria);
+
+        titulo.innerText = item.titulo.replaceAll('-', ' do ');
+        img.setAttribute('src', item.img);
+        descricao.innerText = item.descricao.replaceAll('-', ' do ');
+        botao.innerText = 'Equipar';
+
+        divItem.appendChild(titulo);
+        divItem.appendChild(img);
+        divItem.appendChild(descricao);
+        divItem.appendChild(botao);
+        grid.appendChild(divItem);
+    });
+
+    const btnEquipar = [... document.querySelectorAll('.btnEquipar')];
+    btnEquipar.forEach(btn => {
+        btn.addEventListener('click', () => {
+            switch(btn.getAttribute('categoria')) {
+                case 'foto':
+                    desequipa(btn.getAttribute('categoria'));
+                    equipa(btn.getAttribute('title'));
+                    exibeToast('Item equipado com sucesso.', 0);
+                    break;
+                case 'titulo':
+                    desequipa(btn.getAttribute('categoria'));
+                    equipa(btn.getAttribute('title'));
+                    exibeToast('Item equipado com sucesso.', 0);
+                    break;
+            }
+            atualizaExibicaoPerfilJogador();
+        })
+    });
+}
+
+atualizaEditarPerfil();

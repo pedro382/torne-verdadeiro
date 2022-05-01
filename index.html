@@ -34,10 +34,12 @@
 					<img id="fotoJogador" src="https://picsum.photos/200/300">
 					<div>
 						<p id="nomeJogador">Nome jogador</p>
+						<p id="generoJogador">Masculino</p>
 						<p id="tituloJogador">Título do jogador</p>
 					</div>					
 				</div>
 				<p>Nível: <span id="nivelJogador">0</span></p>
+				<p>Saldo: <span class="saldoJogador">0</span></p>
 				<p>Total conquistas: <span id="totalConquistasJogador">0</span></p>
 				<p>Recorde de fases: <span id="recordeFasesJogador">0</span></p>
 				<p>Recorde de estrelas: <span id="recordeEstrelasJogador">0</span></p>
@@ -164,28 +166,98 @@
 			<h2 id="abrirEditarPerfil" class="abridores">Editar perfil</h2>
 			<div id="divEditarPerfil" class="divsAbertura esconde">
 				<div class="grid">
-					<div class="alinhados-verticalmente item-perfil">
-						<label for="inputNome">Nome: </label>
-						<input type="text" id="inputNome">
-						<label for="selectGenero">Gênero: </label>
-						<select id="selectGenero">
-							<option value="m">Masculino</option>
-							<option value="f">Feminino</option>
-						</select>
-						<button id="btnSalvarPerfil">Salvar</button>					
-					</div>
+				</div>
+				<div class="alinhados-verticalmente item">
+					<label for="inputNome">Nome: </label>
+					<input type="text" id="inputNome">
+					<label for="selectGenero">Gênero: </label>
+					<select id="selectGenero">
+						<option value="m">Masculino</option>
+						<option value="f">Feminino</option>
+					</select>
+					<button class="botao-item" id="btnSalvarPerfil">Salvar</button>					
 				</div>
 			</div>
 			<h2 id="abrirLoja" class="abridores">Loja</h2>
 			<div id="divLoja" class="divsAbertura esconde">
-				<p id="saldo">Saldo: <span><i class="bi bi-star-fill"></i> 100 estrelas</span></p>
+				<p id="saldo">Saldo: <span><i class="bi bi-star-fill"></i> <span class="saldoJogador">0</span> estrelas</span></p>
 				<div class="grid">
-					<div class="item-loja">
-						<h4 class="titulo-item-loja">Tema Azul</h4>
-						<img src="https://picsum.photos/200/300" class="img-item-loja">
-						<p class="descricao-item-loja">Você mudará toda a temática do jogo para azul e cinza.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 100 estrelas</p>
-						<button class="btnComprar">Comprar</button>
+					<div class="item">
+						<h4 class="titulo-item">Poção de Tempo</h4>
+						<img src="media/itens-loja/pocao-tempo.png" class="img-item">
+						<p class="descricao-item">Ganha 5 segundos a mais de tempo a cada poção usada.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
+						<button class="botao-item btnComprar" title="pocao-tempo">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Poção de Bateria</h4>
+						<img src="media/itens-loja/pocao-bateria.png" class="img-item">
+						<p class="descricao-item">Ganha 1 bateria a mais.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<button class="botao-item btnComprar" title="pocao-bateria">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Guerreiro</h4>
+						<img src="media/itens-loja/personagens/con1.png" class="img-item">
+						<p class="descricao-item">Libera a foto do guerreiro para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-guerreiro">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Bruxa</h4>
+						<img src="media/itens-loja/personagens/con2.png" class="img-item">
+						<p class="descricao-item">Libera a foto da bruxa para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-bruxa">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Ladrão</h4>
+						<img src="media/itens-loja/personagens/con3.png" class="img-item">
+						<p class="descricao-item">Libera a foto do ladrão para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-ladrao">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Ferreiro</h4>
+						<img src="media/itens-loja/personagens/con4.png" class="img-item">
+						<p class="descricao-item">Libera a foto do ferreiro para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-ferreiro">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Ladra</h4>
+						<img src="media/itens-loja/personagens/con5.png" class="img-item">
+						<p class="descricao-item">Libera a foto da ladra para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-ladra">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Arqueiro</h4>
+						<img src="media/itens-loja/personagens/con6.png" class="img-item">
+						<p class="descricao-item">Libera a foto do arqueiro para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-arqueiro">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Homem da areia</h4>
+						<img src="media/itens-loja/personagens/con7.png" class="img-item">
+						<p class="descricao-item">Libera a foto do homem da areia para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-homem-areia">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Fada</h4>
+						<img src="media/itens-loja/personagens/con8.png" class="img-item">
+						<p class="descricao-item">Libera a foto da fada para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-fada">Comprar</button>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Ninja</h4>
+						<img src="media/itens-loja/personagens/con9.png" class="img-item">
+						<p class="descricao-item">Libera a foto do ninja para ser usada no perfil.</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
+						<button class="botao-item btnComprar" title="foto-ninja">Comprar</button>
 					</div>
 				</div>
 			</div>
@@ -230,7 +302,7 @@
 			<p id="pMusica"><i id="play" class="bi bi-pause"></i> <span title="música">Música</span></p>
 			<p id="pFase"><i class="bi bi-boxes"></i> Fase <span id="fase" title="fase"></span></p>
 			<p id="pDesempenho"><i class="bi bi-graph-up-arrow"></i> <span id="desempenho" title="desempenho">0.00%</span></p>
-			<p><img src="media/itens-loja/pocao-tempo.png"> 0 <img src="media/itens-loja/pocao-bateria.png"> 0</p>
+			<p><img src="media/itens-loja/pocao-tempo.png"> <span id="quantidadePocaoTempo">0</span> <img src="media/itens-loja/pocao-bateria.png"> <span id="quantidadePocaoBateria">0</span></p>
 		</div>
 		<div>
 			<p class="pGenerico" id="pPontuacao"><i class="pontuacao bi bi-hand-thumbs-up"></i> <span id="pontuacao" title="pontuação">0</span></p>
