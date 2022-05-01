@@ -130,13 +130,13 @@
 				<div>
 					<h3>Dificuldade:</h3>
 					<div class="div-inputs-configuracao">
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeNormal" value="normal" checked><label for="dificuldadeNormal"> Fácil</label></p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeFacil" value="facil" checked><label for="dificuldadeFacil"> Fácil</label></p>
 						<p class="explicacao">Somente 3 tipos de portões lógicos, uma bateria extra por fase, 30 segundos de tempo e penalidade 0 ao perder um circuito</p>
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeDificil" value="dificil"><label for="dificuldadeDificil"> Normal</label></p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeNormal" value="normal"><label for="dificuldadeNormal"> Normal</label></p>
 						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 30 segundos de tempo e penalidade -1 ao perder um circuito</p>
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeMuitoDificil" value="muito-dificil"><label for="dificuldadeMuitoDificil"> Difícil</label></p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeDificil" value="dificil"><label for="dificuldadeDificil"> Difícil</label></p>
 						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 20 segundos de tempo e penalidade -2 ao perder um circuito</p>
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeMuitoDificil" value="muito-dificil"><label for="dificuldadeMuitoDificil"> Impossível</label></p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeImpossivel" value="impossivel"><label for="dificuldadeImpossivel"> Impossível</label></p>
 						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 10 segundos de tempo, penalidade -3 ao perder um circuito e sem cor indicativa nos fios ativos</p>
 					</div>
 				</div>
@@ -161,12 +161,8 @@
 
 				</div>
 			</div>
-
-			<h2 id="abrirQuintetoDia" class="abridores">Quinteto do dia</h2>
 			<h2 id="abrirEditarPerfil" class="abridores">Editar perfil</h2>
 			<div id="divEditarPerfil" class="divsAbertura esconde">
-				<div class="grid">
-				</div>
 				<div class="alinhados-verticalmente item">
 					<label for="inputNome">Nome: </label>
 					<input type="text" id="inputNome">
@@ -175,84 +171,87 @@
 						<option value="m">Masculino</option>
 						<option value="f">Feminino</option>
 					</select>
-					<button class="botao-item" id="btnSalvarPerfil">Salvar</button>					
+					<button class="botao-item" id="btnSalvarPerfil">Salvar</button>
+					<button class="botao-item" id="btnExcluirPerfil">Excluir Perfil</button>			
+				</div>
+				<div class="grid">
 				</div>
 			</div>
 			<h2 id="abrirLoja" class="abridores">Loja</h2>
 			<div id="divLoja" class="divsAbertura esconde">
 				<p id="saldo">Saldo: <span><i class="bi bi-star-fill"></i> <span class="saldoJogador">0</span> estrelas</span></p>
 				<div class="grid">
-					<div class="item">
+					<div class="item" id="pocao-tempo">
 						<h4 class="titulo-item">Poção de Tempo</h4>
 						<img src="media/itens-loja/pocao-tempo.png" class="img-item">
 						<p class="descricao-item">Ganha 5 segundos a mais de tempo a cada poção usada.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
 						<button class="botao-item btnComprar" title="pocao-tempo">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="pocao-bateria">
 						<h4 class="titulo-item">Poção de Bateria</h4>
 						<img src="media/itens-loja/pocao-bateria.png" class="img-item">
 						<p class="descricao-item">Ganha 1 bateria a mais.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
 						<button class="botao-item btnComprar" title="pocao-bateria">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-guerreiro">
 						<h4 class="titulo-item">Guerreiro</h4>
 						<img src="media/itens-loja/personagens/con1.png" class="img-item">
 						<p class="descricao-item">Libera a foto do guerreiro para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-guerreiro">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-bruxa">
 						<h4 class="titulo-item">Bruxa</h4>
 						<img src="media/itens-loja/personagens/con2.png" class="img-item">
 						<p class="descricao-item">Libera a foto da bruxa para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-bruxa">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-ladrao">
 						<h4 class="titulo-item">Ladrão</h4>
 						<img src="media/itens-loja/personagens/con3.png" class="img-item">
 						<p class="descricao-item">Libera a foto do ladrão para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-ladrao">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-ferreiro">
 						<h4 class="titulo-item">Ferreiro</h4>
 						<img src="media/itens-loja/personagens/con4.png" class="img-item">
 						<p class="descricao-item">Libera a foto do ferreiro para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-ferreiro">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-ladra">
 						<h4 class="titulo-item">Ladra</h4>
 						<img src="media/itens-loja/personagens/con5.png" class="img-item">
 						<p class="descricao-item">Libera a foto da ladra para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-ladra">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-arqueiro">
 						<h4 class="titulo-item">Arqueiro</h4>
 						<img src="media/itens-loja/personagens/con6.png" class="img-item">
 						<p class="descricao-item">Libera a foto do arqueiro para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-arqueiro">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-homem-areia">
 						<h4 class="titulo-item">Homem da areia</h4>
 						<img src="media/itens-loja/personagens/con7.png" class="img-item">
 						<p class="descricao-item">Libera a foto do homem da areia para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-homem-areia">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-fada">
 						<h4 class="titulo-item">Fada</h4>
 						<img src="media/itens-loja/personagens/con8.png" class="img-item">
 						<p class="descricao-item">Libera a foto da fada para ser usada no perfil.</p>
 						<p class="preco"><i class="bi bi-star-fill"></i> 250 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-fada">Comprar</button>
 					</div>
-					<div class="item">
+					<div class="item" id="foto-ninja">
 						<h4 class="titulo-item">Ninja</h4>
 						<img src="media/itens-loja/personagens/con9.png" class="img-item">
 						<p class="descricao-item">Libera a foto do ninja para ser usada no perfil.</p>
@@ -265,14 +264,27 @@
 			<h2 id="abrirConquistas" class="abridores">Conquistas</h2>
 			<div id="divConquistas" class="divsAbertura esconde">
 				<p>Quando você concluir uma determinada conquista, a cor de fundo ficará verde.</p>
-				<strong>1º grupo de conquistas:</strong>
 				<div class="grupo-conquistas">
-					<p class="conquista"><i class="bi bi-star-fill"></i> Mexer nas configurações do jogo (5 estrelas) <i class="bi bi-star-fill"></i></p>		
+					<p class="conquista" id="conquistaColega">Participar de 7 quintetos (ganha o título "Colega")</p>
+					<p class="conquista" id="conquistaAmigo">Participar de 30 quintetos (ganha o título "Amigo")</p>
+					<p class="conquista" id="conquistaIrmao">Participar de 365 quintetos (ganha o título "Irmão")</p>
+					<p class="conquista" id="conquistaEuTambemSeiFazer">Criar 1 circuito (ganha o título "Eu também sei fazer")</p>
+					<p class="conquista" id="conquistaCrieiAlguns">Criar 7 circuitos (ganha o título "Criei alguns")</p>
+					<p class="conquista" id="conquistaCrieiMuitos">Criar 15 circuitos (ganha o título "Criei muitos!")</p>
+					<p class="conquista" id="conquistaOLogicoJunior">Atingir a fase 50 no fácil (ganha o título "O Lógico Júnior")</p>
+					<p class="conquista" id="conquistaOLogicoPleno">Conseguir 25 perfeitos seguidos no fácil (ganha o título "O Lógico Pleno")</p>
+					<p class="conquista" id="conquistaOLogicoSenior">Atingir a fase 100 no normal (ganha o título "O Lógico Sênior")</p>
+					<p class="conquista" id="conquistaMestreDaLogica">Conseguir 50 perfeitos seguidos no normal (ganha o título "Mestre da Lógica")</p>
+					<p class="conquista" id="conquistaHumano">Atingir a fase 200 no difícil (ganha o título "Humano?")</p>
+					<p class="conquista" id="conquistaNaoHumano">Conseguir 100 perfeitos seguidos no difícil (ganha o título "Não-humano")</p>
+					<p class="conquista" id="conquistaSemiDeus">Atingir a fase 300 no muito difícil (ganha o título "Semi-Deus")</p>
+					<p class="conquista" id="conquistaDeusInferior">Conseguir 150 perfeitos seguidos no muito difícil (ganha o título "Deus Inferior")</p>
+					<p class="conquista" id="conquistaDeusMedio">Atingir a fase 600 no muito difícil ou impossível (ganha o título "Deus Médio")</p>
+					<p class="conquista" id="conquistaDeusSupremo">Conseguir 200 perfeitos seguidos no muito difícil ou impossível (ganha o título "Deus Supremo")</p>
 				</div>
 			</div>
-
 			<h2 id="abrirCriador" class="abridores">Criar circuitos</h2>
-
+			<h2 id="abrirQuintetoDia" class="abridores">Quinteto do dia</h2>
 			<div class="alinhados-horizontalmente">
 				<button id="btnJogar">Novo jogo!</button><br>
 				<button id="btnVoltar">Voltar à partida</button>

@@ -115,7 +115,11 @@ const btnEntendi = document.querySelector('#btnEntendi');
 const iconeFecharModalInicial = document.querySelector('#iconeFecharModalInicial');
 const btnVoltar = document.querySelector('#btnVoltar');
 const checkboxDesativarEfeitosSonoros = document.querySelector('#checkboxDesativarEfeitosSonoros');
+const checkboxDesativarMusica = document.querySelector('#checkboxDesativarMusica');
+const checkboxDesativarAnimacaoBackground = document.querySelector('#checkboxDesativarAnimacaoBackground');
 let desativarEfeitosSonoros = false;
+let desativarMusica = false;
+let desativarAnimacaoBackground = false;
 let limiteFases = 3;
 
 let elementosLinhasPagina = ['linha-central-vertical', 'linha-central-horizontal', 'linha-lateral-direita', 'linha-lateral-esquerda', 'linha-recentralizadora-direita', 'linha-recentralizadora-esquerda', 'primeiro-canto', 'segundo-canto', 'terceiro-canto', 'quarto-canto', 'cruz', 'cruz-quebrada-direita', 'cruz-quebrada-esquerda', 't'];
@@ -236,14 +240,21 @@ function lidaNivelJogador(xp) {
             mensagemUpou.style.setProperty('display', 'none');
         }, 1500);
     }
-    // salvaPerfilJogador();
+    salvaPerfilJogador();
     atualizaExibicaoPerfilJogador();
 }
 
 const btnSalvarPerfil = document.getElementById('btnSalvarPerfil');
 btnSalvarPerfil.addEventListener('click', () => {
     atualizaNomeGeneroJogador();
+    salvaPerfilJogador();
 });
+
+const btnExcluirPerfil = document.getElementById('btnExcluirPerfil');
+btnExcluirPerfil.addEventListener('click', () => {
+    window.localStorage.clear();
+    exibeToast('Perfil excluído com sucesso.', 0);
+})
 
 function atualizaNomeGeneroJogador() {
     const inputNome = document.getElementById('inputNome');
@@ -297,9 +308,67 @@ function atualizaExibicaoPerfilJogador() {
     // poções
     atualizaSpanPocaoTempo(perfilJogador.quantidadePocaoTempo);
     atualizaSpanPocaoBateria(perfilJogador.quantidadePocaoBateria);
-}
 
-atualizaExibicaoPerfilJogador(perfilJogador);
+    // atualiza as conquistas
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        let nomeAdaptado;
+        switch(perfilJogador.itensInventario[i].titulo) {
+            case 'Colega':
+                nomeAdaptado = 'conquistaColega';
+            case 'Amigo':
+                nomeAdaptado = 'conquistaAmigo';
+            case 'Irmão':
+                nomeAdaptado = 'conquistaIrmao';
+            case 'Eu também sei fazer':
+                nomeAdaptado = 'conquistaEuTambemSeiFazer';
+            case 'Criei alguns':
+                nomeAdaptado = 'conquistaCrieiAlguns';
+            case 'Criei muitos!':
+                nomeAdaptado = 'conquistaCrieiMuitos';
+            case 'O Lógico Júnior':
+                nomeAdaptado = 'conquistaOLogicoJunior';
+                break;
+            case 'O Lógico Pleno':
+                nomeAdaptado = 'conquistaOLogicoPleno';
+                break;
+            case 'O Lógico Sênior':
+                nomeAdaptado = 'conquistaOLogicoSenior';
+                break;
+            case 'Mestre da Lógica':
+                nomeAdaptado = 'conquistaMestreDaLogica';
+                break;
+            case 'Humano?':
+                nomeAdaptado = 'conquistaHumano';
+                break;
+            case 'Não-humano':
+                nomeAdaptado = 'conquistaNaoHumano';
+                break;
+            case 'Semi-Deus':
+                nomeAdaptado = 'conquistaSemiDeus';
+                break;
+            case 'Deus Inferior':
+                nomeAdaptado = 'conquistaDeusInferior';
+                break;
+            case 'Deus Médio':
+                nomeAdaptado = 'conquistaDeusMedio';
+                break;
+            case 'Deus Supremo':
+                nomeAdaptado = 'conquistaDeusSupremo';
+                break;
+
+        }
+
+        if (nomeAdaptado) {
+            document.querySelector(`#${nomeAdaptado}`).style.setProperty('background-color', 'seagreen');
+            document.querySelector(`#${nomeAdaptado}`).style.setProperty('color', '#fff');
+            document.querySelector(`#${nomeAdaptado}`).style.setProperty('border', '2px solid orange');
+        }
+    }
+
+    // atualiza os itens do perfil e remove os itens já comprados da loja
+    atualizaEditarPerfil();
+    salvaPerfilJogador();
+}
 
 function temporizador() {
     clearInterval(intervaloTemporizador);
@@ -347,12 +416,15 @@ btnJogar.addEventListener('click', () => {
     document.querySelector('#pDesempenho').style.setProperty('display', 'block');
     document.querySelector('#pFase').style.setProperty('display', 'block');
     btnVoltar.style.setProperty('display', 'block');
-    if (dificuldade === 'dificil') {
-        tempoInicial = 20;
-    } else if (dificuldade === 'muito-dificil') {
-        tempoInicial = 10;
-    } else {
+
+    if (dificuldade === 'facil') {
+        tempoInicial = 45;
+    } else if (dificuldade === 'normal') {
         tempoInicial = 30;
+    } else if (dificuldade === 'dificil') {
+        tempoInicial = 20;
+    } else {
+        tempoInicial = 10;
     }
 
  	if (modoJogo === 'treino') {
@@ -382,7 +454,10 @@ btnJogar.addEventListener('click', () => {
 
     play.classList.remove('bi-play');
     play.classList.add('bi-pause');
-    musicaFundo.play(); musicaFundo.loop = true;
+   
+    if (!desativarMusica) {
+         musicaFundo.play(); musicaFundo.loop = true;
+    }
 
 	infoMusica.style.setProperty('display', 'block');
 	setTimeout(() => {
@@ -425,7 +500,9 @@ play.addEventListener('click', () => {
 	} else {
 		play.classList.remove('bi-play');
 		play.classList.add('bi-pause');
-        musicaFundo.play();
+        if (!desativarMusica) {
+            musicaFundo.play();
+        }
 	}
 });
 
@@ -435,26 +512,61 @@ btnProximo.addEventListener('click', () => {
     if (modoJogo === 'progressivo') {
         if (circuitoAtual < circuitosFeitos.length - 1 && circuitoAtual < limiteFases - 1) {
             if (derrota) {
-                if (dificuldade === 'normal') {
+                if (dificuldade === 'facil') {
                     circuitoAtual = circuitoAtual;
-                } else if (dificuldade === 'dificil') {
+                } else if (dificuldade === 'normal') {
                     if (circuitoAtual > 0) {
                         circuitoAtual--;
                     } else {
                         circuitoAtual = 0;
                     }
-                } else if (dificuldade === 'muito-dificil') {
-                     if (circuitoAtual > 1) {
-                        circuitoAtual -= 2;
+                } else if (dificuldade === 'dificil') {
+                     if (circuitoAtual > 3) {
+                        circuitoAtual -= 3;
                     } else {
                         circuitoAtual = 0;
                     }                   
+                } else if (dificuldade === 'impossivel') {
+                     if (circuitoAtual > 5) {
+                        circuitoAtual -= 5;
+                    } else {
+                        circuitoAtual = 0;
+                    }    
                 }
             } else {
                 circuitoAtual++;
-                if (circuitoAtual > perfilJogador.recordeFases[0] && modoJogo !== 'treino' && modoJogo !== 'infinito') {
+                if (circuitoAtual > perfilJogador.recordeFases[0]) {
                     perfilJogador.recordeFases[0] = circuitoAtual;
                     perfilJogador.recordeFases[1] = dificuldade;
+                }
+
+                // conquistas de nível
+                if (dificuldade === 'facil') {
+                    if (circuitoAtual === 50) {
+                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Lógico Júnior', descricao: '', img: 'media/conquistas/active1.png'});
+                        atualizaExibicaoPerfilJogador();
+                        exibeToast('Você obteve uma conquista!', 0);
+                    }
+                } else if (dificuldade === 'normal') {
+                    if (circuitoAtual === 100) {
+                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Lógico Sênior', descricao: '', img: 'media/conquistas/active1.png'});
+                        atualizaExibicaoPerfilJogador();
+                        exibeToast('Você obteve uma conquista!', 0);
+                    }
+                } else if (dificuldade === 'dificil' || dificuldade === 'impossivel') {
+                    if (circuitoAtual === 200) {
+                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Humano?', descricao: '', img: 'media/conquistas/active1.png'});
+                        atualizaExibicaoPerfilJogador();
+                        exibeToast('Você obteve uma conquista!', 0);
+                    } else if (circuitoAtual === 300) {
+                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Semi-Deus', descricao: '', img: 'media/conquistas/active1.png'});
+                        atualizaExibicaoPerfilJogador();
+                        exibeToast('Você obteve uma conquista!', 0);
+                    } else if (circuitoAtual === 600) {
+                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Deus Médio', descricao: '', img: 'media/conquistas/active1.png'});
+                        atualizaExibicaoPerfilJogador();
+                        exibeToast('Você obteve uma conquista!', 0);
+                    }
                 }
             }
             fase.innerText = circuitoAtual + 1;
@@ -467,28 +579,20 @@ btnProximo.addEventListener('click', () => {
                 if (valorDesempenho <= 33.33) {
                     mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Você chegou ao fim com certa dificuldade, mas não desanime. Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeito(s) seguidos.`;
-                    if (!desativarEfeitosSonoros) {
-                        executaEfeitoSonoro('fracasso');
-                    }
+                    executaEfeitoSonoro('fracasso');
                 } else if (valorDesempenho > 33.33 && valorDesempenho <= 66.66) {
                     mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Olha, você não foi mal! Continue praticando! Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
-                    if (!desativarEfeitosSonoros) {
-                        executaEfeitoSonoro('fogo-0');
-                    }
+                    executaEfeitoSonoro('fogo-0');
                 } else if (valorDesempenho > 66.66 && valorDesempenho < 99.99) {
                     mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Impressionante! Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
-                    if (!desativarEfeitosSonoros) {
-                        executaEfeitoSonoro('super-sucesso');
-                    }
+                    executaEfeitoSonoro('super-sucesso');
                 } else {
                     mensagem.style.setProperty('background-color', 'darkgreen');
                     mensagem.style.setProperty('box-shadow', '0 0 100px green');
                     textoFinal = `Você é mesmo humano? Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
-                    if (!desativarEfeitosSonoros) {
-                        executaEfeitoSonoro('fogo-2');
-                    }
+                    executaEfeitoSonoro('fogo-2');
                 }
 
                 mensagem.innerText = textoFinal;
@@ -607,14 +711,10 @@ function exibeEstrelas() {
 	}
 
 	if (totalEstrelas >= 3) {
-		if (!desativarEfeitosSonoros) {
-            executaEfeitoSonoro('completou');
-        }
+        executaEfeitoSonoro('completou');
 
 	} else {
-		if (!desativarEfeitosSonoros) {
-            executaEfeitoSonoro('gelo', 'mp3');
-        }
+        executaEfeitoSonoro('gelo', 'mp3');
 	}
 
 	valorPontuacao += totalEstrelas;
@@ -678,9 +778,11 @@ function defineBateria(estadoInicial, solucaoPerfeita) {
 	}
 
     let bonus;
-    if (dificuldade === 'normal') {
+    if (dificuldade === 'facil') {
+        bonus = 2;
+    } else if (dificuldade === 'normal') {
         bonus = 1;
-    } else if (dificuldade === 'dificil' || dificuldade === 'muito-dificil') {
+    } else if (dificuldade === 'dificil' || dificuldade === 'impossivel') {
         bonus = 0;
     }
 
@@ -856,7 +958,7 @@ function propaga(circuitoJSON) {
 	for (let i = 0; i < inputs.length; i++) {
 		if (inputs[i].innerText === '1' && espacosElementos[i + 140].classList.contains('elementoPresente')) {
 			espacosElementos[i + 140].classList.add('on');
-			if (dificuldade !== 'muito-dificil') {
+			if (dificuldade !== 'impossivel') {
                 espacosElementos[i + 140].style.backgroundImage = 'url("media/elementos/linha-central-vertical-on.png")';
             }
 		} else if (espacosElementos[i + 140].classList.contains('elementoPresente')) {
@@ -873,7 +975,7 @@ function propaga(circuitoJSON) {
 			if (circuitoJSON[i].conexao.length !== 0) {
                 if (espacosElementos[circuitoJSON[i].conexao[0]].classList.contains('on')) {
                     espacosElementos[circuitoJSON[i].posicao].classList.add('on');
-                    if (dificuldade !== 'muito-dificil') {
+                    if (dificuldade !== 'impossivel') {
                         espacosElementos[circuitoJSON[i].posicao].style.backgroundImage = `url(media/elementos/${circuitoJSON[i].elemento}-on.png)`;
                     }
                 } else {
@@ -963,20 +1065,45 @@ function lidaVitoria() {
             let elogio = elogios[getRandomIntInclusive(0, elogios.length - 1)];
             exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos);
         }
+
+        // conquistas de streak
+        if (dificuldade === 'facil') {
+            if (totalPerfeitos === 25) {
+                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Lógico Pleno', descricao: '', img: 'media/conquistas/active1.png'});
+                atualizaExibicaoPerfilJogador();
+                exibeToast('Você obteve uma conquista!', 0);
+            }
+        } else if (dificuldade === 'normal') {
+            if (totalPerfeitos === 50) {
+                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Mestre da Lógica', descricao: '', img: 'media/conquistas/active1.png'});
+                atualizaExibicaoPerfilJogador();
+                exibeToast('Você obteve uma conquista!', 0);
+            }
+        } else if (dificuldade === 'dificil' || dificuldade === 'impossivel') {
+            if (totalPerfeitos === 100) {
+                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Não-humano', descricao: '', img: 'media/conquistas/active1.png'});
+                atualizaExibicaoPerfilJogador();
+                exibeToast('Você obteve uma conquista!', 0);
+            } else if (totalPerfeitos === 150) {
+                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Deus Inferior', descricao: '', img: 'media/conquistas/active1.png'});
+                atualizaExibicaoPerfilJogador();
+                exibeToast('Você obteve uma conquista!', 0);
+            } else if (totalPerfeitos === 200) {
+                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Deus Supremo', descricao: '', img: 'media/conquistas/active1.png'});
+                atualizaExibicaoPerfilJogador();
+                exibeToast('Você obteve uma conquista!', 0);
+            } 
+        }
     }
 }
 
 function lidaDerrota(tipo) {
     if (tipo === 'bateria') {
         mensagem.innerText = 'A sua bateria acabou :(';
-        if (!desativarEfeitosSonoros) {
-            executaEfeitoSonoro('bateria', 'mp3');
-        }
+        executaEfeitoSonoro('bateria', 'mp3');
     } else if (tipo === 'tempo') {
         mensagem.innerText = 'O seu tempo acabou :(';
-        if (!desativarEfeitosSonoros) {
-            executaEfeitoSonoro('fracasso');
-        }
+        executaEfeitoSonoro('fracasso');
     }
 
     mensagem.style.setProperty('background-color', 'brown');
@@ -1017,15 +1144,11 @@ for (let i = 0; i < inputs.length; i++) {
 	inputs[i].addEventListener('click', () => {
 		if ((qtdeBateria > 0 && !vitoria && !derrota) || modoJogo === 'treino') {
 			if (inputs[i].innerText === '0') {
-				if (!desativarEfeitosSonoros) {
-                    executaEfeitoSonoro('1');
-                }
+                executaEfeitoSonoro('1');
 				inputs[i].innerText = '1';
 				inputs[i].style.setProperty('color', 'seagreen');
 			} else if (inputs[i].innerText === '1') {
-				if (!desativarEfeitosSonoros) {
-                    executaEfeitoSonoro('0');
-                }
+                executaEfeitoSonoro('0');
 				inputs[i].style.setProperty('color', 'tomato');
 				inputs[i].innerText = '0';
 			}
@@ -1044,10 +1167,7 @@ function exibeToast(mensagem, valor = -1) {
 	toast.innerText = mensagem;
 
 	let imagem = 'media/fogo.png';;
-
-    if (!desativarEfeitosSonoros) {
-        executaEfeitoSonoro('fogo-0');
-    }
+    executaEfeitoSonoro('fogo-0');
 
     if (valor > 10) {
         valor = 10;
@@ -1077,17 +1197,36 @@ btnVoltar.addEventListener('click', () => {
 opcaoMenu.addEventListener('click', () => {
     modalInicial.style.setProperty('display', 'flex');
     atualizaExibicaoPerfilJogador();
-    // salvaPerfilJogador();
+    salvaPerfilJogador();
     clearInterval(intervaloTemporizador);
 });
 
+// checkbox limites configuração
 checkboxDesativarEfeitosSonoros.addEventListener('click', () => {
     if (desativarEfeitosSonoros) {
         desativarEfeitosSonoros = false;
     } else {
         desativarEfeitosSonoros = true;
     }
-})
+});
+
+checkboxDesativarMusica.addEventListener('click', () => {
+    if (desativarMusica) {
+        desativarMusica = false;
+    } else {
+        desativarMusica = true;
+    }
+});
+
+checkboxDesativarAnimacaoBackground.addEventListener('click', () => {
+    if (desativarAnimacaoBackground) {
+        desativarAnimacaoBackground = false;
+        document.querySelector('body').style.setProperty('animation', 'moveBg 10s infinite;');
+    } else {
+        desativarAnimacaoBackground = true;
+        document.querySelector('body').style.setProperty('animation', 'none');
+    }
+});
 
 const abrirComoJogar = document.querySelector('#abrirComoJogar');
 const abrirConfiguracoes = document.querySelector('#abrirConfiguracoes');
@@ -1115,9 +1254,11 @@ function fechaDivsAbertura(excecao) {
 }
 
 function executaEfeitoSonoro(nome, extensao = 'wav', loop = false) {
-    const efeitoSonoro = new Audio(`media/efeitos-sonoros/${nome}.${extensao}`);
-    efeitoSonoro.loop = loop;
-    efeitoSonoro.play();
+    if (!desativarEfeitosSonoros) {
+        const efeitoSonoro = new Audio(`media/efeitos-sonoros/${nome}.${extensao}`);
+        efeitoSonoro.loop = loop;
+        efeitoSonoro.play();
+    }
 }
 
 abridores.forEach(abridor => {
@@ -1266,9 +1407,17 @@ function equipa(titulo) {
 }
 
 function atualizaEditarPerfil() {
-    let grid = [... divEditarPerfil.children][0];
+    let grid = [... divEditarPerfil.children][1];
     grid.innerHTML = '';
     perfilJogador.itensInventario.forEach(item => {
+
+        if (item.categoria === 'foto') {
+            if (item.titulo !== 'Foto inicial') {
+                let removerItemLoja = document.querySelector(`#${item.titulo}`);
+                removerItemLoja.style.setProperty('display', 'none');               
+            }
+        }
+
         let divItem = document.createElement('div');
         divItem.classList.add('item');
         let titulo = document.createElement('h4');
@@ -1315,4 +1464,4 @@ function atualizaEditarPerfil() {
     });
 }
 
-atualizaEditarPerfil();
+atualizaExibicaoPerfilJogador(perfilJogador);
