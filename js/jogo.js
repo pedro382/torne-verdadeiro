@@ -185,6 +185,7 @@ let derrota = false;
 let estadoInicial, solucaoPerfeita;
 let valorPontuacao = 0;
 let totalPerfeitos = 0;
+let totalPerfeitosRelativo = 0;
 let maximoPerfeitos = 0;
 let nomeMusica = 'Cosmic Drift';
 let nomeAutor = 'DivKid';
@@ -201,7 +202,7 @@ let perfilJogador = JSON.parse(localStorage.getItem('perfilJogador'));
 
 if (!perfilJogador) {
     perfilJogador = {
-        nome: 'Jogador',
+        nome: 'Sem Nome',
         genero: 'Masculino',
         nivel: 0,
         expAtual: 0,
@@ -209,7 +210,7 @@ if (!perfilJogador) {
         saldo: 2000,
         quantidadePocaoTempo: 0,
         quantidadePocaoBateria: 0,
-        itensInventario: [{categoria: 'titulo', titulo: 'Pessoa comum', descricao: 'Título inicial', img: 'media/fogo.png', equipado: true}, {categoria: 'foto', titulo: 'Foto inicial', descricao: 'Foto inicial', img: 'media/fogo.png', equipado: true}],
+        itensInventario: [{categoria: 'titulo', titulo: 'Pessoa comum', descricao: 'Título inicial', img: 'media/usuario.png', equipado: true}, {categoria: 'foto', titulo: 'Foto inicial', descricao: 'Foto inicial', img: 'media/usuario.png', equipado: true}],
         quintetosDia: [], 
         conquistas: [],
         recordeFases: [0, 'facil'],
@@ -672,7 +673,7 @@ function exibeEstrelas() {
 		totalEstrelas += 1;
 	}
 
-	if (dificuldade == 'normal') {
+	if (dificuldade == 'normal' || dificuldade == 'facil') {
 		if (qtdeCliques >= qtdeInicialBateria) {
 			totalEstrelas--;
 		}
@@ -1048,6 +1049,9 @@ function calculaDesempenho() {
 	desempenho.innerText = `${ (( valorPontuacao / (circuitosPassados * 5)) * 100).toFixed(2) }%`;
 }
 
+let facaUmaVez = true;
+let antigoTotalPerfeitos = 0;
+
 function lidaVitoria() {
     jogo.style.setProperty('box-shadow', '2px 2px 100px seagreen');
     btnProximo.style.setProperty('background-color', 'seagreen');
@@ -1064,6 +1068,22 @@ function lidaVitoria() {
         if (totalPerfeitos % 3 === 0) {
             let elogio = elogios[getRandomIntInclusive(0, elogios.length - 1)];
             exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos);
+        }
+
+        if (circuitoAtual >= 3 - 1) {
+            if (facaUmaVez) {
+                antigoTotalPerfeitos = totalPerfeitos;
+                facaUmaVez = false;
+            }
+
+            totalPerfeitosRelativo = totalPerfeitos - antigoTotalPerfeitos;
+
+            console.log(antigoTotalPerfeitos);
+            console.log(totalPerfeitosRelativo);
+
+            if (totalPerfeitosRelativo === 2) {
+                console.log('Você obteve 2 perfeitos depois da fase três.')
+            }
         }
 
         // conquistas de streak
@@ -1213,8 +1233,10 @@ checkboxDesativarEfeitosSonoros.addEventListener('click', () => {
 checkboxDesativarMusica.addEventListener('click', () => {
     if (desativarMusica) {
         desativarMusica = false;
+        musicaFundo.play();
     } else {
         desativarMusica = true;
+        musicaFundo.pause();
     }
 });
 

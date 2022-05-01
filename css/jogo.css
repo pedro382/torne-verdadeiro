@@ -42,7 +42,7 @@ body {
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
-	min-height: 200px;
+	min-height: 250px;
 }
 
 .alinhados-horizontalmente {
@@ -212,7 +212,7 @@ th {
 	display: grid;
 	grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
 	grid-gap: 1rem;
-	margin: 1rem;
+	margin-top: 1rem;
 }
 
 .item {
@@ -242,7 +242,7 @@ th {
 }
 
 .preco, #saldo span {
-	color: darkorange;
+	color: tomato;
 	font-weight: bolder;
 }
 
@@ -342,9 +342,10 @@ input[type="number"], input[type="text"] {
 	border: none;
 	border-bottom: 1px solid #ccc;
 	font-size: 1.25rem;
-	width: 25%;
+	width: 35%;
 	color: seagreen !important;
 	font-weight: bolder !important;
+	text-align: center;
 }
 
 input[type="number"]:focus, input[type="text"]:focus {
@@ -621,6 +622,11 @@ a {
 	text-align: center;
 }
 
+.pocoes img {
+	width: 25px;
+	height: auto;
+}
+
 #opcaoMenu {
 	background-color: #000;
 	color: #fff;
@@ -676,14 +682,14 @@ button:hover {
 
 .botao-item {
 	background: none;
-	background-color: dodgerblue;
+	background-color: seagreen;
 	box-shadow: none;
 	font-size: 1rem;
 }
 
 .botao-item:hover {
 	background: none;
-	background-color: dodgerblue;
+	background-color: seagreen;
 	opacity: .75;
 }
 
@@ -751,6 +757,14 @@ button:hover {
 
 	#jogo {
 		margin-top: .5rem;
+	}
+
+	#btnJogar, #btnVoltar {
+		font-size: 1.5rem;
+	}
+
+	.div-inputs-configuracao {
+		width: 100%;
 	}
 
 	#informacoesSuperiores {
