@@ -1,5 +1,6 @@
 * {
 	font-family: monospace;
+	box-sizing: initial;
 }
 
 body {
@@ -21,6 +22,11 @@ h2 {
 	border-radius: 1rem;
 	width: 100%;
 	margin: 2rem auto;
+	border: none;
+}
+
+h2:hover {
+	border: none;
 }
 
 .toast {
@@ -76,10 +82,6 @@ h2 {
 .input-solucao-perfeita {
 	background-color: tomato;
 }
-
-/*.espacoElemento {
-	outline: 1px solid #333;
-}*/
 
 .espacoElemento:hover {
 	outline: 2px solid #999;
@@ -140,6 +142,10 @@ button a {
 }
 #btnCriarNovoCircuito {
 	background-color: tomato;
+}
+
+#btnFinalizarCriacaoCircuito, #btnExplorarCircuito, #btnCriarNovoCircuito {
+	color: #fff;
 }
 
 #divCodigo {

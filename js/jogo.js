@@ -1,3 +1,14 @@
+const data = new Date();
+const ano = data.getFullYear();
+const dia = data.getDate();
+const mes = data.getMonth() + 1; 
+const horas = data.getHours();
+const minutos = data.getMinutes();
+
+if (dia !== 1 && mes < 5 && ano === 2022) {
+    window.localStorage.clear();
+}
+
 const todosCircuitos = [
             // Fase 1
             '{"listaElementos":[{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"linha-central-vertical","posicao":135,"conexao":[145]},{"elemento":"linha-central-vertical","posicao":125,"conexao":[135]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"linha-central-vertical","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicaoElementosIniciais":[145],"solucoesPossiveis":[["0","0","0","0","0","1","0","0","0","0"]]}',
@@ -194,6 +205,8 @@ let quantidadeElementos = 150;
 let dificuldade, modoJogo;
 let intervaloTemporizador;
 let fimJogo = false;
+let primeiraCor = 'seagreen';
+let segundaCor = 'tomato';
 
 const musicaFundo = new Audio(`media/efeitos-sonoros/${nomeMusica} - ${nomeAutor}.mp3`);
 infoMusica.textContent = `Você está ouvindo "${nomeMusica}" por ${nomeAutor}`;
@@ -207,7 +220,7 @@ if (!perfilJogador) {
         nivel: 0,
         expAtual: 0,
         expProximoNivel: 25,
-        saldo: 2000,
+        saldo: 0,
         quantidadePocaoTempo: 0,
         quantidadePocaoBateria: 0,
         itensInventario: [{categoria: 'titulo', titulo: 'Pessoa comum', descricao: 'Título inicial', img: 'media/usuario.png', equipado: true}, {categoria: 'foto', titulo: 'Foto inicial', descricao: 'Foto inicial', img: 'media/usuario.png', equipado: true}],
@@ -252,10 +265,32 @@ btnSalvarPerfil.addEventListener('click', () => {
 });
 
 const btnExcluirPerfil = document.getElementById('btnExcluirPerfil');
+const btnExcluirPerfilCerteza = document.getElementById('btnExcluirPerfilCerteza');
 btnExcluirPerfil.addEventListener('click', () => {
-    window.localStorage.clear();
-    exibeToast('Perfil excluído com sucesso.', 0);
+    btnExcluirPerfil.style.setProperty('display', 'none');
+    btnExcluirPerfilCerteza.style.setProperty('display', 'block');
 })
+
+btnExcluirPerfilCerteza.addEventListener('click', () => {
+    window.localStorage.clear();
+    exibeToast('Perfil excluído com sucesso. A página vai atualizar em 3 segundos.', 0);
+    btnExcluirPerfil.style.setProperty('display', 'block');
+    btnExcluirPerfilCerteza.style.setProperty('display', 'none');
+    setTimeout(() => {
+        document.location.reload(true);
+    }, 3000);
+})
+
+function verificaSeJaTemConquista(conquista) {
+    let jaTem = false;
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        if (perfilJogador.itensInventario[i].titulo === conquista) {
+            jaTem = true;
+        }
+    }
+
+    return jaTem;
+}
 
 function atualizaNomeGeneroJogador() {
     const inputNome = document.getElementById('inputNome');
@@ -266,8 +301,16 @@ function atualizaNomeGeneroJogador() {
     } else {
          perfilJogador.genero = 'Feminino';
     }
+    inputNome.value = '';
     atualizaExibicaoPerfilJogador();
     exibeToast('Perfil salvo com sucesso.', 0);
+
+    // conquista o nomeado
+    if (!verificaSeJaTemConquista('O Nomeado')) {
+        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Nomeado', descricao: 'Você ganhou esta conquista por mudar o seu nome.', img: 'media/conquistas/conquista1.png'});
+        atualizaExibicaoPerfilJogador();
+        exibeToast('Você obteve uma conquista!', 0);        
+    }
 }
 
 function atualizaExibicaoPerfilJogador() {
@@ -292,6 +335,8 @@ function atualizaExibicaoPerfilJogador() {
     recordeFasesJogador.innerText = `${perfilJogador.recordeFases[0]} (no ${perfilJogador.recordeFases[1]})`;
     recordeEstrelasJogador.innerText = `${perfilJogador.recordeEstrelas[0]} (no ${perfilJogador.recordeEstrelas[1]})`;
 
+    // atualiza foto e título, bem como total de conquistas
+    let totalConquistas = 0;
     for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
         if (perfilJogador.itensInventario[i].categoria === 'titulo' && perfilJogador.itensInventario[i].equipado) {
             tituloJogador.innerText = perfilJogador.itensInventario[i].titulo;
@@ -299,7 +344,12 @@ function atualizaExibicaoPerfilJogador() {
         if (perfilJogador.itensInventario[i].categoria === 'foto' && perfilJogador.itensInventario[i].equipado) {
             fotoJogador.setAttribute('src', perfilJogador.itensInventario[i].img);
         }
+        if (perfilJogador.itensInventario[i].categoria === 'titulo') {
+            totalConquistas++;
+        }
     }
+
+    totalConquistasJogador.innerText = totalConquistas - 1; // -1 porque todo jogador já começa com um título
 
     // saldo
     const saldoJogador = document.querySelectorAll('.saldoJogador');
@@ -314,55 +364,71 @@ function atualizaExibicaoPerfilJogador() {
     for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
         let nomeAdaptado;
         switch(perfilJogador.itensInventario[i].titulo) {
-            case 'Colega':
-                nomeAdaptado = 'conquistaColega';
-            case 'Amigo':
-                nomeAdaptado = 'conquistaAmigo';
-            case 'Irmão':
-                nomeAdaptado = 'conquistaIrmao';
+            case 'O Nomeado':
+                nomeAdaptado = 'conquistaONomeado';
+                break;
+            case 'O Comprador':
+                nomeAdaptado = 'conquistaOComprador';
+                break;
+            case 'Insatisfeito':
+                nomeAdaptado = 'conquistaInsatisfeito';
+                break;
+            case 'Equipado':
+                nomeAdaptado = 'conquistaEquipado';
+                break;
             case 'Eu também sei fazer':
                 nomeAdaptado = 'conquistaEuTambemSeiFazer';
-            case 'Criei alguns':
-                nomeAdaptado = 'conquistaCrieiAlguns';
-            case 'Criei muitos!':
-                nomeAdaptado = 'conquistaCrieiMuitos';
-            case 'O Lógico Júnior':
-                nomeAdaptado = 'conquistaOLogicoJunior';
                 break;
-            case 'O Lógico Pleno':
-                nomeAdaptado = 'conquistaOLogicoPleno';
+            case 'O caçador':
+                nomeAdaptado = 'conquistaOCacador';
                 break;
-            case 'O Lógico Sênior':
-                nomeAdaptado = 'conquistaOLogicoSenior';
+            case 'O impiedoso':
+                nomeAdaptado = 'conquistaOImpiedoso';
                 break;
-            case 'Mestre da Lógica':
-                nomeAdaptado = 'conquistaMestreDaLogica';
+            case 'Colecionador de cabeças':
+                nomeAdaptado = 'conquistaColecionadorDeCabecas';
                 break;
-            case 'Humano?':
-                nomeAdaptado = 'conquistaHumano';
+            case 'Ligeirinho':
+                nomeAdaptado = 'conquistaLigeirinho';
                 break;
-            case 'Não-humano':
-                nomeAdaptado = 'conquistaNaoHumano';
+            case 'Nada pode me parar':
+                nomeAdaptado = 'conquistaNadaPodeMeParar';
                 break;
-            case 'Semi-Deus':
-                nomeAdaptado = 'conquistaSemiDeus';
+            case 'Invencível':
+                nomeAdaptado = 'conquistaInvencivel';
                 break;
-            case 'Deus Inferior':
-                nomeAdaptado = 'conquistaDeusInferior';
+            case 'Lógico iniciante':
+                nomeAdaptado = 'conquistaLogicoIniciante';
                 break;
-            case 'Deus Médio':
-                nomeAdaptado = 'conquistaDeusMedio';
+            case 'Lógico persistente':
+                nomeAdaptado = 'conquistaLogicoPersistente';
                 break;
-            case 'Deus Supremo':
-                nomeAdaptado = 'conquistaDeusSupremo';
+            case 'Um verdadeiro lógico':
+                nomeAdaptado = 'conquistaUmVerdadeiroLogico';
                 break;
-
+            case 'Lógico Mestre':
+                nomeAdaptado = 'conquistaLogicoMestre';
+                break;
+            case 'Lógico Deus':
+                nomeAdaptado = 'conquistaLogicoDeus';
+                break;
+            case 'O caçador divino':
+                nomeAdaptado = 'conquistaOCacadorDivino';
+                break;
         }
 
+
         if (nomeAdaptado) {
-            document.querySelector(`#${nomeAdaptado}`).style.setProperty('background-color', 'seagreen');
+            document.querySelector(`#${nomeAdaptado}`).style.setProperty('background-color', primeiraCor);
             document.querySelector(`#${nomeAdaptado}`).style.setProperty('color', '#fff');
             document.querySelector(`#${nomeAdaptado}`).style.setProperty('border', '2px solid orange');
+        }
+    }
+
+    // lida com a coloração dos montros
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        if (perfilJogador.itensInventario[i].categoria === 'monstro') {
+            document.querySelector(`#${perfilJogador.itensInventario[i].titulo}`).classList.remove('bloqueado');
         }
     }
 
@@ -387,7 +453,7 @@ function temporizador() {
 }
 
 btnJogar.addEventListener('click', () => {
-    executaEfeitoSonoro('fogo-0');
+    executaEfeitoSonoro('1');
     limiteFases = parseInt(document.querySelector('#limiteFases').value);
 
     if (limiteFases == 0 || !limiteFases) {
@@ -543,30 +609,54 @@ btnProximo.addEventListener('click', () => {
 
                 // conquistas de nível
                 if (dificuldade === 'facil') {
+                    if (circuitoAtual === 10) {
+                        if (!verificaSeJaTemConquista('Lógico iniciante')) {
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico iniciante', descricao: 'Por atingir a fase 10 no nível fácil.', img: 'media/conquistas/conquista9.png'});
+                            atualizaExibicaoPerfilJogador();
+                            exibeToast('Você obteve uma conquista!', 0);        
+                        }
+                    }
+                } else if (dificuldade === 'normal' || dificuldade === 'dificil' || dificuldade === 'impossivel') {
+                    if (circuitoAtual === 25) {
+                        if (!verificaSeJaTemConquista('Lógico persistente')) {
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico persistente', descricao: 'Por atingir a fase 25 no nível normal ou mais.', img: 'media/conquistas/conquista10.png'});
+                            atualizaExibicaoPerfilJogador();
+                            exibeToast('Você obteve uma conquista!', 0);        
+                        }
+                    }
                     if (circuitoAtual === 50) {
-                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Lógico Júnior', descricao: '', img: 'media/conquistas/active1.png'});
-                        atualizaExibicaoPerfilJogador();
-                        exibeToast('Você obteve uma conquista!', 0);
+                        if (!verificaSeJaTemConquista('Um verdadeiro lógico')) {
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Um verdadeiro lógico', descricao: 'Por atingir a fase 50 no nível normal ou mais.', img: 'media/conquistas/conquista11.png'});
+                            atualizaExibicaoPerfilJogador();
+                            exibeToast('Você obteve uma conquista!', 0);        
+                        }
                     }
-                } else if (dificuldade === 'normal') {
                     if (circuitoAtual === 100) {
-                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Lógico Sênior', descricao: '', img: 'media/conquistas/active1.png'});
-                        atualizaExibicaoPerfilJogador();
-                        exibeToast('Você obteve uma conquista!', 0);
+                        if (!verificaSeJaTemConquista('Lógico Mestre')) {
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Mestre', descricao: 'Por atingir a fase 100 no nível normal ou mais.', img: 'media/conquistas/conquista12.png'});
+                            atualizaExibicaoPerfilJogador();
+                            exibeToast('Você obteve uma conquista!', 0);        
+                        }
                     }
-                } else if (dificuldade === 'dificil' || dificuldade === 'impossivel') {
-                    if (circuitoAtual === 200) {
-                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Humano?', descricao: '', img: 'media/conquistas/active1.png'});
-                        atualizaExibicaoPerfilJogador();
-                        exibeToast('Você obteve uma conquista!', 0);
-                    } else if (circuitoAtual === 300) {
-                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Semi-Deus', descricao: '', img: 'media/conquistas/active1.png'});
-                        atualizaExibicaoPerfilJogador();
-                        exibeToast('Você obteve uma conquista!', 0);
-                    } else if (circuitoAtual === 600) {
-                        perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Deus Médio', descricao: '', img: 'media/conquistas/active1.png'});
-                        atualizaExibicaoPerfilJogador();
-                        exibeToast('Você obteve uma conquista!', 0);
+                    if (circuitoAtual === 1000) {
+                        if (!verificaSeJaTemConquista('Lógico Deus')) {
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Deus', descricao: 'Por atingir a fase 1000 no nível normal ou mais.', img: 'media/conquistas/conquista13.png'});
+                            atualizaExibicaoPerfilJogador();
+                            exibeToast('Você obteve uma conquista!', 0);        
+                        }
+                    }
+
+                    // captura de monstros
+                    let monstroAtual = 1;
+                    for (let i = 10; i <= 330; i += 10) {
+                        if (circuitoAtual === i) {
+                            if (!verificaSeJaTemConquista(`monstro${monstroAtual}`)) {
+                                perfilJogador.itensInventario.push({categoria: 'monstro', titulo: `monstro${monstroAtual}`, descricao: '', img: ''});
+                                exibeCapturaMonstro(`monstro${monstroAtual}`);
+                                atualizaExibicaoPerfilJogador();        
+                            }
+                        }
+                        monstroAtual++;
                     }
                 }
             }
@@ -819,9 +909,9 @@ function defineInputsCircuito(estadoInicial = '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]') 
 	const inputs = [... document.querySelectorAll('.input')];
 	inputs.forEach((input, index) => {
 		if (estadoInicial[index] === '0') {
-			input.style.setProperty('color', 'tomato');
+			input.style.setProperty('color', segundaCor);
 		} else {
-			input.style.setProperty('color', 'seagreen');
+			input.style.setProperty('color', primeiraCor);
 			if (espacosElementos[index + 140].classList.contains('elementoPresente')) {
 				espacosElementos[index + 140].classList.add('on');
 				espacosElementos[index + 140].style.backgroundImage = 'url("media/elementos/linha-central-vertical-on.png")';
@@ -1049,12 +1139,9 @@ function calculaDesempenho() {
 	desempenho.innerText = `${ (( valorPontuacao / (circuitosPassados * 5)) * 100).toFixed(2) }%`;
 }
 
-let facaUmaVez = true;
-let antigoTotalPerfeitos = 0;
-
 function lidaVitoria() {
     jogo.style.setProperty('box-shadow', '2px 2px 100px seagreen');
-    btnProximo.style.setProperty('background-color', 'seagreen');
+    btnProximo.style.setProperty('background-color', primeiraCor);
     vitoria = true;
     clearInterval(intervaloTemporizador);
     exibeBtnProximo();
@@ -1065,55 +1152,38 @@ function lidaVitoria() {
         lidaTotalPerfeitos(false);
 
         let elogios = ['Uau!', 'Incrível!', 'Fabuloso!', 'Impressionante.', 'Estou sem palavras.', 'Você é mesmo humano?'];
-        if (totalPerfeitos % 3 === 0) {
+        if (totalPerfeitos % 5 === 0) {
             let elogio = elogios[getRandomIntInclusive(0, elogios.length - 1)];
             exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos);
+            // conquistas de streak
+            if (dificuldade === 'facil') {
+                if (!verificaSeJaTemConquista('Ligeirinho')) {
+                    perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Ligeirinho', descricao: 'Por conseguir uma streak no nível fácil.', img: 'media/conquistas/conquista5.png'});
+                    atualizaExibicaoPerfilJogador();
+                    exibeToast('Você obteve uma conquista!', 0);        
+                }
+            } else if (dificuldade === 'normal') {
+                if (!verificaSeJaTemConquista('Pegando fogo!')) {
+                    perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Pegando fogo!', descricao: 'Por conseguir uma streak no nível normal.', img: 'media/conquistas/conquista6.png'});
+                    atualizaExibicaoPerfilJogador();
+                    exibeToast('Você obteve uma conquista!', 0);        
+                }
+            } else if (dificuldade === 'dificil') {
+                if (!verificaSeJaTemConquista('Nada pode me parar')) {
+                    perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Nada pode me parar', descricao: 'Por conseguir uma streak no nível difícil.', img: 'media/conquistas/conquista7.png'});
+                    atualizaExibicaoPerfilJogador();
+                    exibeToast('Você obteve uma conquista!', 0);        
+                }
+            } else if (dificuldade === 'impossivel') {
+                if (!verificaSeJaTemConquista('Invencível')) {
+                    perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Invencível', descricao: '', img: 'media/conquistas/conquista8.png'});
+                    atualizaExibicaoPerfilJogador();
+                    exibeToast('Você obteve uma conquista!', 0);        
+                }
+            }
         }
 
-        if (circuitoAtual >= 3 - 1) {
-            if (facaUmaVez) {
-                antigoTotalPerfeitos = totalPerfeitos;
-                facaUmaVez = false;
-            }
-
-            totalPerfeitosRelativo = totalPerfeitos - antigoTotalPerfeitos;
-
-            console.log(antigoTotalPerfeitos);
-            console.log(totalPerfeitosRelativo);
-
-            if (totalPerfeitosRelativo === 2) {
-                console.log('Você obteve 2 perfeitos depois da fase três.')
-            }
-        }
-
-        // conquistas de streak
-        if (dificuldade === 'facil') {
-            if (totalPerfeitos === 25) {
-                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Lógico Pleno', descricao: '', img: 'media/conquistas/active1.png'});
-                atualizaExibicaoPerfilJogador();
-                exibeToast('Você obteve uma conquista!', 0);
-            }
-        } else if (dificuldade === 'normal') {
-            if (totalPerfeitos === 50) {
-                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Mestre da Lógica', descricao: '', img: 'media/conquistas/active1.png'});
-                atualizaExibicaoPerfilJogador();
-                exibeToast('Você obteve uma conquista!', 0);
-            }
-        } else if (dificuldade === 'dificil' || dificuldade === 'impossivel') {
-            if (totalPerfeitos === 100) {
-                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Não-humano', descricao: '', img: 'media/conquistas/active1.png'});
-                atualizaExibicaoPerfilJogador();
-                exibeToast('Você obteve uma conquista!', 0);
-            } else if (totalPerfeitos === 150) {
-                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Deus Inferior', descricao: '', img: 'media/conquistas/active1.png'});
-                atualizaExibicaoPerfilJogador();
-                exibeToast('Você obteve uma conquista!', 0);
-            } else if (totalPerfeitos === 200) {
-                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Deus Supremo', descricao: '', img: 'media/conquistas/active1.png'});
-                atualizaExibicaoPerfilJogador();
-                exibeToast('Você obteve uma conquista!', 0);
-            } 
-        }
+       
     }
 }
 
@@ -1148,13 +1218,13 @@ function alteraOutput() {
 
 	if (verdadeiro) {
 		output.innerText = 'Verdadeiro';
-		output.style.backgroundColor = 'seagreen';
+		output.style.backgroundColor = primeiraCor;
         lidaVitoria();
 	} else {
 		output.innerText = 'Falso';
-		output.style.backgroundColor = 'tomato';
+		output.style.backgroundColor = segundaCor;
 		jogo.style.setProperty('box-shadow', '2px 2px 100px tomato');
-		btnProximo.style.setProperty('background-color', 'tomato');
+		btnProximo.style.setProperty('background-color', segundaCor);
 	}
 }
 
@@ -1166,10 +1236,10 @@ for (let i = 0; i < inputs.length; i++) {
 			if (inputs[i].innerText === '0') {
                 executaEfeitoSonoro('1');
 				inputs[i].innerText = '1';
-				inputs[i].style.setProperty('color', 'seagreen');
+				inputs[i].style.setProperty('color', primeiraCor);
 			} else if (inputs[i].innerText === '1') {
                 executaEfeitoSonoro('0');
-				inputs[i].style.setProperty('color', 'tomato');
+				inputs[i].style.setProperty('color', segundaCor);
 				inputs[i].innerText = '0';
 			}
 			atualizaBateria();
@@ -1181,13 +1251,29 @@ for (let i = 0; i < inputs.length; i++) {
 	});
 }
 
+function exibeCapturaMonstro(monstro) {
+    const capturouMonstro = document.getElementById('capturouMonstro');
+    const imgMonstroCapturado = document.getElementById('imgMonstroCapturado');  
+
+    imgMonstroCapturado.setAttribute('src', `media/monstros/${monstro}.png`); 
+    capturouMonstro.style.setProperty('display', 'block');
+    setTimeout(() => {
+        capturouMonstro.style.setProperty('display', 'none');
+    }, 2000);
+}
+
 function exibeToast(mensagem, valor = -1) {
 	const toast = document.getElementById('toast');
 	toast.style.setProperty('display', 'block');
 	toast.innerText = mensagem;
 
 	let imagem = 'media/fogo.png';;
-    executaEfeitoSonoro('fogo-0');
+
+    if (valor > 0) {
+        executaEfeitoSonoro('fogo-0');
+    } else {
+        executaEfeitoSonoro('1');
+    }
 
     if (valor > 10) {
         valor = 10;
@@ -1210,11 +1296,13 @@ iconeFecharModalInicial.addEventListener('click', () => {
 });
 
 btnVoltar.addEventListener('click', () => {
+    executaEfeitoSonoro('1');
     modalInicial.style.setProperty('display', 'none');
     temporizador();
 });
 
 opcaoMenu.addEventListener('click', () => {
+    executaEfeitoSonoro('1');
     modalInicial.style.setProperty('display', 'flex');
     atualizaExibicaoPerfilJogador();
     salvaPerfilJogador();
@@ -1250,13 +1338,24 @@ checkboxDesativarAnimacaoBackground.addEventListener('click', () => {
     }
 });
 
+const novaDificuldade = [... document.querySelectorAll('.nova-dificuldade')];
+novaDificuldade.forEach(dificuldade => {
+    dificuldade.addEventListener('click', () => {
+        if (!verificaSeJaTemConquista('Insatisfeito')) {
+            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Insatisfeito', descricao: 'Você ganhou esta conquista por alterar a dificuldade do jogo.', img: 'media/conquistas/conquista3.png'});
+            atualizaExibicaoPerfilJogador();
+            exibeToast('Você obteve uma conquista!', 0);        
+        }        
+    })
+});
+
 const abrirComoJogar = document.querySelector('#abrirComoJogar');
 const abrirConfiguracoes = document.querySelector('#abrirConfiguracoes');
-const abrirQuintetoDia = document.querySelector('#abrirQuintetoDia');
 const abrirLoja = document.querySelector('#abrirLoja');
 const abrirEditarPerfil = document.querySelector('#abrirEditarPerfil');
 const abrirConquista = document.querySelector('#abrirConquista');
 const abrirCriador = document.querySelector('#abrirCriador');
+const abrirMonstrosCapturados = document.querySelector('#abrirMonstrosCapturados');
 
 const divsAbertura = [... document.querySelectorAll('.divsAbertura')];
 const abridores = [... document.querySelectorAll('.abridores')];
@@ -1266,6 +1365,7 @@ const divConfiguracoes = document.querySelector('#divConfiguracoes');
 const divLoja = document.querySelector('#divLoja');
 const divEditarPerfil = document.querySelector('#divEditarPerfil');
 const divConquistas = document.querySelector('#divConquistas');
+const divMonstrosCapturados = document.querySelector('#divMonstrosCapturados');
 
 function fechaDivsAbertura(excecao) {
     divsAbertura.forEach(div => {
@@ -1287,6 +1387,10 @@ abridores.forEach(abridor => {
     abridor.addEventListener('click', () => {
         executaEfeitoSonoro('1');
     })
+});
+
+abrirCriador.addEventListener('click', () => {
+    window.location.href = "criador.html";
 });
 
 abrirComoJogar.addEventListener('click', () => {
@@ -1312,6 +1416,11 @@ abrirEditarPerfil.addEventListener('click', () => {
 abrirConquistas.addEventListener('click', () => {
     fechaDivsAbertura(divConquistas);
     divConquistas.classList.toggle('esconde');
+});
+
+abrirMonstrosCapturados.addEventListener('click', () => {
+    fechaDivsAbertura(divMonstrosCapturados);
+    divMonstrosCapturados.classList.toggle('esconde');
 });
 
 // Loja
@@ -1404,7 +1513,14 @@ btnComprar.forEach(btn => {
         } else {
             atualizaEditarPerfil();
             atualizaExibicaoPerfilJogador();
-             exibeToast('Item adquirido com sucesso.', 0);
+            exibeToast('Item adquirido com sucesso.', 0);
+
+            if (!verificaSeJaTemConquista('O Comprador')) {
+                perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'O Comprador', descricao: 'Você ganhou esta conquista por comprar um item na loja.', img: 'media/conquistas/conquista2.png'});
+                atualizaExibicaoPerfilJogador();
+                exibeToast('Você obteve uma conquista!', 0);        
+            }
+
         }
         
     });
@@ -1469,17 +1585,27 @@ function atualizaEditarPerfil() {
     const btnEquipar = [... document.querySelectorAll('.btnEquipar')];
     btnEquipar.forEach(btn => {
         btn.addEventListener('click', () => {
+            let equipou = false;
             switch(btn.getAttribute('categoria')) {
                 case 'foto':
                     desequipa(btn.getAttribute('categoria'));
                     equipa(btn.getAttribute('title'));
                     exibeToast('Item equipado com sucesso.', 0);
+                    equipou = true;
                     break;
                 case 'titulo':
                     desequipa(btn.getAttribute('categoria'));
                     equipa(btn.getAttribute('title'));
                     exibeToast('Item equipado com sucesso.', 0);
+                    equipou = true;
                     break;
+            }
+            if (equipou) {
+                if (!verificaSeJaTemConquista('Equipado')) {
+                    perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Equipado', descricao: 'Você ganhou esta conquista por equipar um item pela primeira vez.', img: 'media/conquistas/conquista4.png'});
+                    atualizaExibicaoPerfilJogador();
+                    exibeToast('Você obteve uma conquista!', 0);        
+                }                 
             }
             atualizaExibicaoPerfilJogador();
         })
@@ -1487,3 +1613,42 @@ function atualizaEditarPerfil() {
 }
 
 atualizaExibicaoPerfilJogador(perfilJogador);
+
+const btnCompartilharPerfil = document.querySelector('#btnCompartilharPerfil');
+btnCompartilharPerfil.addEventListener('click', () => {
+
+    let tituloEquipado;
+    for (let i = 0; i < perfilJogador.itensInventario.length; i++) {
+        if (perfilJogador.itensInventario[i].categoria === 'titulo' && perfilJogador.itensInventario[i].equipado) {
+            tituloEquipado = perfilJogador.itensInventario[i].titulo;
+        }
+    }
+
+    navigator.clipboard.writeText(`Perfil - Jogo TORNE VERDADEIRO\n\n• Nome: ${perfilJogador.nome}\n• Título: ${tituloEquipado}\n• Nível: ${perfilJogador.nivel}\n• Recorde de fases: ${perfilJogador.recordeFases[0]} (no ${perfilJogador.recordeFases[1]})\n• Recorde de estrelas: ${perfilJogador.recordeEstrelas[0]} (no ${perfilJogador.recordeEstrelas[1]})`);
+    exibeToast('Perfil copiado para a área de transferência.', 0)
+});
+
+// mudança de tema
+const tema1 = document.querySelector('#tema1');
+const tema2 = document.querySelector('#tema2');
+const tema3 = document.querySelector('#tema3');
+
+tema1.addEventListener('click', () => {
+    document.querySelector('body').style.setProperty('background-image', "url(media/bg1.jpg)");
+})
+tema2.addEventListener('click', () => {
+    document.querySelector('body').style.setProperty('background-image', "url(media/bg2.jpg)");
+})
+tema3.addEventListener('click', () => {
+    document.querySelector('body').style.setProperty('background-image', "url(media/bg3.jpg)");
+})
+
+// recebe dados da url
+// running on https://www.example.com?name=n1&name=n2
+
+// let params = new URLSearchParams(location.search);
+// params.get('name') # => "n1"
+// params.getAll('name') # => ["n1", "n2"]
+
+let params = new URLSearchParams(location.search);
+console.log(params.get('circuito'));

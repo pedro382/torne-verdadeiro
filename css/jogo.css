@@ -1,6 +1,8 @@
 :root {
 	--dimensaoElemento: 35px;
 	--elementosPorColuna: 10;
+	--primeiraCor: seagreen;
+	--segundaCor: tomato;
 }
 
 * {
@@ -10,20 +12,20 @@
 
 ::-webkit-scrollbar {
     width: 10px;
-    background-color: seagreen;
+    background-color: var(--primeiraCor);
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: tomato;
+    background-color: var(--segundaCor);
 }
 
 ::-moz-selection { /* para Firefox */
-    background-color: seagreen;
+    background-color: var(--primeiraCor);
     color: white;
   }
   
 ::selection {
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
     color: white;
 }
 
@@ -31,7 +33,7 @@ body {
 	padding: 0;
 	margin: 0;
 	background-color: #111;
-	background: url('../media/bg.jpg');
+	background: url('../media/bg1.jpg');
 	overflow: hidden;
 	background-size: 250%;
 	animation: moveBg 10s infinite;
@@ -70,7 +72,7 @@ table td, th {
 }
 
 tr {
-	background-color: tomato;
+	background-color: var(--segundaCor);
 }
 
 th {
@@ -78,7 +80,7 @@ th {
 }
 
 .linha-verdadeira-tabela {
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 }
 
 #elementosPagina {
@@ -105,6 +107,25 @@ th {
 #toast img {
 	width: 25px;
 	height: auto;
+}
+
+#capturouMonstro {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 999;
+	background-color: #000;
+	padding: 1rem;
+	border-radius: 1rem;
+	border: 3px solid #fff;
+	box-shadow: 0 0 100px #fff;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bolder;
+	font-size: 1.5rem;
+	color: #fff;
+	display: none;
 }
 
 .alinhados {
@@ -210,9 +231,11 @@ th {
 
 .grid {
 	display: grid;
-	grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+	grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+	grid-gap: 1px;
+	margin: 1rem 0;
 	grid-gap: 1rem;
-	margin-top: 1rem;
+	width: 100%;
 }
 
 .item {
@@ -223,7 +246,7 @@ th {
 
 .titulo-item {
 	margin-bottom: 0;
-	color: seagreen;
+	color: var(--primeiraCor);
 	text-transform: uppercase;
 	font-size: 1.25rem;
 }
@@ -242,7 +265,7 @@ th {
 }
 
 .preco, #saldo span {
-	color: tomato;
+	color: var(--segundaCor);
 	font-weight: bolder;
 }
 
@@ -263,7 +286,7 @@ th {
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
-	outline: 3px dashed tomato;
+	outline: 3px dashed var(--segundaCor);
 	padding: 1rem;
 	margin: 1rem;
 }
@@ -294,7 +317,7 @@ th {
 	width: 100px;
 	border-radius: 50%;
 	margin-right: 1rem;
-	outline: 5px solid seagreen;
+	outline: 5px solid var(--primeiraCor);
 }
 
 #nomeJogador {
@@ -318,7 +341,7 @@ th {
 .barra-progresso {
 	width: 50%;
 	height: 100%;
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 }
 
 #mensagemUpou {
@@ -326,7 +349,7 @@ th {
 	bottom: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: seagreen;
+	background-color: #000;
 	box-shadow: 0 0 100px green;
 	padding: 1rem;
 	text-align: center;
@@ -335,7 +358,13 @@ th {
 	display: none;
 	color: #fff;
 	font-size: 2rem;
-	border: 2px solid #fff;
+	border: 3px solid #fff;
+	z-index: 999;
+}
+
+#divMonstrosCapturados .bloqueado {
+	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+	filter: grayscale(100%);
 }
 
 input[type="number"], input[type="text"] {
@@ -343,7 +372,7 @@ input[type="number"], input[type="text"] {
 	border-bottom: 1px solid #ccc;
 	font-size: 1.25rem;
 	width: 35%;
-	color: seagreen !important;
+	color: var(--primeiraCor) !important;
 	font-weight: bolder !important;
 	text-align: center;
 }
@@ -376,16 +405,16 @@ h2, h3 {
 h2:hover {
 	opacity: .75;
 	cursor: pointer;
-	border-left: 3px solid tomato;
-	border-bottom: 3px solid tomato;
+	border-left: 3px solid var(--segundaCor);
+	border-bottom: 3px solid var(--segundaCor);
 }
 
 h2 {
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 }
 
 h3 {
-	background-color: tomato;
+	background-color: var(--segundaCor);
 	margin-top: 1rem;
 }
 
@@ -412,7 +441,7 @@ h3 {
 }
 
 a {
-	color: seagreen;
+	color: var(--primeiraCor);
 	text-decoration: none;
 	font-weight: bolder;
 }
@@ -448,25 +477,15 @@ a {
 	margin-top: 1rem;
 }
 
-.infoJogo {
+#estrelas {
 	font-size: 3rem;
 }
 
-.infoJogo #estrelas span {
-	font-size: 3rem;
+#estrelas #comentarioEstrelas {
 	display: block;
 	margin-bottom: 1rem;
 	text-align: center;
-}
-
-.infoJogo i.tempo {
-	color: tomato;
-	animation: moveTempo 2s infinite;
-	display: inline-block;
-}
-
-.infoJogo i.pontuacao {
-	color: seagreen;
+	color: #fff;
 }
 
 @keyframes moveTempo {
@@ -481,7 +500,7 @@ a {
 	}
 }
 
-.infoJogo i.estrela {
+i.estrela {
 	color: yellow;
 }
 
@@ -500,15 +519,6 @@ a {
 	100% {
 		transform: scale(1);
 	}
-}
-
-.infoJogo i.bateria {
-	color: dodgerblue;
-}
-
-.infoJogo p {
-	color: #fff;
-	margin: 5px;
 }
 
 #output, #input, #solucaoPerfeita {
@@ -531,7 +541,7 @@ a {
 
 #input {
 	background-color: #000;
-	color: tomato;
+	color: var(--segundaCor);
 	border-top: 1px solid white;
 }
 
@@ -586,7 +596,7 @@ a {
 
 #infoMusica {
 	z-index: 5;
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 	color: #fff;
 	padding: 1rem;
 	border-radius: 1rem;
@@ -597,6 +607,31 @@ a {
 	transform: translate(-90%, -50%);
 	width: 10vw;
 	display: none;
+}
+
+/* info jogo */
+
+i.tempo {
+	color: var(--segundaCor);
+	animation: moveTempo 2s infinite;
+	display: inline-block;
+}
+
+i.pontuacao {
+	color: var(--primeiraCor);
+}
+
+i.bateria {
+	color: dodgerblue;
+}
+
+.infoJogo {
+	font-size: 3rem;
+}
+
+.infoJogo p {
+	color: #fff;
+	margin: 5px;
 }
 
 #pMusica, #pFase, #pDesempenho, .pGenerico {
@@ -610,7 +645,7 @@ a {
 }
 
 #pFase {
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 }
 
 #pDesempenho {
@@ -646,7 +681,7 @@ a {
 
 /* botões */
 button {
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 	color: #fff;
 	padding: 1rem;
 	border: none;
@@ -657,6 +692,10 @@ button:hover {
 	cursor: pointer;
 	transition: 1s;
 	opacity: .75;
+}
+
+#btnCompartilharPerfil {
+	margin-top: 1rem;
 }
 
 #btnProximo, #estrelas {
@@ -670,26 +709,26 @@ button:hover {
 }
 
 #btnJogar, #btnProximo {
-	background: linear-gradient(to right, tomato, seagreen);
+	background: linear-gradient(to right, var(--segundaCor), var(--primeiraCor));
 	font-size: 3rem;
 }
 
 #btnJogar:hover, #btnProximo:hover {
-	background: linear-gradient(to left, tomato, seagreen);
+	background: linear-gradient(to left, var(--segundaCor), var(--primeiraCor));
 	transform: scale(1.1);
 	opacity: 1;
 }
 
 .botao-item {
 	background: none;
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 	box-shadow: none;
 	font-size: 1rem;
 }
 
 .botao-item:hover {
 	background: none;
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 	opacity: .75;
 }
 
@@ -701,7 +740,12 @@ button:hover {
 }
 
 #btnExcluirPerfil {
-	background-color: tomato;
+	background-color: var(--segundaCor);
+}
+
+#btnExcluirPerfilCerteza {
+	background-color: brown;
+	display: none;
 }
 
 @media (min-width: 1500px) {
@@ -729,7 +773,7 @@ button:hover {
 
 @media (max-width: 1000px) {
 	:root {
-		--dimensaoElemento: 35px;
+		--dimensaoElemento: 30px;
 	}
 
 	body {
@@ -739,7 +783,7 @@ button:hover {
 	#opcaoMenu {
 		background-color: #000;
 		color: #fff;
-		padding: 1rem;
+		padding: .5rem;
 		margin: 0;
 		font-size: 2rem;
 		text-align: center;
@@ -767,12 +811,20 @@ button:hover {
 		width: 100%;
 	}
 
-	#informacoesSuperiores {
-		margin-top: .5rem;
+	.infoJogo {
+		margin-top: 1px;
 		display: flex;
 		justify-content: space-around;
 		align-items: space-around;
 		width: 100%;
+	}
+
+	.pocoes img {
+		width: 15px;
+	}
+
+	#pMusica, #pFase, #pDesempenho, .pGenerico {
+		padding: .25rem;
 	}
 
 	#estrelas {
@@ -797,7 +849,7 @@ button:hover {
 	}
 
 	.infoJogo {
-		font-size: 1.25rem;
+		font-size: 1rem;
 	}
 
 	#output, .input {
