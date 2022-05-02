@@ -1,3 +1,5 @@
+let perfilJogador = JSON.parse(localStorage.getItem('perfilJogador'));
+
 const loader = document.getElementById('loader');
 const mensagemLoader = document.getElementById('mensagemLoader');
 
@@ -631,8 +633,8 @@ btnFinalizarCriacaoCircuito.addEventListener('click', () => {
 		} else {
 			exibeToast('Não existe solução para esse circuito.', 'tomato');
 		}
-		circuitosFeitos.push(codigoFinal);
 	}, 300);
+	circuitosFeitos.push(codigoFinal);
 })
 
 function criaCombinacoesPortoes(quantidade) {
@@ -842,7 +844,6 @@ btnExplorarCircuito.addEventListener('click', () => {
 });
 
 btnCriarNovoCircuito.addEventListener('click', () => {
-	circuitosFeitos.push(codigoFinal);
 	limpaCircuito();
 	exibeToast('Pronto, você já pode criar um novo circuito.', 'dodgerblue');
 })
@@ -851,7 +852,7 @@ const btnGerarLink = document.querySelector('#btnGerarLink');
 btnGerarLink.addEventListener('click', () => {
 	let conjuntoCircuitos = JSON.stringify(circuitosFeitos);
 	conjuntoCircuitos = comprimeCircuito(conjuntoCircuitos);
-	let url = `${window.location.href}?circuitos=${conjuntoCircuitos}`;
+	let url = `${window.location.href}?circuitos=${conjuntoCircuitos}&autor=${perfilJogador.nome}`;
 	url = url.replaceAll('criador.html', 'index.html');
 	navigator.clipboard.writeText(url);
 	exibeToast('Link gerado e copiado para a área de transfêrencia.', 'dodgerblue');
