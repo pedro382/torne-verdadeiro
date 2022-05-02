@@ -4,11 +4,13 @@
 }
 
 body {
-	background-color: black;
+	background-color: #ccc;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	padding: 0;
 	margin: 0;
+	background-image: none;
+	animation: none;
 }
 
 h1, h2, h3 {
@@ -20,7 +22,7 @@ h2 {
 	color: #fff;
 	padding: 1rem;
 	border-radius: 1rem;
-	width: 100%;
+	width: 75%;
 	margin: 2rem auto;
 	border: none;
 }
@@ -101,6 +103,10 @@ h2:hover {
 	color: #606060;
 }
 
+#divCodigo {
+	display: none;
+}
+
 #codigo:focus {
 	border: 2px solid #000;
 	outline: none;
@@ -132,6 +138,7 @@ button a {
 	border-radius: 1rem;
 	font-size: 1rem;
 	text-shadow: 0 0 5px black;
+	color: #fff;
 }
 
 #btnFinalizarCriacaoCircuito {
@@ -142,14 +149,6 @@ button a {
 }
 #btnCriarNovoCircuito {
 	background-color: tomato;
-}
-
-#btnFinalizarCriacaoCircuito, #btnExplorarCircuito, #btnCriarNovoCircuito {
-	color: #fff;
-}
-
-#divCodigo {
-	display: none;
 }
 
 @media (max-width: 1000px) {

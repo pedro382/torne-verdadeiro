@@ -42,17 +42,18 @@ const codigo = document.querySelector('#codigo');
 
 let elementoClicado = null;
 let elementoCriado = null;
-let listaElementos = [];
+let lista_elementos = [];
 
 function arrayQuantidadeColunas() {
 	return ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
 }
 
 let codigoFinal = {
-	listaElementos: [],
-	posicaoElementosIniciais: null,
-	solucoesPossiveis: []
+	lista_elementos: [],
+	posicao_elementos_iniciais: null,
+	solucoes_possiveis: []
 };
+let circuitosFeitos = [];
 
 function limpaElementos() {
 	elementos.forEach(elemento => {
@@ -203,7 +204,7 @@ function criaConexaoElemento(indice, nomeElemento) {
 }
 
 let primeiroElementoInformado = false;
-let posicaoElementosIniciais = [];
+let posicao_elementos_iniciais = [];
 for (let i = 0; i < espacosElementos.length; i++) {
 	espacosElementos[i].addEventListener('click', () => {
 		if ((elementoClicado && !espacosElementos[i].classList.contains('elemento-presente')) || elementoClicado === 'remove') {
@@ -294,14 +295,14 @@ for (let i = 0; i < espacosElementos.length; i++) {
 					case 'remove':
 						espacosElementos[i].style.setProperty('background-image', 'none');
 						espacosElementos[i].classList.remove('elemento-presente');
-						for (let j = 0; j < listaElementos.length; j++) {
-							if (listaElementos[j].posicao === i) {
-								listaElementos.splice(j, 1);
+						for (let j = 0; j < lista_elementos.length; j++) {
+							if (lista_elementos[j].posicao === i) {
+								lista_elementos.splice(j, 1);
 							}
 						}
-						for (let j = 0; j < posicaoElementosIniciais.length; j++) {
-							if (posicaoElementosIniciais[j] === i) {
-								posicaoElementosIniciais.splice(j, 1);
+						for (let j = 0; j < posicao_elementos_iniciais.length; j++) {
+							if (posicao_elementos_iniciais[j] === i) {
+								posicao_elementos_iniciais.splice(j, 1);
 							}
 						}
 						break;
@@ -311,14 +312,14 @@ for (let i = 0; i < espacosElementos.length; i++) {
 					elementoCriado.elemento = elementoClicado;
 					elementoCriado.posicao = i;
 					elementoCriado.conexao = conexao;
-					listaElementos.push(elementoCriado);
+					lista_elementos.push(elementoCriado);
 
 					if (houveElementoAutomatico) {
-						listaElementos.push(elementoAutomatico);
+						lista_elementos.push(elementoAutomatico);
 					}
 
 					if (i >= 140) {
-						posicaoElementosIniciais.push(i);
+						posicao_elementos_iniciais.push(i);
 					}				
 				}
 				limpaElementos();
@@ -328,8 +329,8 @@ for (let i = 0; i < espacosElementos.length; i++) {
 			const music = new Audio('media/efeitos-sonoros/1.wav'); music.play(); music.loop = false;
 			exibeToast('Você não selecionou um elemento ou este espaço está indisponível.', 'brown');
 		}
-		codigoFinal.listaElementos = listaElementos;
-		codigoFinal.posicaoElementosIniciais = posicaoElementosIniciais;
+		codigoFinal.lista_elementos = lista_elementos;
+		codigoFinal.posicao_elementos_iniciais = posicao_elementos_iniciais;
 		codigo.value = JSON.stringify(codigoFinal);
 	})
 }
@@ -348,7 +349,7 @@ for (let i = 0; i < inputsSolucaoPerfeita.length; i++) {
 
 			const music = new Audio('media/efeitos-sonoros/0.wav'); music.play(); music.loop = false;
 		}
-		propaga(listaElementos);
+		propaga(lista_elementos);
 	});
 }
 
@@ -373,10 +374,10 @@ function estadosIguais(estado1, estado2) {
     return iguais;
 }
 
-function criaTodasPossibilidadesResposta(posicaoElementosIniciais) {
+function criaTodasPossibilidadesResposta(posicao_elementos_iniciais) {
 	let quantidadeNecessaria;;
-	if (posicaoElementosIniciais.length > 0) {
-		quantidadeNecessaria = Math.pow(2, posicaoElementosIniciais.length);
+	if (posicao_elementos_iniciais.length > 0) {
+		quantidadeNecessaria = Math.pow(2, posicao_elementos_iniciais.length);
 	} else {
 		quantidadeNecessaria = 0;
 	}
@@ -385,8 +386,8 @@ function criaTodasPossibilidadesResposta(posicaoElementosIniciais) {
 	if (quantidadeNecessaria > 0) {
 		do {
 			let estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
-		    for (let i = 0; i < posicaoElementosIniciais.length; i++) {
-		        estadoInicial[posicaoElementosIniciais[i] - 140] = getRandomIntInclusive(0, 1).toString();
+		    for (let i = 0; i < posicao_elementos_iniciais.length; i++) {
+		        estadoInicial[posicao_elementos_iniciais[i] - 140] = getRandomIntInclusive(0, 1).toString();
 		    }
 
 			let jaTem = false;
@@ -417,27 +418,27 @@ function defineInputsCircuito(estadoInicial = ['0', '0', '0', '0', '0', '0', '0'
 	});
 }
 
-function verificaSolucoesPossiveis() {
-	let respostasPossiveisValidas = criaTodasPossibilidadesResposta(posicaoElementosIniciais);
-	let solucoesPossiveis = [];
+function verificasolucoes_possiveis() {
+	let respostasPossiveisValidas = criaTodasPossibilidadesResposta(posicao_elementos_iniciais);
+	let solucoes_possiveis = [];
 	for (let i = 0; i < respostasPossiveisValidas.length; i++) {
 		defineInputsCircuito(respostasPossiveisValidas[i]);
-		let r = propaga(listaElementos);
+		let r = propaga(lista_elementos);
 		if (r) {
 			let jaTem = false;
-			for (let j = 0; j < solucoesPossiveis.length; j++) {
-				if (estadosIguais(solucoesPossiveis[j], respostasPossiveisValidas[i])) {
+			for (let j = 0; j < solucoes_possiveis.length; j++) {
+				if (estadosIguais(solucoes_possiveis[j], respostasPossiveisValidas[i])) {
 					jaTem = true;
 				}
 			}
 
 			if (!jaTem) {
-				solucoesPossiveis.push(respostasPossiveisValidas[i]);
+				solucoes_possiveis.push(respostasPossiveisValidas[i]);
 			}
 		}
 	}
 
-	return solucoesPossiveis;
+	return solucoes_possiveis;
 }
 
 function propaga(circuitoJSON) {
@@ -553,14 +554,14 @@ function alteraOutput() {
 }
 
 function limpaCircuito() {
-	listaElementos = [];
+	lista_elementos = [];
 	codigoFinal = {
-		listaElementos: [],
-		posicaoElementosIniciais: [],
-		solucoesPossiveis: []
+		lista_elementos: [],
+		posicao_elementos_iniciais: [],
+		solucoes_possiveis: []
 	};
 	codigo.value = '';
-	posicaoElementosIniciais = [];
+	posicao_elementos_iniciais = [];
 	for (let i = 0; i < espacosElementos.length; i++) {
 		espacosElementos[i].style.backgroundImage = "none";
 		espacosElementos[i].classList.remove('elemento-presente');
@@ -576,11 +577,11 @@ function leCircuito(circuitoJSON, limpa = true) {
 	if (limpa) {
 		limpaCircuito();
 	}
-	if (!circuitoJSON.listaElementos) {
+	if (!circuitoJSON.lista_elementos) {
 		circuitoJSON = JSON.parse(circuitoJSON);
 	}
-	circuitoJSON = circuitoJSON.listaElementos;
-	listaElementos = circuitoJSON;
+	circuitoJSON = circuitoJSON.lista_elementos;
+	lista_elementos = circuitoJSON;
 
 	for (let i = 0; i < circuitoJSON.length; i++) {
 		let simples = false;
@@ -621,16 +622,17 @@ function leCircuito(circuitoJSON, limpa = true) {
 btnFinalizarCriacaoCircuito.addEventListener('click', () => {
 	loader.style.display = 'flex';
 	setTimeout(() => {
-		codigoFinal.solucoesPossiveis = verificaSolucoesPossiveis();
+		codigoFinal.solucoes_possiveis = verificasolucoes_possiveis();
 		loader.style.display = 'none';
-		if (codigoFinal.solucoesPossiveis.length > 0) {
+		if (codigoFinal.solucoes_possiveis.length > 0) {
 			codigo.value = JSON.stringify(codigoFinal);
 			divCodigo.style.setProperty('display', 'block');
 			exibeToast('Circuito finalizado com sucesso.', 'seagreen');
 		} else {
 			exibeToast('Não existe solução para esse circuito.', 'tomato');
 		}
-	}, 1000);
+		circuitosFeitos.push(codigoFinal);
+	}, 300);
 })
 
 function criaCombinacoesPortoes(quantidade) {
@@ -638,7 +640,7 @@ function criaCombinacoesPortoes(quantidade) {
 	let combinacoes = [];
 	switch(quantidade) {
 		case 1:
-			combinacoes = portoesLogicos;
+			combinacoes = [['and'], ['or'], ['nor'], ['nand'], ['xor'], ['xnor']];
 			break;
 		case 2:
 			for (let i = 0; i < portoesLogicos.length; i++) {
@@ -780,15 +782,14 @@ function criaCombinacoesPortoes(quantidade) {
 	return combinacoes;	
 }
 
-let circuitosFeitos = [];
 btnExplorarCircuito.addEventListener('click', () => {
 	let erro;
 	let teste = JSON.stringify(codigoFinal);
 	teste = teste.replaceAll('and', '');
 
 	let totalAnds = 0;
-	for (let i = 0; i < codigoFinal.listaElementos.length; i++) {
-		if (codigoFinal.listaElementos[i].elemento === 'and') {
+	for (let i = 0; i < codigoFinal.lista_elementos.length; i++) {
+		if (codigoFinal.lista_elementos[i].elemento === 'and') {
 			totalAnds++;
 		}
 	}
@@ -810,17 +811,20 @@ btnExplorarCircuito.addEventListener('click', () => {
 			console.log(combinacoesPortoes);
 			for (let i = 0; i < combinacoesPortoes.length; i++) {
 				// realiza as substituições
-				let posicaoAnd = 0;
-				for (let j = 0; j < codigoFinal.listaElementos.length; j++) {
-					if (codigoFinal.listaElementos[j].elemento === 'and') {
-						copiaCodigoFinal.listaElementos[j].elemento = combinacoesPortoes[i][posicaoAnd];
+				let posicaoAnd = 0; // uma vez que determinado circuito pode ter 2 ands ou mais, a posição de and a ser substituída não pode simplesmente receber um array com a combinação [or, xor], por exemplo; é preciso que o primeiro and encontrado receba 'or' e o segundo receba 'xor'
+				// a posicaoAnd sempre vai seguir a quantidade certa, porque ela só é incrementada quando se encontra um 'and' na lista de elementos do codigoFinal abaixo
+				for (let j = 0; j < codigoFinal.lista_elementos.length; j++) {
+					if (codigoFinal.lista_elementos[j].elemento === 'and') {
+						copiaCodigoFinal.lista_elementos[j].elemento = combinacoesPortoes[i][posicaoAnd];
 						posicaoAnd++;
 					}
 				}
 
+				console.log(copiaCodigoFinal.lista_elementos);
+
 				// encontra as soluções para o circuito feito
 				leCircuito(copiaCodigoFinal, false);
-				copiaCodigoFinal.solucoesPossiveis = verificaSolucoesPossiveis();
+				copiaCodigoFinal.solucoes_possiveis = verificasolucoes_possiveis();
 				let ultimaCopiaCircuitosFeitos = JSON.stringify(copiaCodigoFinal);
 				ultimaCopiaCircuitosFeitos = JSON.parse(ultimaCopiaCircuitosFeitos);
 				circuitosFeitos.push(ultimaCopiaCircuitosFeitos);
@@ -838,6 +842,58 @@ btnExplorarCircuito.addEventListener('click', () => {
 });
 
 btnCriarNovoCircuito.addEventListener('click', () => {
+	circuitosFeitos.push(codigoFinal);
 	limpaCircuito();
 	exibeToast('Pronto, você já pode criar um novo circuito.', 'dodgerblue');
 })
+
+const btnGerarLink = document.querySelector('#btnGerarLink');
+btnGerarLink.addEventListener('click', () => {
+	let conjuntoCircuitos = JSON.stringify(circuitosFeitos);
+	conjuntoCircuitos = comprimeCircuito(conjuntoCircuitos);
+	let url = `${window.location.href}?circuitos=${conjuntoCircuitos}`;
+	url = url.replaceAll('criador.html', 'index.html');
+	navigator.clipboard.writeText(url);
+	exibeToast('Link gerado e copiado para a área de transfêrencia.', 'dodgerblue');
+})
+
+// compressor de circuitos
+function comprimeCircuito(circuitoJSON) {
+	return circuitoJSON
+		.replaceAll('"lista_elementos":', '^')
+		.replaceAll('"posicao_elementos_iniciais":', '~')
+		.replaceAll('"solucoes_possiveis":', '=')
+		.replaceAll('{"elemento":"linha-central-vertical","posicao":', 'A')
+		.replaceAll('{"elemento":"linha-recentralizadora-esquerda","posicao":', 'B')
+		.replaceAll('{"elemento":"linha-recentralizadora-direita","posicao":', 'C')
+		.replaceAll('{"elemento":"linha-central-horizontal","posicao":', 'D')
+		.replaceAll('{"elemento":"primeiro-canto","posicao":', 'E')
+		.replaceAll('{"elemento":"segundo-canto","posicao":', 'F')
+		.replaceAll('{"elemento":"terceiro-canto","posicao":', 'G')
+		.replaceAll('{"elemento":"quarto-canto","posicao":', 'H')
+		.replaceAll('{"elemento":"cruz","posicao":', 'I')
+		.replaceAll('{"elemento":"cruz-quebrada-esquerda","posicao":', 'J')
+		.replaceAll('{"elemento":"cruz-quebrada-direita","posicao":', 'K')
+		.replaceAll('{"elemento":"t","posicao":', 'L')
+		.replaceAll('{"elemento":"not","posicao":', 'M')
+		.replaceAll('{"elemento":"and","posicao":', 'N')
+		.replaceAll('{"elemento":"or","posicao":', 'O')
+		.replaceAll('{"elemento":"nand","posicao":', 'P')
+		.replaceAll('{"elemento":"xor","posicao":', 'Q')
+		.replaceAll('{"elemento":"nor","posicao":', 'R')
+		.replaceAll('{"elemento":"xnor","posicao":', 'S')
+		.replaceAll(',"conexao":', 'T')
+		.replaceAll('},', 'U')
+		.replaceAll('],', 'V')
+		.replaceAll('"0","0"', 'W')
+		.replaceAll('"1","1"', 'X')
+		.replaceAll('"0","1"', 'Y')
+		.replaceAll('"1","0"', 'Z')
+		.replaceAll('[]', '@')
+		.replaceAll('[[', '$')
+		.replaceAll('144,145', '*')
+	    .replaceAll(']}', ')');
+}
+
+
+
