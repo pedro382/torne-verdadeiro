@@ -894,6 +894,3 @@ function comprimeCircuito(circuitoJSON) {
 		.replaceAll('144,145', '*')
 	    .replaceAll(']}', ')');
 }
-
-
-

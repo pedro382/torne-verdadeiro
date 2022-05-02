@@ -1,3 +1,5 @@
+// let gc = new gameslib.GameConnection();
+
 const data = new Date();
 const ano = data.getFullYear();
 const dia = data.getDate();
@@ -5,7 +7,7 @@ const mes = data.getMonth() + 1;
 const horas = data.getHours();
 const minutos = data.getMinutes();
 
-if (dia !== 1 && mes < 5 && ano === 2022) {
+if (dia !== 2 && mes < 5 && ano === 2022) {
     window.localStorage.clear();
 }
 
@@ -115,7 +117,6 @@ if (params.get('circuitos')) {
 }
 
 let circuitosFeitos;
-
 const body = document.querySelector('body');
 const jogo = document.querySelector('#jogo');
 const circuito = document.querySelector('#circuito');
@@ -243,9 +244,32 @@ if (!perfilJogador) {
         conquistas: [],
         recordeFases: [0, 'facil'],
         recordeEstrelas: [0, 'facil'],
-        recordeImpossivel: []
+        desativarAnimacaoBackground: false,
+        desativarMusica: false,
+        desativarEfeitosSonoros: false,
+        tema: 1,
+        dificuldade: 'facil'
     };    
 }
+
+if (perfilJogador.desativarBg) {
+    desativarAnimacaoBackground = true;
+}
+if (perfilJogador.desativarMusica) {
+    desativarMusica = true;
+}
+if (perfilJogador.desativarEfeitosSonoros) {
+    desativarEfeitosSonoros = true;
+}
+if (perfilJogador.tema === 1) {
+    document.querySelector('body').style.setProperty('background-image', "url(media/bg1.jpg)");
+} else if (perfilJogador.tema === 2) {
+    document.querySelector('body').style.setProperty('background-image', "url(media/bg2.jpg)");
+} else {
+    document.querySelector('body').style.setProperty('background-image', "url(media/bg3.jpg)");
+}
+
+dificuldade = perfilJogador.dificuldade;
 
 function salvaPerfilJogador() {
     localStorage.setItem('perfilJogador', JSON.stringify(perfilJogador));
@@ -270,6 +294,7 @@ function lidaNivelJogador(xp) {
         }, 1500);
     }
     salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
     atualizaExibicaoPerfilJogador();
 }
 
@@ -277,6 +302,7 @@ const btnSalvarPerfil = document.getElementById('btnSalvarPerfil');
 btnSalvarPerfil.addEventListener('click', () => {
     atualizaNomeGeneroJogador();
     salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 });
 
 const btnExcluirPerfil = document.getElementById('btnExcluirPerfil');
@@ -450,6 +476,7 @@ function atualizaExibicaoPerfilJogador() {
     // atualiza os itens do perfil e remove os itens já comprados da loja
     atualizaEditarPerfil();
     salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 }
 
 function temporizador() {
@@ -508,6 +535,10 @@ btnJogar.addEventListener('click', () => {
     } else {
         tempoInicial = 10;
     }
+
+    perfilJogador.dificuldade = dificuldade;
+    salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 
  	if (modoJogo === 'treino') {
         document.querySelector('#pPontuacao').style.setProperty('display', 'none');
@@ -837,6 +868,14 @@ function exibeEstrelas() {
 
 	valorPontuacao += totalEstrelas;
 
+    if (dificuldade === 'normal') {
+        valorPontuacao += 2;
+    } else if (dificuldade === 'dificil') {
+        valorPontuacao += 3;
+    } else if (dificuldade === 'impossivel') {
+        valorPontuacao += 5;
+    }
+
     if (modoJogo !== 'treino') {
         perfilJogador.saldo += totalEstrelas;
         if (valorPontuacao > perfilJogador.recordeEstrelas[0]) {
@@ -845,6 +884,7 @@ function exibeEstrelas() {
         }
     }
 
+    // gc.sendScore(valorPontuacao);
 	pontuacao.innerText = valorPontuacao;
 	estrelas.style.setProperty('display', 'block');
 
@@ -1337,6 +1377,7 @@ opcaoMenu.addEventListener('click', () => {
     modalInicial.style.setProperty('display', 'flex');
     atualizaExibicaoPerfilJogador();
     salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
     clearInterval(intervaloTemporizador);
 });
 
@@ -1347,6 +1388,9 @@ checkboxDesativarEfeitosSonoros.addEventListener('click', () => {
     } else {
         desativarEfeitosSonoros = true;
     }
+    perfilJogador.desativarEfeitosSonoros = desativarEfeitosSonoros;
+    salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 });
 
 checkboxDesativarMusica.addEventListener('click', () => {
@@ -1357,6 +1401,9 @@ checkboxDesativarMusica.addEventListener('click', () => {
         desativarMusica = true;
         musicaFundo.pause();
     }
+    perfilJogador.desativarMusica = desativarMusica;
+    salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 });
 
 checkboxDesativarAnimacaoBackground.addEventListener('click', () => {
@@ -1367,17 +1414,24 @@ checkboxDesativarAnimacaoBackground.addEventListener('click', () => {
         desativarAnimacaoBackground = true;
         document.querySelector('body').style.setProperty('animation', 'none');
     }
+    perfilJogador.desativarAnimacaoBackground = desativarAnimacaoBackground;
+    salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 });
 
 const novaDificuldade = [... document.querySelectorAll('.nova-dificuldade')];
-novaDificuldade.forEach(dificuldade => {
+novaDificuldade.forEach(dificuldade => { 
     dificuldade.addEventListener('click', () => {
+        dificuldade = document.querySelector('input[name="radioDificuldade"]:checked').value;
+        perfilJogador.dificuldade = dificuldade;
+        atualizaResumoConfiguracoes();
+        salvaPerfilJogador();
         if (!verificaSeJaTemConquista('Insatisfeito')) {
             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Insatisfeito', descricao: 'Você ganhou esta conquista por alterar a dificuldade do jogo.', img: 'media/conquistas/conquista3.png'});
             atualizaExibicaoPerfilJogador();
             exibeToast('Você obteve uma conquista!', 0);        
-        }        
-    })
+        }    
+    });
 });
 
 const abrirComoJogar = document.querySelector('#abrirComoJogar');
@@ -1666,12 +1720,21 @@ const tema3 = document.querySelector('#tema3');
 
 tema1.addEventListener('click', () => {
     document.querySelector('body').style.setProperty('background-image', "url(media/bg1.jpg)");
+    perfilJogador.tema = 1;
+    salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 })
 tema2.addEventListener('click', () => {
     document.querySelector('body').style.setProperty('background-image', "url(media/bg2.jpg)");
+    perfilJogador.tema = 1;
+    salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 })
 tema3.addEventListener('click', () => {
     document.querySelector('body').style.setProperty('background-image', "url(media/bg3.jpg)");
+    perfilJogador.tema = 1;
+    salvaPerfilJogador();
+    atualizaResumoConfiguracoes();
 })
 
 function descomprimeCircuito(circuitoJSON) {
@@ -1710,3 +1773,43 @@ function descomprimeCircuito(circuitoJSON) {
         .replaceAll('*', '144,145')
         .replaceAll(')', ']}');
 }
+
+function atualizaResumoConfiguracoes() {
+    const resumoConfiguracoes = document.getElementById('resumoConfiguracoes');
+
+    let msgs = ['', '', ''];
+    if (perfilJogador.desativarAnimacaoBackground) {
+        msgs[0] = 'sem animação no background';
+    } else {
+        msgs[0] = 'com animação no background';
+    }
+    if (perfilJogador.desativarEfeitosSonoros) {
+        msgs[1] = 'sem efeitos sonoros';
+    } else {
+        msgs[1] = 'com efeitos sonoros';
+    }
+    if (perfilJogador.desativarMusica) {
+        msgs[2] = 'sem música'
+    } else {
+        msgs[2] = 'com música'
+    }
+
+    switch(perfilJogador.dificuldade) {
+        case 'facil':
+            document.getElementById('dificuldadeFacil').setAttribute('checked', 'true');
+            break;
+        case 'normal':
+            document.getElementById('dificuldadeNormal').setAttribute('checked', 'true');
+            break;
+        case 'dificil':
+            document.getElementById('dificuldadeDificil').setAttribute('checked', 'true');
+            break;
+        case 'impossivel':
+            document.getElementById('dificuldadeImpossivel').setAttribute('checked', 'true');
+            break;
+    }
+
+    resumoConfiguracoes.innerText = `Você está configurado para jogar no nível ${perfilJogador.dificuldade}; tema ${perfilJogador.tema}; ${msgs[0]}; ${msgs[1]}; ${msgs[2]}.`;
+}
+
+atualizaResumoConfiguracoes();

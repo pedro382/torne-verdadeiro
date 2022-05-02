@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="css/jogo.css">
 	<link rel="stylesheet" type="text/css" href="css/loader.css">
 	<script type="text/javascript" src="js/jogo.js" defer></script>
+	<!-- <script src="../../GamesLib/dist/gameslib.min.js" defer></script> -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 	<link rel="icon" href="media/icone.png">
 	<title>Torne Verdadeiro - Jogo</title>
@@ -55,6 +56,7 @@
 				</div>
 				<button id="btnCompartilharPerfil">Compartilhar perfil</button>
 			</div>
+			<p id="resumoConfiguracoes"></p>
 			<h2 id="abrirComoJogar" class="abridores">Como jogar?</h2>
 			<div id="divComoJogar" class="divsAbertura esconde">
 				<p>O objetivo do jogo é tornar o circuito verdadeiro. Para isso, você deve fazer a corrente elétrica chegar até o final.</p>
@@ -136,13 +138,13 @@
 				<div>
 					<h3>Dificuldade:</h3>
 					<div class="div-inputs-configuracao">
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeFacil" value="facil" checked><label for="dificuldadeFacil"> Fácil</label></p>
+						<p><input type="radio" name="radioDificuldade" class="nova-dificuldade" id="dificuldadeFacil" value="facil" checked><label for="dificuldadeFacil"> Fácil</label></p>
 						<p class="explicacao">Somente 3 tipos de portões lógicos, uma bateria extra por fase, 30 segundos de tempo e penalidade 0 ao perder um circuito</p>
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeNormal" value="normal"><label for="dificuldadeNormal" class="nova-dificuldade"> Normal</label></p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeNormal" value="normal" class="nova-dificuldade"><label for="dificuldadeNormal"> Normal</label></p>
 						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 30 segundos de tempo e penalidade -1 ao perder um circuito</p>
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeDificil" value="dificil"><label for="dificuldadeDificil" class="nova-dificuldade"> Difícil</label></p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeDificil" value="dificil" class="nova-dificuldade"><label for="dificuldadeDificil"> Difícil</label></p>
 						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 20 segundos de tempo e penalidade -2 ao perder um circuito</p>
-						<p><input type="radio" name="radioDificuldade" id="dificuldadeImpossivel" value="impossivel"><label for="dificuldadeImpossivel" class="nova-dificuldade"> Impossível</label></p>
+						<p><input type="radio" name="radioDificuldade" id="dificuldadeImpossivel" value="impossivel" class="nova-dificuldade"><label for="dificuldadeImpossivel"> Impossível</label></p>
 						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 10 segundos de tempo, penalidade -3 ao perder um circuito e sem cor indicativa nos fios ativos</p>
 					</div>
 				</div>
@@ -189,7 +191,7 @@
 					</select>
 					<button class="botao-item" id="btnSalvarPerfil">Salvar</button>
 					<button class="botao-item" id="btnExcluirPerfil">Excluir Perfil</button>	
-					<button class="botao-item" id="btnExcluirPerfilCerteza">Tem certeza?</button>		
+					<button class="botao-item" id="btnExcluirPerfilCerteza">Clique novamente se tem certeza</button>		
 				</div>
 				<div class="grid">
 				</div>

@@ -389,7 +389,7 @@ input[type="number"]:focus, input[type="text"]:focus {
 }
 
 h2#abrirComoJogar {
-	margin-top: 3rem;
+	margin-top: 1rem;
 }
 
 h2, h3 {
@@ -748,6 +748,12 @@ button:hover {
 	display: none;
 }
 
+#resumoConfiguracoes {
+	color: #606060;
+	text-transform: uppercase;
+	margin: 1rem 0;
+}
+
 @media (min-width: 1500px) {
 	:root {
 		--dimensaoElemento: 50px;
@@ -773,7 +779,7 @@ button:hover {
 
 @media (max-width: 1000px) {
 	:root {
-		--dimensaoElemento: 30px;
+		--dimensaoElemento: 35px;
 	}
 
 	body {
