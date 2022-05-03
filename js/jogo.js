@@ -1,23 +1,8 @@
 // let gc = new gameslib.GameConnection();
+// git rm -r --cached .
 
-const data = new Date();
-const ano = data.getFullYear();
-const dia = data.getDate();
-const mes = data.getMonth() + 1; 
-const horas = data.getHours();
-const minutos = data.getMinutes();
 
-if (dia !== 2 && mes < 5 && ano === 2022) {
-    window.localStorage.clear();
-}
-
-// recebe dados da url
-// running on https://www.example.com?name=n1&name=n2
-
-// let params = new URLSearchParams(location.search);
-// params.get('name') # => "n1"
 // params.getAll('name') # => ["n1", "n2"]
-
 let params = new URLSearchParams(location.search);
 // console.log(params.get('circuitos'));
 let conjuntoExterno;
@@ -1257,7 +1242,7 @@ function exibeToast(mensagem, valor = -1) {
 
     if (valor > 0) {
         executaEfeitoSonoro('fogo-0');
-    } else {
+    } else if (valor < 0) {
         executaEfeitoSonoro('1');
     }
 
@@ -1740,10 +1725,27 @@ if (params.get('autor') === perfilJogador.nome) {
 }
 
 // conquista eu tenho amigos
-if (params.get('autor') !== perfilJogador.nome) {
+if (params.get('autor') !== null && params.get('autor') !== perfilJogador.nome) {
     if (!verificaSeJaTemConquista('Eu tenho amigos')) {
         perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Eu tenho amigos', descricao: 'Você ganhou esta conquista por criar um circuito.', img: 'media/conquistas/conquista15.png'});
         atualizaExibicaoPerfilJogador();
         exibeToast('Você obteve uma conquista!', 0);        
     }
+}
+
+const data = new Date();
+const ano = data.getFullYear();
+const dia = data.getDate();
+const mes = data.getMonth() + 1; 
+const horas = data.getHours();
+const minutos = data.getMinutes();
+
+let diaMaisAtual = 3, mesMaisAtual = 5, anoMaisAtual = 2022;
+
+if (dia < diaMaisAtual && mes <= mesMaisAtual && ano <= anoMaisAtual) {
+    window.localStorage.clear();
+    exibeToast('O localStorage foi limpo pois a versão do Torne Verdadeiro estava desatualizada. Reiniciando em 3...2...1...', 0);
+    setTimeout(() => {
+        document.location.reload(true);
+    }, 3000);
 }

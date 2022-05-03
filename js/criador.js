@@ -17,7 +17,6 @@ const QUANTIDADE_ELEMENTOS = 150;
 
 const divCodigo = document.querySelector('#divCodigo');
 const btnFinalizarCriacaoCircuito = document.querySelector('#btnFinalizarCriacaoCircuito');
-const btnExplorarCircuito = document.querySelector('#btnExplorarCircuito');
 const btnCriarNovoCircuito = document.querySelector('#btnCriarNovoCircuito');
 
 document.documentElement.style.setProperty('--dimensaoElemento', DIMENSAO_ELEMENTO);
@@ -50,7 +49,7 @@ function arrayQuantidadeColunas() {
 	return ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
 }
 
-let codigoFinal = {
+let circuitoJSON = {
 	lista_elementos: [],
 	posicao_elementos_iniciais: null,
 	solucoes_possiveis: []
@@ -72,6 +71,14 @@ function objetoElemento() {
 		posicao: null,
 		conexao: []
 	};
+}
+
+let letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'];
+let combinacoes = [];
+for(let i = 0; i < letras.length; i++) {
+    for (let j = 0; j < letras.length; j++) {
+        combinacoes.push(`${letras[i]}${letras[j]}`);
+    }
 }
 
 elementos.forEach(elemento => {
@@ -331,9 +338,9 @@ for (let i = 0; i < espacosElementos.length; i++) {
 			const music = new Audio('media/efeitos-sonoros/1.wav'); music.play(); music.loop = false;
 			exibeToast('Você não selecionou um elemento ou este espaço está indisponível.', 'brown');
 		}
-		codigoFinal.lista_elementos = lista_elementos;
-		codigoFinal.posicao_elementos_iniciais = posicao_elementos_iniciais;
-		codigo.value = JSON.stringify(codigoFinal);
+		circuitoJSON.lista_elementos = lista_elementos;
+		circuitoJSON.posicao_elementos_iniciais = posicao_elementos_iniciais;
+		codigo.value = JSON.stringify(circuitoJSON);
 	})
 }
 
@@ -376,6 +383,18 @@ function estadosIguais(estado1, estado2) {
     return iguais;
 }
 
+function defineInputsCircuito(estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']) {
+	const inputs = [... document.querySelectorAll('.input')];
+	inputs.forEach((input, index) => {
+		if (estadoInicial[index] === '0') {
+			input.style.setProperty('background-color', 'tomato');
+		} else {
+			input.style.setProperty('background-color', 'seagreen');
+		}
+		input.innerText = estadoInicial[index];
+	});
+}
+
 function criaTodasPossibilidadesResposta(posicao_elementos_iniciais) {
 	let quantidadeNecessaria;;
 	if (posicao_elementos_iniciais.length > 0) {
@@ -408,24 +427,11 @@ function criaTodasPossibilidadesResposta(posicao_elementos_iniciais) {
     return respostasPossiveisValidas;
 }
 
-function defineInputsCircuito(estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']) {
-	const inputs = [... document.querySelectorAll('.input')];
-	inputs.forEach((input, index) => {
-		if (estadoInicial[index] === '0') {
-			input.style.setProperty('background-color', 'tomato');
-		} else {
-			input.style.setProperty('background-color', 'seagreen');
-		}
-		input.innerText = estadoInicial[index];
-	});
-}
-
-function verificasolucoes_possiveis() {
-	let respostasPossiveisValidas = criaTodasPossibilidadesResposta(posicao_elementos_iniciais);
+function verificaSolucoesPossiveis(circuitoJSON) {
+	let respostasPossiveisValidas = criaTodasPossibilidadesResposta(circuitoJSON.posicao_elementos_iniciais);
 	let solucoes_possiveis = [];
 	for (let i = 0; i < respostasPossiveisValidas.length; i++) {
-		defineInputsCircuito(respostasPossiveisValidas[i]);
-		let r = propaga(lista_elementos);
+		let r = pegaOutputDePropagacaoVirtual(circuitoJSON, respostasPossiveisValidas[i]);
 		if (r) {
 			let jaTem = false;
 			for (let j = 0; j < solucoes_possiveis.length; j++) {
@@ -441,6 +447,126 @@ function verificasolucoes_possiveis() {
 	}
 
 	return solucoes_possiveis;
+}
+
+function pegaOutputDePropagacaoVirtual(circuitoJSON, estadoInicial = ["0","0","0","0","1","1","0","0","0","0"]) {
+	function ativaAlgumElementoDadaSuaPosicao(posicaoDada) {
+		for (let j = 0; j < circuitoJSON.lista_elementos.length; j++) {
+			if (circuitoJSON.lista_elementos[j].posicao === posicaoDada) {
+				circuitoJSON.lista_elementos[j].estado = 'on';
+			}
+		}
+	}
+
+	function verificaSeDeterminadoElementoEstaAtivo(posicaoDada) {
+		let ativo = false;
+		for (let j = 0; j < circuitoJSON.lista_elementos.length; j++) {
+			if (circuitoJSON.lista_elementos[j].posicao === posicaoDada && circuitoJSON.lista_elementos[j].estado === 'on') {
+				ativo = true;
+			}
+		}
+		return ativo;
+	}
+
+	// coloca o atributo "estado" e dá a ele o valor off para cada um dos elementos
+	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
+		circuitoJSON.lista_elementos[i].estado = 'off';
+	}
+	// realiza a primeira propagação, considerando a posição dos elementos inicias e o estadoInicial passado
+	// percorre o array de posição dos elementos iniciais, para sem seguida verificar se a posição correspondente do estado inicial é 1, porque se for, queremos ativar esse elemento que tá nessa posição inicial
+	for (let i = 0; i < circuitoJSON.posicao_elementos_iniciais.length; i++) {
+		if (estadoInicial[circuitoJSON.posicao_elementos_iniciais[i] - 140] === '1') {
+			ativaAlgumElementoDadaSuaPosicao(circuitoJSON.posicao_elementos_iniciais[i]);
+		}
+	}
+	// realiza o resto da propagação, com base nos elementos iniciais que estão ativos
+	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) { 
+		let nomeElemento = circuitoJSON.lista_elementos[i].elemento.split('-');
+		// linhas normais
+		if (nomeElemento.includes('linha') || nomeElemento.includes('canto') || nomeElemento.includes('cruz') || nomeElemento.includes('t')) {
+			// se tem conexão 0, é porque é um dos primeiros elementos
+			if (circuitoJSON.lista_elementos[i].conexao.length !== 0) {				
+                if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0])) {
+                	circuitoJSON.lista_elementos[i].estado = 'on';
+                } else {
+                	circuitoJSON.lista_elementos[i].estado = 'off';
+                }
+			}
+		}
+		// not: inverte
+		if (circuitoJSON.lista_elementos[i].elemento === 'not') {
+			if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0])) {
+				circuitoJSON.lista_elementos[i].estado = 'off';
+			} else {
+				circuitoJSON.lista_elementos[i].estado = 'on';
+			}
+		}
+		// and: ambas devem ser verdadeiras
+		if (circuitoJSON.lista_elementos[i].elemento === 'and') {
+			if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
+				circuitoJSON.lista_elementos[i].estado = 'on';
+			} else {
+				circuitoJSON.lista_elementos[i].estado = 'off';
+			}
+		}
+		// or: pelo menos uma deve ser verdadeira
+		if (circuitoJSON.lista_elementos[i].elemento === 'or') {
+			if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) || verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
+				circuitoJSON.lista_elementos[i].estado = 'on';
+			} else {
+				circuitoJSON.lista_elementos[i].estado = 'off';
+			}
+		}
+        // nand: falsa se ambas verdadeiras
+        if (circuitoJSON.lista_elementos[i].elemento === 'nand') {
+            if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
+                circuitoJSON.lista_elementos[i].estado = 'off';
+            } else {
+                circuitoJSON.lista_elementos[i].estado = 'on';
+            }
+        }
+        // nor: nenhuma deve ser verdadeira
+        if (circuitoJSON.lista_elementos[i].elemento === 'nor') {
+            if (!verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && !verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
+                circuitoJSON.lista_elementos[i].estado = 'on';
+            } else {
+                circuitoJSON.lista_elementos[i].estado = 'off';
+            }
+        }
+        // xor: só uma pode ser verdadeira
+        if (circuitoJSON.lista_elementos[i].elemento === 'xor') {
+            if ((verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && !verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) || (!verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1]))) {
+                circuitoJSON.lista_elementos[i].estado = 'on';
+            } else {
+                circuitoJSON.lista_elementos[i].estado = 'off';
+            }
+        }
+        // xnor: ou ambas falsas ou ambas verdadeiras
+        if (circuitoJSON.lista_elementos[i].elemento === 'xnor') {
+            if ((!verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && !verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) || (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1]))) {
+                circuitoJSON.lista_elementos[i].estado = 'on';
+            } else {
+                circuitoJSON.lista_elementos[i].estado = 'off';
+            }
+        }
+        // fim
+	}
+	// agora altera o output, verificando se todos os últimos elementos estão ativos
+	let output = true, totalElementosUltimaPosicao = 0;
+	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
+		if (circuitoJSON.lista_elementos[i].posicao < 10) {
+			totalElementosUltimaPosicao++;
+			if (circuitoJSON.lista_elementos[i].estado === 'off') {
+				output = false;
+			}			
+		}
+	}
+	// remove a propriedade "estado" dos elementos, já que ela não será útil mais
+	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
+		delete circuitoJSON.lista_elementos[i].estado;
+	}
+
+	return output && totalElementosUltimaPosicao > 0;
 }
 
 function propaga(circuitoJSON) {
@@ -529,22 +655,21 @@ function propaga(circuitoJSON) {
         // fim
 	}
 
-    let resultado = alteraOutput();
-
-    return resultado;
+    return alteraOutput();
 }
 
 function alteraOutput() {
-	let verdadeiro = true;
+	let verdadeiro = true, totalElementos = 0;
 	for (let i = 0; i < 10; i++) {
-		if (espacosElementos[i].classList.contains('elementoPresente') || espacosElementos[i].classList.contains('elemento-presente')) {
+		if (espacosElementos[i].classList.contains('elementoPresente')) {
+			totalElementos++;
 			if (!espacosElementos[i].classList.contains('on')) {
 				verdadeiro = false;
 			}
 		}
 	}
 
-	if (verdadeiro) {
+	if (verdadeiro && totalElementos > 0) {
 		output.style.setProperty('background-color', 'seagreen');
 		output.innerText = 'Verdadeiro';
 	} else {
@@ -552,12 +677,12 @@ function alteraOutput() {
 		output.innerText = 'Falso';
 	}
 
-	return verdadeiro;
+	return verdadeiro && totalElementos > 0;
 }
 
 function limpaCircuito() {
 	lista_elementos = [];
-	codigoFinal = {
+	circuitoJSON = {
 		lista_elementos: [],
 		posicao_elementos_iniciais: [],
 		solucoes_possiveis: []
@@ -621,232 +746,38 @@ function leCircuito(circuitoJSON, limpa = true) {
 	alteraOutput();
 }
 
-btnFinalizarCriacaoCircuito.addEventListener('click', () => {
+function finalizaCriacaoCircuito() {
 	loader.style.display = 'flex';
 	setTimeout(() => {
-		codigoFinal.solucoes_possiveis = verificasolucoes_possiveis();
+		circuitoJSON.solucoes_possiveis = verificaSolucoesPossiveis(circuitoJSON);
 		loader.style.display = 'none';
-		if (codigoFinal.solucoes_possiveis.length > 0) {
-			codigo.value = JSON.stringify(codigoFinal);
+		if (circuitoJSON.solucoes_possiveis.length > 0) {
+			codigo.value = JSON.stringify(circuitoJSON);
 			divCodigo.style.setProperty('display', 'block');
 			exibeToast('Circuito finalizado com sucesso.', 'seagreen');
+			atualizaTotalCircuitosFeitos();
 		} else {
 			exibeToast('Não existe solução para esse circuito.', 'tomato');
 		}
 	}, 300);
-	circuitosFeitos.push(codigoFinal);
-})
-
-function criaCombinacoesPortoes(quantidade) {
-	let portoesLogicos = ['and', 'or', 'nor', 'nand', 'xor', 'xnor'];
-	let combinacoes = [];
-	switch(quantidade) {
-		case 1:
-			combinacoes = [['and'], ['or'], ['nor'], ['nand'], ['xor'], ['xnor']];
-			break;
-		case 2:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					combinacoes.push([portoesLogicos[i], portoesLogicos[j]]);
-				}
-			}
-			break;
-		case 3:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k]]);
-					}
-				}
-			}
-			break;
-		case 4:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						for (let l = 0; l < portoesLogicos.length; l++) {
-							combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l]]);
-						}
-					}
-				}
-			}
-			break;
-		case 5:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						for (let l = 0; l < portoesLogicos.length; l++) {
-							for (let m = 0; m < portoesLogicos.length; m++) {
-								combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m]]);
-							}
-						}
-					}
-				}
-			}
-			break;
-		case 6:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						for (let l = 0; l < portoesLogicos.length; l++) {
-							for (let m = 0; m < portoesLogicos.length; m++) {
-								for (let n = 0; n < portoesLogicos.length; n++) {
-									combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n]]);
-								}
-							}
-						}
-					}
-				}
-			}
-			break;
-		case 7:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						for (let l = 0; l < portoesLogicos.length; l++) {
-							for (let m = 0; m < portoesLogicos.length; m++) {
-								for (let n = 0; n < portoesLogicos.length; n++) {
-									for (let o = 0; o < portoesLogicos.length; o++) {
-										combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			break;
-		case 8:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						for (let l = 0; l < portoesLogicos.length; l++) {
-							for (let m = 0; m < portoesLogicos.length; m++) {
-								for (let n = 0; n < portoesLogicos.length; n++) {
-									for (let o = 0; o < portoesLogicos.length; o++) {
-										for (let p = 0; p < portoesLogicos.length; p++) {
-											combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			break;
-		case 9:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						for (let l = 0; l < portoesLogicos.length; l++) {
-							for (let m = 0; m < portoesLogicos.length; m++) {
-								for (let n = 0; n < portoesLogicos.length; n++) {
-									for (let o = 0; o < portoesLogicos.length; o++) {
-										for (let p = 0; p < portoesLogicos.length; p++) {
-											for (let q = 0; q < portoesLogicos.length; q++) {
-												combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			break;
-		case 10:
-			for (let i = 0; i < portoesLogicos.length; i++) {
-				for (let j = 0; j < portoesLogicos.length; j++) {
-					for (let k = 0; k < portoesLogicos.length; k++) {
-						for (let l = 0; l < portoesLogicos.length; l++) {
-							for (let m = 0; m < portoesLogicos.length; m++) {
-								for (let n = 0; n < portoesLogicos.length; n++) {
-									for (let o = 0; o < portoesLogicos.length; o++) {
-										for (let p = 0; p < portoesLogicos.length; p++) {
-											for (let q = 0; q < portoesLogicos.length; q++) {
-												for (let r = 0; r < portoesLogicos.length; r++) {
-													combinacoes.push([portoesLogicos[i], portoesLogicos[j], portoesLogicos[k], portoesLogicos[l], portoesLogicos[m], portoesLogicos[n], portoesLogicos[o]]);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			break;
-	}
-
-	return combinacoes;	
+	circuitosFeitos.push(circuitoJSON);
 }
 
-btnExplorarCircuito.addEventListener('click', () => {
-	let erro;
-	let teste = JSON.stringify(codigoFinal);
-	teste = teste.replaceAll('and', '');
-
-	let totalAnds = 0;
-	for (let i = 0; i < codigoFinal.lista_elementos.length; i++) {
-		if (codigoFinal.lista_elementos[i].elemento === 'and') {
-			totalAnds++;
-		}
-	}
-
-	if (totalAnds > 10) {
-		erro = 'O máximo de ANDs permitidos é 10';
-	}
-
-	if (teste === JSON.stringify(codigoFinal)) {
-		erro = 'É preciso que os portões do circuito sejam apenas ANDs';
-	}
-
-	if (!erro) {
-		loader.style.display = 'flex';
-		let copiaCodigoFinal = JSON.stringify(codigoFinal);
-		copiaCodigoFinal = JSON.parse(copiaCodigoFinal);
-		setTimeout(() => {
-			let combinacoesPortoes = criaCombinacoesPortoes(totalAnds);
-			console.log(combinacoesPortoes);
-			for (let i = 0; i < combinacoesPortoes.length; i++) {
-				// realiza as substituições
-				let posicaoAnd = 0; // uma vez que determinado circuito pode ter 2 ands ou mais, a posição de and a ser substituída não pode simplesmente receber um array com a combinação [or, xor], por exemplo; é preciso que o primeiro and encontrado receba 'or' e o segundo receba 'xor'
-				// a posicaoAnd sempre vai seguir a quantidade certa, porque ela só é incrementada quando se encontra um 'and' na lista de elementos do codigoFinal abaixo
-				for (let j = 0; j < codigoFinal.lista_elementos.length; j++) {
-					if (codigoFinal.lista_elementos[j].elemento === 'and') {
-						copiaCodigoFinal.lista_elementos[j].elemento = combinacoesPortoes[i][posicaoAnd];
-						posicaoAnd++;
-					}
-				}
-
-				console.log(copiaCodigoFinal.lista_elementos);
-
-				// encontra as soluções para o circuito feito
-				leCircuito(copiaCodigoFinal, false);
-				copiaCodigoFinal.solucoes_possiveis = verificasolucoes_possiveis();
-				let ultimaCopiaCircuitosFeitos = JSON.stringify(copiaCodigoFinal);
-				ultimaCopiaCircuitosFeitos = JSON.parse(ultimaCopiaCircuitosFeitos);
-				circuitosFeitos.push(ultimaCopiaCircuitosFeitos);
-			}
-
-			codigo.value = JSON.stringify(circuitosFeitos);
-			divCodigo.style.setProperty('display', 'block');
-			loader.style.display = 'none';
-			console.log(circuitosFeitos);
-		}, 1000);		
-	} else {
-		exibeToast(erro, 'brown');
-	}
-
-});
+function atualizaTotalCircuitosFeitos() {
+	const totalCircuitosFeitos = [... document.querySelectorAll('.total-circuitos-feitos')];
+	totalCircuitosFeitos.forEach(total => {
+		total.innerText = circuitosFeitos.length;
+	});
+}
 
 btnCriarNovoCircuito.addEventListener('click', () => {
 	limpaCircuito();
-	exibeToast('Pronto, você já pode criar um novo circuito.', 'dodgerblue');
-})
+	exibeToast('Pronto, você já pode criar outro circuito.', 'dodgerblue');
+});
+
+btnFinalizarCriacaoCircuito.addEventListener('click', () => {
+	finalizaCriacaoCircuito();
+});
 
 const btnGerarLink = document.querySelector('#btnGerarLink');
 btnGerarLink.addEventListener('click', () => {
@@ -856,7 +787,30 @@ btnGerarLink.addEventListener('click', () => {
 	url = url.replaceAll('criador.html', 'index.html');
 	navigator.clipboard.writeText(url);
 	exibeToast('Link gerado e copiado para a área de transfêrencia.', 'dodgerblue');
-})
+});
+
+function realizaSubstituicoes(circuitoJSON, padrao, tipo = 'and') {
+	let total = 0;
+	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
+		if (circuitoJSON.lista_elementos[i].elemento === tipo) {
+			total++;
+		}
+	}
+
+	if (total === padrao.length) {
+		let posicaoPadrao = 0;
+		for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
+			if (circuitoJSON.lista_elementos[i].elemento === tipo) {
+				circuitoJSON.lista_elementos[i].elemento = padrao[posicaoPadrao];
+				posicaoPadrao++;
+			}
+		}
+	}
+
+	circuitoJSON.solucoes_possiveis = verificaSolucoesPossiveis(circuitoJSON);
+
+	return circuitoJSON;
+}
 
 // compressor de circuitos
 function comprimeCircuito(circuitoJSON) {
