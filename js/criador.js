@@ -148,12 +148,12 @@ function getRandomIntInclusive(min, max) {
 
 let elementoAutomatico;
 let houveElementoAutomatico = false;
-let ultimoElementoComplexo = 1;
+let ultimoElementoComplexo = 0;
 function criaElementoAutomatico(indice) {
 	elementoAutomatico = objetoElemento();
 	elementoAutomatico['conexao'].push(indice);
 
-	if (ultimoElementoComplexo % 2 === 0) {
+	if (ultimoElementoComplexo % 2 !== 0) {
 		elementoAutomatico['posicao'] = indice - 10;
 		espacosElementos[indice - 10].classList.add('elemento-presente');
 		elementoAutomatico['elemento'] = 'linha-recentralizadora-esquerda';
@@ -171,37 +171,96 @@ function criaElementoAutomatico(indice) {
 
 function criaConexaoElemento(indice, nomeElemento) {
 	if (indice < 140) {
-		// elementos que se conectam no elemento abaixo e tão somente no elemento abaixo
-		if (nomeElemento === 'linha-central-vertical' || nomeElemento === 'cruz' || nomeElemento === 'cruz-quebrada-esquerda' || nomeElemento === 'cruz-quebrada-direita' || nomeElemento === 't' || nomeElemento === 'not') {
-			return [indice + 10];
+		// cima e baixo
+		if (nomeElemento === 'linha-central-vertical' || nomeElemento === 'not') {
+			if (espacosElementos[indice + 10].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			} else if (espacosElementos[indice - 10].classList.contains('elemento-presente')) {
+				return [indice - 10];
+			}
 		}
-		// elementos que se conectam a algum elemento ao lado
+		// esquerda e direita
 		if (nomeElemento === 'linha-central-horizontal') {
+			if (espacosElementos[indice + 1].classList.contains('elemento-presente')) {
+				return [indice + 1];
+			} else if (espacosElementos[indice - 1].classList.contains('elemento-presente')) {
+				return [indice - 1];
+			}
+		}
+		// esquerda e cima
+		if (nomeElemento === 'primeiro-canto') {
 			if (espacosElementos[indice - 1].classList.contains('elemento-presente')) {
 				return [indice - 1];
-			} else {
+			} else if (espacosElementos[indice - 10].classList.contains('elemento-presente')) {
+				return [indice - 10];
+			}
+		}
+		// cima e direita
+		if (nomeElemento === 'segundo-canto') {
+			if (espacosElementos[indice + 1].classList.contains('elemento-presente')) {
+				return [indice + 1];
+			} else if (espacosElementos[indice - 10].classList.contains('elemento-presente')) {
+				return [indice - 10];
+			}
+		}
+		// direita e baixo
+		if (nomeElemento === 'terceiro-canto') {
+			if (espacosElementos[indice + 1].classList.contains('elemento-presente')) {
+				return [indice + 1];
+			} else if (espacosElementos[indice + 10].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			}
+		}
+		// esquerda e baixo
+		if (nomeElemento === 'quarto-canto') {
+			if (espacosElementos[indice - 1].classList.contains('elemento-presente')) {
+				return [indice - 1];
+			} else if (espacosElementos[indice + 10].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			}
+		}
+		// cima, baixo, esquerda e direita
+		if (nomeElemento === 'cruz') {
+			if (espacosElementos[indice - 1].classList.contains('elemento-presente')) {
+				return [indice - 1];
+			} else if (espacosElementos[indice + 10].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			} else if (espacosElementos[indice - 10].classList.contains('elemento-presente')) {
+				return [indice - 10];
+			} else if (espacosElementos[indice + 1].classList.contains('elemento-presente')) {
 				return [indice + 1];
 			}
 		}
-
-		// elementos que se conectam à esquerda
-		if (nomeElemento === 'primeiro-canto' || nomeElemento === 'quarto-canto') {
-			if (!espacosElementos[indice - 1].classList.contains('elemento-presente')) {
+		// cima, baixo e esquerda
+		if (nomeElemento === 'cruz-quebrada-esquerda') {
+			if (espacosElementos[indice - 1].classList.contains('elemento-presente')) {
+				return [indice - 1];
+			} else if (espacosElementos[indice + 10].classList.contains('elemento-presente')) {
 				return [indice + 10];
-			} else {
+			} else if (espacosElementos[indice - 10].classList.contains('elemento-presente')) {
+				return [indice - 10];
+			}
+		}
+		// cima, baixo e direita
+		if (nomeElemento === 'cruz-quebrada-esquerda') {
+			if (espacosElementos[indice + 1].classList.contains('elemento-presente')) {
+				return [indice + 1];
+			} else if (espacosElementos[indice + 10].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			} else if (espacosElementos[indice - 10].classList.contains('elemento-presente')) {
+				return [indice - 10];
+			}
+		}
+		// cima, baixo e direita
+		if (nomeElemento === 't') {
+			if (espacosElementos[indice + 1].classList.contains('elemento-presente')) {
+				return [indice + 1];
+			} else if (espacosElementos[indice + 10].classList.contains('elemento-presente')) {
+				return [indice + 10];
+			} else if (espacosElementos[indice - 1].classList.contains('elemento-presente')) {
 				return [indice - 1];
 			}
 		}
-
-		// elementos que se conectam à direita
-		if (nomeElemento === 'segundo-canto' || nomeElemento === 'terceiro-canto') {
-			if (!espacosElementos[indice + 1].classList.contains('elemento-presente')) {
-				return [indice + 10];
-			} else {
-				return [indice + 1];
-			}
-		}
-
 
 		// elementos que se conectam a dois outros elementos imediatamente abaixo (isto é, elementos complexos)
 		if (nomeElemento === 'and' || nomeElemento === 'or' || nomeElemento === 'xor' || nomeElemento === 'xnor' || nomeElemento === 'nor' || nomeElemento === 'nand') {
@@ -572,10 +631,10 @@ function pegaOutputDePropagacaoVirtual(circuitoJSON, estadoInicial = ["0","0","0
 function propaga(circuitoJSON) {
 	const inputs = [... document.querySelectorAll('.input')];
 	for (let i = 0; i < inputs.length; i++) {
-		if (inputs[i].innerText === '1' && (espacosElementos[i + 140].classList.contains('elementoPresente') || espacosElementos[i + 140].classList.contains('elemento-presente'))) {
+		if (inputs[i].innerText === '1' && (espacosElementos[i + 140].classList.contains('elemento-presente') || espacosElementos[i + 140].classList.contains('elemento-presente'))) {
 			espacosElementos[i + 140].classList.add('on');
 			espacosElementos[i + 140].style.backgroundImage = 'url("media/elementos/linha-central-vertical-on.png")';
-		} else if (espacosElementos[i + 140].classList.contains('elemento-presente') || espacosElementos[i + 140].classList.contains('elementoPresente')) {
+		} else if (espacosElementos[i + 140].classList.contains('elemento-presente') || espacosElementos[i + 140].classList.contains('elemento-presente')) {
 			espacosElementos[i + 140].classList.remove('on');
 			espacosElementos[i + 140].style.backgroundImage = 'url("media/elementos/linha-central-vertical.png")';
 		}
@@ -661,7 +720,7 @@ function propaga(circuitoJSON) {
 function alteraOutput() {
 	let verdadeiro = true, totalElementos = 0;
 	for (let i = 0; i < 10; i++) {
-		if (espacosElementos[i].classList.contains('elementoPresente')) {
+		if (espacosElementos[i].classList.contains('elemento-presente')) {
 			totalElementos++;
 			if (!espacosElementos[i].classList.contains('on')) {
 				verdadeiro = false;
@@ -692,7 +751,6 @@ function limpaCircuito() {
 	for (let i = 0; i < espacosElementos.length; i++) {
 		espacosElementos[i].style.backgroundImage = "none";
 		espacosElementos[i].classList.remove('elemento-presente');
-		espacosElementos[i].classList.remove('elementoPresente');
 		espacosElementos[i].classList.remove('on');
 	}
 	defineInputsCircuito();
@@ -749,18 +807,18 @@ function leCircuito(circuitoJSON, limpa = true) {
 function finalizaCriacaoCircuito() {
 	loader.style.display = 'flex';
 	setTimeout(() => {
-		circuitoJSON.solucoes_possiveis = verificaSolucoesPossiveis(circuitoJSON);
 		loader.style.display = 'none';
-		if (circuitoJSON.solucoes_possiveis.length > 0) {
+		if (verificaSolucoesPossiveis(circuitoJSON).length > 0) {
+			circuitoJSON.solucoes_possiveis = verificaSolucoesPossiveis(circuitoJSON);
 			codigo.value = JSON.stringify(circuitoJSON);
 			divCodigo.style.setProperty('display', 'block');
+			circuitosFeitos.push(circuitoJSON);
 			exibeToast('Circuito finalizado com sucesso.', 'seagreen');
 			atualizaTotalCircuitosFeitos();
 		} else {
 			exibeToast('Não existe solução para esse circuito.', 'tomato');
 		}
 	}, 300);
-	circuitosFeitos.push(circuitoJSON);
 }
 
 function atualizaTotalCircuitosFeitos() {
@@ -772,6 +830,7 @@ function atualizaTotalCircuitosFeitos() {
 
 btnCriarNovoCircuito.addEventListener('click', () => {
 	limpaCircuito();
+	ultimoElementoComplexo = 0;
 	exibeToast('Pronto, você já pode criar outro circuito.', 'dodgerblue');
 });
 
@@ -779,14 +838,18 @@ btnFinalizarCriacaoCircuito.addEventListener('click', () => {
 	finalizaCriacaoCircuito();
 });
 
-const btnGerarLink = document.querySelector('#btnGerarLink');
-btnGerarLink.addEventListener('click', () => {
-	let conjuntoCircuitos = JSON.stringify(circuitosFeitos);
-	conjuntoCircuitos = comprimeCircuito(conjuntoCircuitos);
-	let url = `${window.location.href}?circuitos=${conjuntoCircuitos}&autor=${perfilJogador.nome}`;
-	url = url.replaceAll('criador.html', 'index.html');
-	navigator.clipboard.writeText(url);
-	exibeToast('Link gerado e copiado para a área de transfêrencia.', 'dodgerblue');
+const btnCopiarLink = document.querySelector('#btnCopiarLink');
+btnCopiarLink.addEventListener('click', () => {
+	if (circuitosFeitos.length > 0) {
+		let conjuntoCircuitos = JSON.stringify(circuitosFeitos);
+		conjuntoCircuitos = comprimeCircuito(conjuntoCircuitos);
+		let url = `${window.location.href}?circuitos=${conjuntoCircuitos}&autor=${perfilJogador.nome}`;
+		url = url.replaceAll('criador.html', 'index.html');
+		navigator.clipboard.writeText(url);
+		exibeToast('Link gerado e copiado para a área de transfêrencia.', 'seagreen');
+	} else {
+		exibeToast('Nenhum circuito foi feito ainda.', 'tomato');
+	}
 });
 
 function realizaSubstituicoes(circuitoJSON, padrao, tipo = 'and') {

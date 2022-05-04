@@ -1,7 +1,6 @@
 // let gc = new gameslib.GameConnection();
 // git rm -r --cached .
 
-
 // params.getAll('name') # => ["n1", "n2"]
 let params = new URLSearchParams(location.search);
 // console.log(params.get('circuitos'));
@@ -10,7 +9,12 @@ if (params.get('circuitos')) {
     conjuntoExterno = JSON.parse(descomprimeCircuito(params.get('circuitos')));
 }
 
-let circuitosFeitos;
+const data = new Date();
+const ano = data.getFullYear();
+const dia = data.getDate();
+const mes = data.getMonth() + 1; 
+const horas = data.getHours();
+const minutos = data.getMinutes();
 const body = document.querySelector('body');
 const jogo = document.querySelector('#jogo');
 const circuito = document.querySelector('#circuito');
@@ -42,6 +46,7 @@ let desativarEfeitosSonoros = false;
 let desativarMusica = false;
 let desativarAnimacaoBackground = false;
 let limiteFases = 3;
+let conjuntoInterno;
 
 let elementosLinhasPagina = ['linha-central-vertical', 'linha-central-horizontal', 'linha-lateral-direita', 'linha-lateral-esquerda', 'linha-recentralizadora-direita', 'linha-recentralizadora-esquerda', 'primeiro-canto', 'segundo-canto', 'terceiro-canto', 'quarto-canto', 'cruz', 'cruz-quebrada-direita', 'cruz-quebrada-esquerda', 't'];
 let elementosPortoesPagina = ['primeiro-and', 'segundo-and', 'primeiro-or', 'segundo-or', 'primeiro-nand', 'segundo-nand', 'primeiro-nor', 'segundo-nor', 'primeiro-xor', 'segundo-xor', 'primeiro-xnor', 'segundo-xnor'];
@@ -142,8 +147,8 @@ if (!perfilJogador) {
         desativarAnimacaoBackground: false,
         desativarMusica: false,
         desativarEfeitosSonoros: false,
-        tema: 1,
-        dificuldade: 'facil'
+        dificuldade: 'facil',
+        ultimoLogin: [0, 0, 0] 
     };    
 }
 
@@ -156,17 +161,13 @@ if (perfilJogador.desativarMusica) {
 if (perfilJogador.desativarEfeitosSonoros) {
     desativarEfeitosSonoros = true;
 }
-if (perfilJogador.tema === 1) {
-    document.querySelector('body').style.setProperty('background-image', "url(media/bg1.jpg)");
-} else if (perfilJogador.tema === 2) {
-    document.querySelector('body').style.setProperty('background-image', "url(media/bg2.jpg)");
-} else {
-    document.querySelector('body').style.setProperty('background-image', "url(media/bg3.jpg)");
-}
 
 dificuldade = perfilJogador.dificuldade;
 
 function salvaPerfilJogador() {
+    perfilJogador.ultimoLogin[0] = dia;
+    perfilJogador.ultimoLogin[1] = mes;
+    perfilJogador.ultimoLogin[2] = ano;
     localStorage.setItem('perfilJogador', JSON.stringify(perfilJogador));
 }
 
@@ -373,7 +374,11 @@ function atualizaExibicaoPerfilJogador() {
 
     // atualiza os itens do perfil e remove os itens já comprados da loja
     atualizaEditarPerfil();
-    salvaPerfilJogador();
+    try {
+        salvaPerfilJogador();
+    } catch(e) {
+        resetaLocalStorage();
+    }
     atualizaResumoConfiguracoes();
 }
 
@@ -451,12 +456,12 @@ btnJogar.addEventListener('click', () => {
 
     if (modoJogo === 'progressivo' || modoJogo === 'infinito') {
         if (conjuntoExterno) {
-            circuitosFeitos = conjuntoExterno;
+            conjuntoInterno = conjuntoExterno;
         } else {
-            circuitosFeitos = todosCircuitos;
+            conjuntoInterno = todosCircuitos;
         }
     } else if (modoJogo === 'treino') {
-    	circuitosFeitos = [
+    	conjuntoInterno = [
     	'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"linha-central-vertical","posicao":135,"conexao":[145]},{"elemento":"linha-central-vertical","posicao":125,"conexao":[135]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"not","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicao_elementos_iniciais":[145],"solucoes_possiveis":[["0","0","0","0","0","0","0","0","0","0"]]}',
 		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"and","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-direita","posicao":125,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"linha-central-vertical","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","1","1","0","0","0","0"]]}',
 		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"or","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-esquerda","posicao":124,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":114,"conexao":[124]},{"elemento":"linha-central-vertical","posicao":104,"conexao":[114]},{"elemento":"linha-central-vertical","posicao":94,"conexao":[104]},{"elemento":"linha-central-vertical","posicao":84,"conexao":[94]},{"elemento":"linha-central-vertical","posicao":74,"conexao":[84]},{"elemento":"linha-central-vertical","posicao":64,"conexao":[74]},{"elemento":"linha-central-vertical","posicao":54,"conexao":[64]},{"elemento":"linha-central-vertical","posicao":44,"conexao":[54]},{"elemento":"linha-central-vertical","posicao":34,"conexao":[44]},{"elemento":"linha-central-vertical","posicao":24,"conexao":[34]},{"elemento":"linha-central-vertical","posicao":14,"conexao":[24]},{"elemento":"linha-central-vertical","posicao":4,"conexao":[14]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","0","1","0","0","0","0"],["0","0","0","0","1","0","0","0","0","0"],["0","0","0","0","1","1","0","0","0","0"]]}',
@@ -505,7 +510,7 @@ btnJogar.addEventListener('click', () => {
 	if (conjuntoExterno) {
         leCircuito(conjuntoExterno[circuitoAtual]);
     } else {
-        leCircuito(JSON.parse(circuitosFeitos[circuitoAtual]));
+        leCircuito(conjuntoInterno[circuitoAtual]);
     }
 	fase.innerText = circuitoAtual + 1;
 	temporizador();
@@ -529,7 +534,7 @@ let circuitoAnterior;
 btnProximo.addEventListener('click', () => {
     tempo.innerText = tempoInicial;
     if (modoJogo === 'progressivo') {
-        if (circuitoAtual < circuitosFeitos.length - 1 && circuitoAtual < limiteFases - 1) {
+        if (circuitoAtual < conjuntoInterno.length - 1 && circuitoAtual < limiteFases - 1) {
             if (derrota) {
                 if (dificuldade === 'facil') {
                     circuitoAtual = circuitoAtual;
@@ -645,12 +650,12 @@ btnProximo.addEventListener('click', () => {
         }
     } else {
         let circuitoSorteado;
-        if (circuitosFeitos.length > 1) {
+        if (conjuntoInterno.length > 1) {
             do {
-                circuitoSorteado = getRandomIntInclusive(0, circuitosFeitos.length - 1);
+                circuitoSorteado = getRandomIntInclusive(0, conjuntoInterno.length - 1);
             } while(circuitoSorteado === circuitoAnterior);
         } else {
-            circuitoSorteado = getRandomIntInclusive(0, circuitosFeitos.length - 1);
+            circuitoSorteado = getRandomIntInclusive(0, conjuntoInterno.length - 1);
         }
         circuitoAtual = circuitoSorteado;
         circuitoAnterior = circuitoSorteado;
@@ -665,7 +670,7 @@ btnProximo.addEventListener('click', () => {
         if (conjuntoExterno) {
             leCircuito(conjuntoExterno[circuitoAtual]);
         } else {
-            leCircuito(JSON.parse(circuitosFeitos[circuitoAtual]));
+            leCircuito(conjuntoInterno[circuitoAtual]);
         }
         temporizador(); 
     }
@@ -870,9 +875,8 @@ function criaInputsCircuito() {
 	}
 }
 
-function defineInputsCircuito(estadoInicial = '[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]') {
+function defineInputsCircuito(estadoInicial) {
 	// também serve para resetá-los
-	estadoInicial = JSON.parse(estadoInicial);
 	const inputs = [... document.querySelectorAll('.input')];
 	inputs.forEach((input, index) => {
 		if (estadoInicial[index] === '0') {
@@ -970,7 +974,7 @@ function leCircuito(circuitoJSON) {
 	let resultadoCriacaoEstadoInicial = criaEstadoInicial(circuitoJSON.solucoes_possiveis, circuitoJSON.posicao_elementos_iniciais);
     let estadoInicial = resultadoCriacaoEstadoInicial[0];
     qtdeBateria = resultadoCriacaoEstadoInicial[1]
-    defineInputsCircuito(JSON.stringify(estadoInicial));
+    defineInputsCircuito(estadoInicial);
 	qtdeInicialBateria = qtdeBateria;
 	bateria.innerText = qtdeBateria;
 	circuitoJSON = circuitoJSON.lista_elementos;
@@ -1213,7 +1217,7 @@ for (let i = 0; i < inputs.length; i++) {
 			if (conjuntoExterno) {
                 propaga(conjuntoExterno[circuitoAtual].lista_elementos);
             } else {
-                propaga(JSON.parse(circuitosFeitos[circuitoAtual]).lista_elementos);
+                propaga(conjuntoInterno[circuitoAtual].lista_elementos);
             }
 			alteraOutput();
 		} else if (qtdeBateria === 0 && !derrota && !vitoria && modoJogo !== 'treino') {
@@ -1614,30 +1618,6 @@ btnCompartilharPerfil.addEventListener('click', () => {
     exibeToast('Perfil copiado para a área de transferência.', 0)
 });
 
-// mudança de tema
-const tema1 = document.querySelector('#tema1');
-const tema2 = document.querySelector('#tema2');
-const tema3 = document.querySelector('#tema3');
-
-tema1.addEventListener('click', () => {
-    document.querySelector('body').style.setProperty('background-image', "url(media/bg1.jpg)");
-    perfilJogador.tema = 1;
-    salvaPerfilJogador();
-    atualizaResumoConfiguracoes();
-})
-tema2.addEventListener('click', () => {
-    document.querySelector('body').style.setProperty('background-image', "url(media/bg2.jpg)");
-    perfilJogador.tema = 1;
-    salvaPerfilJogador();
-    atualizaResumoConfiguracoes();
-})
-tema3.addEventListener('click', () => {
-    document.querySelector('body').style.setProperty('background-image', "url(media/bg3.jpg)");
-    perfilJogador.tema = 1;
-    salvaPerfilJogador();
-    atualizaResumoConfiguracoes();
-})
-
 function descomprimeCircuito(circuitoJSON) {
     return circuitoJSON
         .replaceAll('^', '"lista_elementos":')
@@ -1710,7 +1690,7 @@ function atualizaResumoConfiguracoes() {
             break;
     }
 
-    resumoConfiguracoes.innerText = `Você está configurado para jogar no nível ${perfilJogador.dificuldade}; tema ${perfilJogador.tema}; ${msgs[0]}; ${msgs[1]}; ${msgs[2]}.`;
+    resumoConfiguracoes.innerText = `Você está configurado para jogar no nível ${perfilJogador.dificuldade}; ${msgs[0]}; ${msgs[1]}; ${msgs[2]}.`;
 }
 
 atualizaResumoConfiguracoes();
@@ -1733,19 +1713,22 @@ if (params.get('autor') !== null && params.get('autor') !== perfilJogador.nome) 
     }
 }
 
-const data = new Date();
-const ano = data.getFullYear();
-const dia = data.getDate();
-const mes = data.getMonth() + 1; 
-const horas = data.getHours();
-const minutos = data.getMinutes();
+function resetaLocalStorage() {
+    function reseta() {
+        window.localStorage.clear();
+        exibeToast('O localStorage foi limpo pois a versão do Torne Verdadeiro estava desatualizada. Reiniciando em 3...2...1...', 0);
+        setTimeout(() => {
+            document.location.reload(true);
+        }, 3000);
+    }
+    if (perfilJogador.ultimoLogin) {
+        if ((perfilJogador.ultimoLogin[0] < 4 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
+            reseta();
+        }
+    } else {
+        reseta();
+    }
 
-let diaMaisAtual = 3, mesMaisAtual = 5, anoMaisAtual = 2022;
-
-if (dia < diaMaisAtual && mes <= mesMaisAtual && ano <= anoMaisAtual) {
-    window.localStorage.clear();
-    exibeToast('O localStorage foi limpo pois a versão do Torne Verdadeiro estava desatualizada. Reiniciando em 3...2...1...', 0);
-    setTimeout(() => {
-        document.location.reload(true);
-    }, 3000);
 }
+
+resetaLocalStorage();

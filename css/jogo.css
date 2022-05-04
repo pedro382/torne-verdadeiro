@@ -3,6 +3,7 @@
 	--elementosPorColuna: 10;
 	--primeiraCor: seagreen;
 	--segundaCor: tomato;
+	--bg: url('../media/bg/bg1.png');
 }
 
 * {
@@ -33,8 +34,8 @@ body {
 	padding: 0;
 	margin: 0;
 	background-color: #111;
-	background: url('../media/bg1.jpg');
 	overflow: hidden;
+	background: var(--bg);
 	background-size: 250%;
 	animation: moveBg 10s infinite;
 }
@@ -652,7 +653,7 @@ i.bateria {
 }
 
 .pocoes img {
-	width: 25px;
+	width: 35px;
 	height: auto;
 }
 
