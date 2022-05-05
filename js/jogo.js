@@ -97,7 +97,6 @@ for (let i = 0; i < lista_elementosPagina.length; i++) {
 }
 
 let jogoIniciou = false;
-let faseAtual = 0;
 let bgAtual = 1;
 let circuitosPassados = 0;
 let tempoInicial = 31; // segundos
@@ -140,7 +139,7 @@ if (!perfilJogador) {
         nivel: 0,
         expAtual: 0,
         expProximoNivel: 25,
-        saldo: 10000,
+        saldo: 0,
         quantidadePocaoTempo: 0,
         quantidadePocaoBateria: 0,
         itensInventario: [{categoria: 'titulo', titulo: 'Pessoa comum', descricao: 'Título inicial', img: 'media/usuario.png', equipado: true}, {categoria: 'foto', titulo: 'Foto inicial', descricao: 'Foto inicial', img: 'media/usuario.png', equipado: true}],
@@ -152,7 +151,9 @@ if (!perfilJogador) {
         desativarMusica: false,
         desativarEfeitosSonoros: false,
         dificuldade: 'facil',
-        ultimoLogin: [0, 0, 0] 
+        ultimoLogin: [0, 0, 0],
+        fasesAtingidas: [0, 0, 0, 0],
+        faseAtual: 0
     };    
 }
 
@@ -353,9 +354,7 @@ function atualizaExibicaoPerfilJogador() {
 
 
         if (nomeAdaptado) {
-            document.querySelector(`#${nomeAdaptado}`).style.setProperty('background-color', primeiraCor);
-            document.querySelector(`#${nomeAdaptado}`).style.setProperty('color', '#fff');
-            document.querySelector(`#${nomeAdaptado}`).style.setProperty('border', '5px solid orange');
+            document.querySelector(`#${nomeAdaptado}`).classList.add('conquista-desbloqueada');
         }
     }
 
@@ -393,17 +392,14 @@ function temporizador() {
 
 btnJogar.addEventListener('click', () => {
     executaEfeitoSonoro('1');
+    fechaDivsAbertura();
     jogoIniciou = true;
-    if (!limiteFases) {
-        limiteFases = parseInt(document.querySelector('#limiteFases').value);
-    }
-
+    limiteFases = parseInt(document.querySelector('#limiteFases').value);
     if (limiteFases == 0 || !limiteFases) {
         limiteFases = Number.POSITIVE_INFINITY;
     }
 
     // exibe a fase pela primeira vez, começando do 0
-    faseAtual = 0; fase.innerText = faseAtual;
     moldeAtual = 0;
     alcanceMolde = 0;
     moldeInicial = 0;
@@ -437,16 +433,29 @@ btnJogar.addEventListener('click', () => {
     if (dificuldade === 'facil') {
         tempoInicial = 45;
         bonusBateria = 2;
+        fase.innerText = perfilJogador.fasesAtingidas[0];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[0];
     } else if (dificuldade === 'normal') {
         tempoInicial = 30;
         bonusBateria = 1;
+        fase.innerText = perfilJogador.fasesAtingidas[1];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[1];
     } else if (dificuldade === 'dificil') {
         tempoInicial = 20;
         bonusBateria = 0;
+        fase.innerText = perfilJogador.fasesAtingidas[2];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[2];
     } else {
         tempoInicial = 10;
         bonusBateria = 0;
+        fase.innerText = perfilJogador.fasesAtingidas[3];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[3];
     }
+
+    if (limiteFases !== Number.POSITIVE_INFINITY) {
+        fase.innerText = 0;
+        perfilJogador.faseAtual = 0;  
+    }  
 
     perfilJogador.dificuldade = dificuldade;
     salvaPerfilJogador();
@@ -480,15 +489,13 @@ btnJogar.addEventListener('click', () => {
     function lidaPocaoTempo() {
         if (perfilJogador.quantidadePocaoTempo > 0) {
             tempoCorrente += 5;
-            perfilJogador.quantidadePocaoTempo--;
-            atualizaSpanPocaoTempo(perfilJogador.quantidadePocaoTempo);
+            atualizaSpanPocaoTempo(--perfilJogador.quantidadePocaoTempo);
         }
     }
     function lidaPocaoBateria() {
         if (perfilJogador.quantidadePocaoBateria > 0) {
             atualizaBateria(1);
-            perfilJogador.quantidadePocaoBateria--;
-            atualizaSpanPocaoBateria(perfilJogador.quantidadePocaoBateria);
+            atualizaSpanPocaoBateria(--perfilJogador.quantidadePocaoBateria);
         }  
     }
     function lidaTeclaPocoes(e) {
@@ -521,11 +528,12 @@ btnJogar.addEventListener('click', () => {
     }
 
 	if (conjuntoExterno) {
-        leCircuito(conjuntoExterno[faseAtual]);
+        leCircuito(conjuntoExterno[0]);
     } else {
         geracaoDinamicaFases();
     }
 	temporizador();
+    exibeToast(`Você está jogando na dificuldade ${dificuldade} e no modo de jogo ${modoJogo}.`, 0);
 });
 
 play.addEventListener('click', () => {
@@ -542,52 +550,77 @@ play.addEventListener('click', () => {
 	}
 });
 
+function tetoQuantiaPercentual(percentual, valor) {
+    if (percentual > 1) {
+        percentual = percentual / 100;
+    }
+    return Math.ceil(percentual * valor);
+}
+
 btnProximo.addEventListener('click', () => {
     tempo.innerText = tempoInicial;
     if (modoJogo === 'progressivo') {
         // mudança do bg
-        if (faseAtual > 0 && faseAtual % 10 === 0) {
+        if (perfilJogador.faseAtual > 0 && perfilJogador.faseAtual % 10 === 0) {
             if (bgAtual < 56) {
                 bgAtual++;
             }
             document.documentElement.style.setProperty('--bg', `url('../media/bg/bg${bgAtual}.png')`);
         }
         // penalidades por perder o circuito atual, de acordo com a dificuldade escolhida
-        if (faseAtual < limiteFases - 1) {
+        if (perfilJogador.faseAtual < limiteFases - 1) {
             if (derrota) {
                 if (dificuldade === 'facil') {
-                    faseAtual = faseAtual;
+                    perfilJogador.faseAtual = perfilJogador.faseAtual;
                 } else if (dificuldade === 'normal') {
-                    if (faseAtual > 0) {
-                        faseAtual--;
+                    if (perfilJogador.faseAtual > 0) {
+                        perfilJogador.faseAtual -= tetoQuantiaPercentual(10, perfilJogador.faseAtual);
                     } else {
-                        faseAtual = 0;
+                        perfilJogador.faseAtual = 0;
                     }
                 } else if (dificuldade === 'dificil') {
-                     if (faseAtual > 3) {
-                        faseAtual -= 3;
+                     if (perfilJogador.faseAtual > 0) {
+                        perfilJogador.faseAtual -= tetoQuantiaPercentual(20, perfilJogador.faseAtual);
                     } else {
-                        faseAtual = 0;
+                        perfilJogador.faseAtual = 0;
                     }                   
                 } else if (dificuldade === 'impossivel') {
-                     if (faseAtual > 5) {
-                        faseAtual -= 5;
+                     if (perfilJogador.faseAtual > 0) {
+                        perfilJogador.faseAtual -= tetoQuantiaPercentual(30, perfilJogador.faseAtual);
                     } else {
-                        faseAtual = 0;
+                        perfilJogador.faseAtual = 0;
                     }    
                 }
-                fase.innerText = faseAtual;
+                fase.innerText = perfilJogador.faseAtual;
             // este else é para caso o jogador não tenha perdido o circuito atual
             } else {
-                fase.innerText = ++faseAtual;
-                if (faseAtual > perfilJogador.recordeFases[0]) {
-                    perfilJogador.recordeFases[0] = faseAtual;
+                fase.innerText = ++perfilJogador.faseAtual;
+                if (limiteFases === Number.POSITIVE_INFINITY || limiteFases === 0 || !limiteFases) {
+                    switch(dificuldade){
+                        case 'facil':
+                            perfilJogador.fasesAtingidas[0] = perfilJogador.faseAtual;
+                            break;
+                        case 'normal':
+                            perfilJogador.fasesAtingidas[1] = perfilJogador.faseAtual;
+                            break;
+                        case 'dificil':
+                            perfilJogador.fasesAtingidas[2] = perfilJogador.faseAtual;
+                            break;
+                        case 'impossivel':
+                            perfilJogador.fasesAtingidas[3] = perfilJogador.faseAtual;
+                            break;
+                    }
+                    salvaPerfilJogador();
+                }
+                // determina o recorde de fases
+                if (perfilJogador.faseAtual > perfilJogador.recordeFases[0]) {
+                    perfilJogador.recordeFases[0] = perfilJogador.faseAtual;
                     perfilJogador.recordeFases[1] = dificuldade;
                 }
 
                 // conquistas de nível
                 if (dificuldade === 'facil') {
-                    if (faseAtual === 10) {
+                    if (perfilJogador.faseAtual === 10) {
                         if (!verificaSeJaTemConquista('Lógico iniciante')) {
                             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico iniciante', descricao: 'Por atingir a fase 10 no nível fácil.', img: 'media/conquistas/conquista9.png'});
                             atualizaExibicaoPerfilJogador();
@@ -595,30 +628,30 @@ btnProximo.addEventListener('click', () => {
                         }
                     }
                 } else if (dificuldade === 'normal' || dificuldade === 'dificil' || dificuldade === 'impossivel') {
-                    if (faseAtual === 25) {
+                    if (perfilJogador.faseAtual === 25) {
                         if (!verificaSeJaTemConquista('Lógico persistente')) {
                             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico persistente', descricao: 'Por atingir a fase 25 no nível normal ou mais.', img: 'media/conquistas/conquista10.png'});
                             atualizaExibicaoPerfilJogador();
                             exibeToast('Você obteve uma conquista!', 0);        
                         }
                     }
-                    if (faseAtual === 50) {
+                    if (perfilJogador.faseAtual === 500) {
                         if (!verificaSeJaTemConquista('Um verdadeiro lógico')) {
-                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Um verdadeiro lógico', descricao: 'Por atingir a fase 50 no nível normal ou mais.', img: 'media/conquistas/conquista11.png'});
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Um verdadeiro lógico', descricao: 'Por atingir a fase 500 no nível normal ou mais.', img: 'media/conquistas/conquista11.png'});
                             atualizaExibicaoPerfilJogador();
                             exibeToast('Você obteve uma conquista!', 0);        
                         }
                     }
-                    if (faseAtual === 100) {
+                    if (perfilJogador.faseAtual === 1000) {
                         if (!verificaSeJaTemConquista('Lógico Mestre')) {
-                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Mestre', descricao: 'Por atingir a fase 100 no nível normal ou mais.', img: 'media/conquistas/conquista12.png'});
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Mestre', descricao: 'Por atingir a fase 1.000 no nível normal ou mais.', img: 'media/conquistas/conquista12.png'});
                             atualizaExibicaoPerfilJogador();
                             exibeToast('Você obteve uma conquista!', 0);        
                         }
                     }
-                    if (faseAtual === 1000) {
+                    if (perfilJogador.faseAtual === 5000) {
                         if (!verificaSeJaTemConquista('Lógico Deus')) {
-                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Deus', descricao: 'Por atingir a fase 1000 no nível normal ou mais.', img: 'media/conquistas/conquista13.png'});
+                            perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Deus', descricao: 'Por atingir a fase 5.000 no nível normal ou mais.', img: 'media/conquistas/conquista13.png'});
                             atualizaExibicaoPerfilJogador();
                             exibeToast('Você obteve uma conquista!', 0);        
                         }
@@ -626,8 +659,8 @@ btnProximo.addEventListener('click', () => {
 
                     // captura de monstros
                     let monstroAtual = 1;
-                    for (let i = 10; i <= 330; i += 10) {
-                        if (faseAtual === i) {
+                    for (let i = 50; i <= 1650; i += 50) {
+                        if (perfilJogador.faseAtual === i) {
                             if (!verificaSeJaTemConquista(`monstro${monstroAtual}`)) {
                                 perfilJogador.itensInventario.push({categoria: 'monstro', titulo: `monstro${monstroAtual}`, descricao: '', img: ''});
                                 exibeCapturaMonstro(`monstro${monstroAtual}`);
@@ -701,10 +734,10 @@ function geracaoDinamicaFases() {
     circuitoCriado = criaCircuito(todosCircuitos[moldeAtual], combinacoesBaseMolde[0], combinacoesBaseMolde[1]);
 
     if (modoJogo === 'progressivo') {
-        if (Math.floor((faseAtual / 10)) > todosCircuitos.length - 1) {
+        if (Math.floor((perfilJogador.faseAtual / 10)) > todosCircuitos.length - 1) {
             alcanceMolde = todosCircuitos.length - 1;
         } else {
-            alcanceMolde = Math.floor((faseAtual / 10));
+            alcanceMolde = Math.floor((perfilJogador.faseAtual / 10));
         }
     } else {
         alcanceMolde = todosCircuitos.length - 1;
@@ -729,7 +762,7 @@ function proximaFase() {
     switch(modoJogo) {
         case 'progressivo':
             if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[faseAtual]);
+                leCircuito(conjuntoExterno[perfilJogador.faseAtual]);
             } else {
                 // geração dinâmica de fases
                 geracaoDinamicaFases();
@@ -737,7 +770,7 @@ function proximaFase() {
             break;
         case 'infinito':
             if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[faseAtual]);
+                leCircuito(conjuntoExterno[perfilJogador.faseAtual]);
             } else {
                 // geração dinâmica de fases
                 geracaoDinamicaFases();
@@ -745,7 +778,7 @@ function proximaFase() {
             break;
         case 'treino':
             if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[faseAtual]);
+                leCircuito(conjuntoExterno[perfilJogador.faseAtual]);
             } else {
                 // geração dinâmica de fases
                 geracaoDinamicaFases();
@@ -866,7 +899,7 @@ function exibeEstrelas() {
     valorPontuacaoParaDesempenho += totalEstrelas;
 
     if (modoJogo !== 'treino') {
-        perfilJogador.saldo += totalEstrelas + faseAtual;
+        perfilJogador.saldo += totalEstrelas + perfilJogador.faseAtual;
         if (valorPontuacao > perfilJogador.recordeEstrelas[0]) {
             perfilJogador.recordeEstrelas[0] = valorPontuacao;
             perfilJogador.recordeEstrelas[1] = dificuldade;
@@ -1286,7 +1319,7 @@ for (let i = 0; i < inputs.length; i++) {
 			}
 			atualizaBateria();
 			if (conjuntoExterno) {
-                propaga(conjuntoExterno[faseAtual].lista_elementos);
+                propaga(conjuntoExterno[perfilJogador.faseAtual].lista_elementos);
             } else {
                 propaga(circuitoCriado.lista_elementos);
             }
@@ -1435,7 +1468,7 @@ const divEditarPerfil = document.querySelector('#divEditarPerfil');
 const divConquistas = document.querySelector('#divConquistas');
 const divMonstrosCapturados = document.querySelector('#divMonstrosCapturados');
 
-function fechaDivsAbertura(excecao) {
+function fechaDivsAbertura(excecao = null) {
     divsAbertura.forEach(div => {
         if (div != excecao) {
             div.classList.add('esconde');
@@ -1526,50 +1559,50 @@ btnComprar.forEach(btn => {
                 }
                 break;
             case 'foto-ladrao':
-                if (perfilJogador.saldo >= 500) {
-                    perfilJogador.saldo -= 500;
+                if (perfilJogador.saldo >= 1000) {
+                    perfilJogador.saldo -= 1000;
                     perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con3.png', equipado: false});
                     compraFeita = true;
                 }
                 break;
             case 'foto-ferreiro':
-                if (perfilJogador.saldo >= 500) {
-                    perfilJogador.saldo -= 500;
+                if (perfilJogador.saldo >= 1000) {
+                    perfilJogador.saldo -= 1000;
                     perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con4.png', equipado: false});
                     compraFeita = true;
                 }
                 break;
             case 'foto-ladra':
-                if (perfilJogador.saldo >= 500) {
-                    perfilJogador.saldo -= 500;
+                if (perfilJogador.saldo >= 2500) {
+                    perfilJogador.saldo -= 2500;
                     perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con5.png', equipado: false});
                     compraFeita = true;
                 }
                 break;
             case 'foto-arqueiro':
-                if (perfilJogador.saldo >= 500) {
-                    perfilJogador.saldo -= 500;
+                if (perfilJogador.saldo >= 2500) {
+                    perfilJogador.saldo -= 2500;
                     perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con6.png', equipado: false});
                     compraFeita = true;
                 }
                 break;
             case 'foto-homem-areia':
-                if (perfilJogador.saldo >= 500) {
-                    perfilJogador.saldo -= 500;
+                if (perfilJogador.saldo >= 3000) {
+                    perfilJogador.saldo -= 3000;
                     perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con7.png', equipado: false});
                     compraFeita = true;
                 }
                 break;
             case 'foto-fada':
-                if (perfilJogador.saldo >= 500) {
-                    perfilJogador.saldo -= 500;
+                if (perfilJogador.saldo >= 3000) {
+                    perfilJogador.saldo -= 3000;
                     perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con8.png', equipado: false});
                     compraFeita = true;
                 }
                 break;
             case 'foto-ninja':
-                if (perfilJogador.saldo >= 500) {
-                    perfilJogador.saldo -= 500;
+                if (perfilJogador.saldo >= 5000) {
+                    perfilJogador.saldo -= 5000;
                     perfilJogador.itensInventario.push({categoria: 'foto', titulo: btn.getAttribute('title'), descricao: btn.getAttribute('title'), img: 'media/itens-loja/personagens/con9.png', equipado: false});
                     compraFeita = true;
                 }
@@ -1638,9 +1671,9 @@ function atualizaEditarPerfil() {
             botao.setAttribute('title', item.titulo);
             botao.setAttribute('categoria', item.categoria);
 
-            titulo.innerText = item.titulo.replaceAll('-', ' do ');
+            titulo.innerText = item.titulo.replaceAll('-', ' ');
             img.setAttribute('src', item.img);
-            descricao.innerText = item.descricao.replaceAll('-', ' do ');
+            descricao.innerText = item.descricao.replaceAll('-', ' ');
             botao.innerText = 'Equipar';
 
             divItem.appendChild(titulo);
@@ -1808,7 +1841,7 @@ function resetaLocalStorage() {
         }, 3000);
     }
     if (perfilJogador.ultimoLogin) {
-        if ((perfilJogador.ultimoLogin[0] < 4 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
+        if ((perfilJogador.ultimoLogin[0] < 5 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
             reseta();
         }
     } else {
@@ -1819,25 +1852,25 @@ function resetaLocalStorage() {
 
 resetaLocalStorage();
 
-// // impede o usuário de inspecionar o jogo
-// document.addEventListener('contextmenu', e => {
-//     e.preventDefault();
-// });
+// impede o usuário de inspecionar o jogo
+document.addEventListener('contextmenu', e => {
+    e.preventDefault();
+});
 
-// document.onkeydown = function(e) {
-//     if (event.keyCode == 123) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-//         return false;
-//     }
-// }
+document.onkeydown = function(e) {
+    if (event.keyCode == 123) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+        return false;
+    }
+}

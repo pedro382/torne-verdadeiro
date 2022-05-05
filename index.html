@@ -46,8 +46,12 @@
 						<p id="tituloJogador">Título do jogador</p>
 					</div>					
 				</div>
-				<p>Nível: <span id="nivelJogador">0</span></p>
-				<p>Saldo: <span class="saldoJogador">0</span></p>
+				<p><i class="bi bi-person-fill"></i> Nível: <span id="nivelJogador">0</span></p>
+				<p><i class="bi bi-star-fill"></i> Saldo: <span class="saldoJogador">0</span></p>
+				<p title="Esta informação é referente apenas ao modo de jogo progressivo.">Fase Atual Fácil: <span id="faseAtualFacil">0</span></p>
+				<p title="Esta informação é referente apenas ao modo de jogo progressivo.">Fase Atual Normal: <span id="faseAtualNormal">0</span></p>
+				<p title="Esta informação é referente apenas ao modo de jogo progressivo.">Fase Atual Difícil: <span id="faseAtualDificil">0</span></p>
+				<p title="Esta informação é referente apenas ao modo de jogo progressivo.">Fase Atual Impossível: <span id="faseAtualImpossivel">0</span></p>
 				<p>Total conquistas: <span id="totalConquistasJogador">0</span></p>
 				<p>Recorde de fases: <span id="recordeFasesJogador">0</span></p>
 				<p>Recorde de estrelas: <span id="recordeEstrelasJogador">0</span></p>
@@ -59,6 +63,7 @@
 				<button id="btnCompartilharPerfil">Compartilhar perfil</button>
 			</div>
 			<p id="resumoConfiguracoes"></p>
+			<h2 id="abrirCriador" class="abridores">Criar circuitos</h2>
 			<h2 id="abrirComoJogar" class="abridores">Como jogar?</h2>
 			<div id="divComoJogar" class="divsAbertura esconde">
 				<p>O objetivo do jogo é tornar o circuito verdadeiro. Para isso, você deve fazer a corrente elétrica chegar até o final.</p>
@@ -73,6 +78,7 @@
 					<tr><td>0</td><td>1</td><td>Falso</td></tr>
 					<tr><td>1</td><td>0</td><td>Falso</td></tr>
 				</table>
+				<img class="exemplo" src="media/exemplos/exemplo-and.png">
 				<p>A porta <strong>OR</strong>, ilustrada abaixo, exige que pelo menos uma linha que se conecta a ela esteja ativa.</p>
 				<img class="ilustracao" src="media/elementos/or-preto.png">
 				<table>
@@ -83,6 +89,7 @@
 					<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
 					<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
 				</table>
+				<img class="exemplo" src="media/exemplos/exemplo-or.png">
 				<p>A porta <strong>NOT</strong> inverte o valor da linha conectada a ela. Se estiver ativa, então ela ficará desativada. Se estiver desativada, então ela ficará ativada.</p>
 				<img class="ilustracao" src="media/elementos/not-preto.png">
 				<table>
@@ -91,6 +98,7 @@
 					<tr class="linha-verdadeira-tabela"><td>0</td><td>Verdadeiro</td></tr>
 					<tr><td>1</td><td>Falso</td></tr>
 				</table>
+				<img class="exemplo" src="media/exemplos/exemplo-not.png">
 				<p>A porta <strong>XOR</strong> exige que só uma conexão esteja ativa.</p>
 				<img class="ilustracao" src="media/elementos/xor-preto.png">
 				<table>
@@ -101,6 +109,7 @@
 					<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
 					<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
 				</table>
+				<img class="exemplo" src="media/exemplos/exemplo-xor.png">
 				<p>A porta <strong>NOR</strong> exige que nenhuma conexão esteja ativa.</p>
 				<img class="ilustracao" src="media/elementos/nor-preto.png">
 				<table>
@@ -111,8 +120,8 @@
 					<tr><td>0</td><td>1</td><td>Falso</td></tr>
 					<tr><td>1</td><td>0</td><td>Falso</td></tr>
 				</table>
+				<img class="exemplo" src="media/exemplos/exemplo-nor.png">
 				<p>A porta <strong>XNOR</strong> exige que ou ambas as conexões estejam ativas ou ambas estejam falsas.</p>
-				<img class="ilustracao" src="media/elementos/xnor-preto.png">
 				<table>
 					<caption>Tabela Verdade - XNOR</caption>
 					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
@@ -121,8 +130,9 @@
 					<tr><td>0</td><td>1</td><td>Falso</td></tr>
 					<tr><td>1</td><td>0</td><td>Falso</td></tr>
 				</table>
-				<p>A porta <strong>NAND</strong> só será falsa se ambas as suas conexões forem verdadeiras.</p>
 				<img class="ilustracao" src="media/elementos/xnor-preto.png">
+				<p>A porta <strong>NAND</strong> só será falsa se ambas as suas conexões forem verdadeiras.</p>
+				<img class="ilustracao" src="media/elementos/nand-preto.png">
 				<table>
 					<caption>Tabela Verdade - NAND</caption>
 					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
@@ -131,6 +141,7 @@
 					<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
 					<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
 				</table>
+				<img class="exemplo" src="media/exemplos/exemplo-nand.png">
 				<p>Cada circuito possui um tempo determinado <i class="tempo bi bi-hourglass-split"></i>. Se o tempo acabar, você perde. Além disso, eles também possuem uma quantidade de bateria disponível <i class="bateria bi bi-battery-charging"></i>. Isso significa que a cada clique dado, você perde uma bateria. Se as baterias acabarem você perde.</p>
 				<p>A ideia é resolver o circuito no menor tempo possível e com a menor quantidade de cliques. Boa sorte.</p>
 			</div>
@@ -143,11 +154,11 @@
 						<p><input type="radio" name="radioDificuldade" class="nova-dificuldade" id="dificuldadeFacil" value="facil" checked><label for="dificuldadeFacil"> Fácil</label></p>
 						<p class="explicacao">Somente 3 tipos de portões lógicos, uma bateria extra por fase, 30 segundos de tempo e penalidade 0 ao perder um circuito</p>
 						<p><input type="radio" name="radioDificuldade" id="dificuldadeNormal" value="normal" class="nova-dificuldade"><label for="dificuldadeNormal"> Normal</label></p>
-						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 30 segundos de tempo e penalidade -1 ao perder um circuito</p>
+						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 30 segundos de tempo e penalidade -10% ao perder um circuito</p>
 						<p><input type="radio" name="radioDificuldade" id="dificuldadeDificil" value="dificil" class="nova-dificuldade"><label for="dificuldadeDificil"> Difícil</label></p>
-						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 20 segundos de tempo e penalidade -2 ao perder um circuito</p>
+						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 20 segundos de tempo e penalidade -20% ao perder um circuito</p>
 						<p><input type="radio" name="radioDificuldade" id="dificuldadeImpossivel" value="impossivel" class="nova-dificuldade"><label for="dificuldadeImpossivel"> Impossível</label></p>
-						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 10 segundos de tempo, penalidade -3 ao perder um circuito e sem cor indicativa nos fios ativos</p>
+						<p class="explicacao">Todos os portões lógicos, nenhuma bateria extra por fase, 10 segundos de tempo, penalidade -30% ao perder um circuito e sem cor indicativa nos fios ativos</p>
 					</div>
 				</div>
 
@@ -155,18 +166,18 @@
 					<h3>Modo de jogo:</h3>
 					<div class="div-inputs-configuracao">
 						<p><input type="radio" name="radioModoJogo" id="modoProgressivo" value="progressivo" checked><label for="modoProgressivo" title="Até onde você consegue chegar"> Progressivo</label></p>
+						<p><label for="limiteFases">Limite de fases: </label><input type="number" id="limiteFases" value="0"></p>
 						<p><input type="radio" name="radioModoJogo" id="modoInfinito" value="infinito"><label for="modoInfinito"> Infinito</label></p>
 						<p><input type="radio" name="radioModoJogo" id="modoTreino" value="treino"><label for="modoTreino" title="Muita bateria, muito tempo"> Treino</label></p>
 					</div>
 				</div>
 
 				<div>
-					<h3>Limites</h3>
+					<h3>Desativações</h3>
 					<div class="div-inputs-configuracao">
 						<p><input type="checkbox" name="checkboxDesativarEfeitosSonoros" id="checkboxDesativarEfeitosSonoros"> <label for="checkboxDesativarEfeitosSonoros">Desativar efeitos sonoros</label></p>
 						<p><input type="checkbox" name="checkboxDesativarMusica" id="checkboxDesativarMusica"> <label for="checkboxDesativarMusica">Desativar música</label></p>
-						<p><input type="checkbox" name="checkboxDesativarAnimacaoBackground" id="checkboxDesativarAnimacaoBackground"> <label for="checkboxDesativarAnimacaoBackground">Desativar animação do background</label></p>
-						<p><label for="limiteFases">Limite de fases: </label><input type="number" id="limiteFases" value="0"></p>				
+						<p><input type="checkbox" name="checkboxDesativarAnimacaoBackground" id="checkboxDesativarAnimacaoBackground"> <label for="checkboxDesativarAnimacaoBackground">Desativar animação do background</label></p>				
 					</div>
 				</div>
 			</div>
@@ -224,49 +235,49 @@
 						<h4 class="titulo-item">Ladrão</h4>
 						<img src="media/itens-loja/personagens/con3.png" class="img-item">
 						<p class="descricao-item">Libera a foto do ladrão para ser usada no perfil.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 1.000 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-ladrao">Comprar</button>
 					</div>
 					<div class="item" id="foto-ferreiro">
 						<h4 class="titulo-item">Ferreiro</h4>
 						<img src="media/itens-loja/personagens/con4.png" class="img-item">
 						<p class="descricao-item">Libera a foto do ferreiro para ser usada no perfil.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 1.000 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-ferreiro">Comprar</button>
 					</div>
 					<div class="item" id="foto-ladra">
 						<h4 class="titulo-item">Ladra</h4>
 						<img src="media/itens-loja/personagens/con5.png" class="img-item">
 						<p class="descricao-item">Libera a foto da ladra para ser usada no perfil.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 2.500 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-ladra">Comprar</button>
 					</div>
 					<div class="item" id="foto-arqueiro">
 						<h4 class="titulo-item">Arqueiro</h4>
 						<img src="media/itens-loja/personagens/con6.png" class="img-item">
 						<p class="descricao-item">Libera a foto do arqueiro para ser usada no perfil.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 2.500 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-arqueiro">Comprar</button>
 					</div>
 					<div class="item" id="foto-homem-areia">
 						<h4 class="titulo-item">Homem da areia</h4>
 						<img src="media/itens-loja/personagens/con7.png" class="img-item">
 						<p class="descricao-item">Libera a foto do homem da areia para ser usada no perfil.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 3.000 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-homem-areia">Comprar</button>
 					</div>
 					<div class="item" id="foto-fada">
 						<h4 class="titulo-item">Fada</h4>
 						<img src="media/itens-loja/personagens/con8.png" class="img-item">
 						<p class="descricao-item">Libera a foto da fada para ser usada no perfil.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 3.000 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-fada">Comprar</button>
 					</div>
 					<div class="item" id="foto-ninja">
 						<h4 class="titulo-item">Ninja</h4>
 						<img src="media/itens-loja/personagens/con9.png" class="img-item">
 						<p class="descricao-item">Libera a foto do ninja para ser usada no perfil.</p>
-						<p class="preco"><i class="bi bi-star-fill"></i> 500 estrelas</p>
+						<p class="preco"><i class="bi bi-star-fill"></i> 5.000 estrelas</p>
 						<button class="botao-item btnComprar" title="foto-ninja">Comprar</button>
 					</div>
 				</div>
@@ -278,167 +289,167 @@
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
 						<img src="media/monstros/monstro1.png" class="img-item bloqueado" id="monstro1">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 10 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro2.png" class="img-item bloqueado" id="monstro2">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 20 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro3.png" class="img-item bloqueado" id="monstro3">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 30 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro4.png" class="img-item bloqueado" id="monstro4">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 40 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro5.png" class="img-item bloqueado" id="monstro5">
 						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 50 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro6.png" class="img-item bloqueado" id="monstro6">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 60 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro7.png" class="img-item bloqueado" id="monstro7">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 70 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro8.png" class="img-item bloqueado" id="monstro8">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 80 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro9.png" class="img-item bloqueado" id="monstro9">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 90 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro10.png" class="img-item bloqueado" id="monstro10">
+						<img src="media/monstros/monstro2.png" class="img-item bloqueado" id="monstro2">
 						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 100 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro11.png" class="img-item bloqueado" id="monstro11">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 110 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro12.png" class="img-item bloqueado" id="monstro12">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 120 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro13.png" class="img-item bloqueado" id="monstro13">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 130 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro14.png" class="img-item bloqueado" id="monstro14">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 140 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro15.png" class="img-item bloqueado" id="monstro15">
+						<img src="media/monstros/monstro3.png" class="img-item bloqueado" id="monstro3">
 						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 150 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro16.png" class="img-item bloqueado" id="monstro16">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 160 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro17.png" class="img-item bloqueado" id="monstro17">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 170 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro18.png" class="img-item bloqueado" id="monstro18">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 180 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro19.png" class="img-item bloqueado" id="monstro19">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 190 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro20.png" class="img-item bloqueado" id="monstro20">
+						<img src="media/monstros/monstro4.png" class="img-item bloqueado" id="monstro4">
 						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 200 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro21.png" class="img-item bloqueado" id="monstro21">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 210 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro22.png" class="img-item bloqueado" id="monstro22">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 220 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro23.png" class="img-item bloqueado" id="monstro23">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 230 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro24.png" class="img-item bloqueado" id="monstro24">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 240 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro25.png" class="img-item bloqueado" id="monstro25">
+						<img src="media/monstros/monstro5.png" class="img-item bloqueado" id="monstro5">
 						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 250 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro26.png" class="img-item bloqueado" id="monstro26">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 260 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro27.png" class="img-item bloqueado" id="monstro27">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 270 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro28.png" class="img-item bloqueado" id="monstro28">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 280 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro29.png" class="img-item bloqueado" id="monstro29">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 290 no normal ou mais.</p>
-					</div>
-					<div class="item">
-						<h4 class="titulo-item">Monstro</h4>
-						<img src="media/monstros/monstro30.png" class="img-item bloqueado" id="monstro30">
+						<img src="media/monstros/monstro6.png" class="img-item bloqueado" id="monstro6">
 						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 300 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro7.png" class="img-item bloqueado" id="monstro7">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 350 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro8.png" class="img-item bloqueado" id="monstro8">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 400 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro9.png" class="img-item bloqueado" id="monstro9">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 450 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro10.png" class="img-item bloqueado" id="monstro10">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 500 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro11.png" class="img-item bloqueado" id="monstro11">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 550 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro12.png" class="img-item bloqueado" id="monstro12">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 600 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro13.png" class="img-item bloqueado" id="monstro13">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 650 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro14.png" class="img-item bloqueado" id="monstro14">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 700 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro15.png" class="img-item bloqueado" id="monstro15">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 750 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro16.png" class="img-item bloqueado" id="monstro16">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 800 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro17.png" class="img-item bloqueado" id="monstro17">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 850 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro18.png" class="img-item bloqueado" id="monstro18">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 900 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro19.png" class="img-item bloqueado" id="monstro19">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 950 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro20.png" class="img-item bloqueado" id="monstro20">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.000 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro21.png" class="img-item bloqueado" id="monstro21">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.050 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro22.png" class="img-item bloqueado" id="monstro22">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.100 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro23.png" class="img-item bloqueado" id="monstro23">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.150 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro24.png" class="img-item bloqueado" id="monstro24">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.200 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro25.png" class="img-item bloqueado" id="monstro25">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.250 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro26.png" class="img-item bloqueado" id="monstro26">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.300 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro27.png" class="img-item bloqueado" id="monstro27">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.350 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro28.png" class="img-item bloqueado" id="monstro28">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.400 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro29.png" class="img-item bloqueado" id="monstro29">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.450 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
+						<img src="media/monstros/monstro30.png" class="img-item bloqueado" id="monstro30">
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.500 no normal ou mais.</p>
+					</div>
+					<div class="item">
+						<h4 class="titulo-item">Monstro</h4>
 						<img src="media/monstros/monstro31.png" class="img-item bloqueado" id="monstro31">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 310 no normal ou mais.</p>
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.550 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
 						<img src="media/monstros/monstro32.png" class="img-item bloqueado" id="monstro32">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 320 no normal ou mais.</p>
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.600 no normal ou mais.</p>
 					</div>
 					<div class="item">
 						<h4 class="titulo-item">Monstro</h4>
 						<img src="media/monstros/monstro33.png" class="img-item bloqueado" id="monstro33">
-						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 330 no normal ou mais.</p>
+						<p class="descricao-item">Esta criatura pode ser capturada atingindo o nível 1.650 no normal ou mais.</p>
 					</div>					
 				</div>
 			</div>
@@ -461,20 +472,21 @@
 					<p class="conquista" id="conquistaInvencivel">Realizar uma streak no impossível (ganha o título "Invencível")</p>
 					<p class="conquista" id="conquistaLogicoIniciante">Atingir a fase 10 no fácil (ganha o título "Lógico Iniciante")</p>
 					<p class="conquista" id="conquistaLogicoPersistente">Atingir a fase 25 no normal (ganha o título "Lógico Persistente")</p>
-					<p class="conquista" id="conquistaUmVerdadeiroLogico">Atingir a fase 50 no normal (ganha o título "Um verdadeiro lógico")</p>
-					<p class="conquista" id="conquistaLogicoMestre">Atingir a fase 100 no normal (ganha o título "Lógico Mestre")</p>
-					<p class="conquista" id="conquistaLogicoDeus">Atingir a fase 1.000 no normal (ganha o título "Lógico Deus")</p>
+					<p class="conquista" id="conquistaUmVerdadeiroLogico">Atingir a fase 500 no normal (ganha o título "Um verdadeiro lógico")</p>
+					<p class="conquista" id="conquistaLogicoMestre">Atingir a fase 1.000 no normal (ganha o título "Lógico Mestre")</p>
+					<p class="conquista" id="conquistaLogicoDeus">Atingir a fase 5.000 no normal (ganha o título "Lógico Deus")</p>
 					<p class="conquista" id="conquistaOCacadorDivino">Ter caçado todos os monstros (ganha o título "O Caçador Divino")</p>
 				</div>
 			</div>
-			<h2 id="abrirCriador" class="abridores">Criar circuitos</h2>
 			<div class="alinhados-horizontalmente">
 				<button id="btnJogar">Novo jogo!</button><br>
 				<button id="btnVoltar">Voltar à partida</button>
 			</div>
 
 			<div id="creditos">
-				<p>Créditos pela foto de fundo para <a href="https://www.instagram.com/frankconephotos/" target="_blank">Frank Cone</a> no <a href="https://www.pexels.com/pt-br" target="_blank">Pexels</a></p>
+				<p>Este jogo foi desenvolvido por <a href="https://wdpedroborges.github.io">Pedro Borges</a></p>
+				<p>Créditos pelas ilustrações dos monstros e dos personagens presentes na loja para <a href="http://craftpix.net">CraftPixel</a></p>
+				<p>Ícones de poções criados por <a href="https://www.flaticon.com/free-icons/potions" target="_blank">Flaticon</a></p>
 				<p>Ícone de fogo criado por  <a href="https://www.flaticon.com/free-icons/fire" target="_blank">Vectors Market - Flaticon</a></p>
 				<p>Ícone de escolha criado por <a href="https://www.flaticon.com/free-icons/choice" target="_blank">Freepik - Flaticon</a></p>
 				<p>Efeitos sonoros obtidos em <a href="https://freesound.org">Free Sound</a></p>
