@@ -571,7 +571,11 @@ btnProximo.addEventListener('click', () => {
         if (perfilJogador.faseAtual < limiteFases - 1) {
             if (derrota) {
                 if (dificuldade === 'facil') {
-                    perfilJogador.faseAtual = perfilJogador.faseAtual;
+                    if (perfilJogador.faseAtual > 0) {
+                        perfilJogador.faseAtual -= tetoQuantiaPercentual(5, perfilJogador.faseAtual);
+                    } else {
+                        perfilJogador.faseAtual = 0;
+                    }
                 } else if (dificuldade === 'normal') {
                     if (perfilJogador.faseAtual > 0) {
                         perfilJogador.faseAtual -= tetoQuantiaPercentual(10, perfilJogador.faseAtual);
@@ -899,7 +903,7 @@ function exibeEstrelas() {
     valorPontuacaoParaDesempenho += totalEstrelas;
 
     if (modoJogo !== 'treino') {
-        perfilJogador.saldo += totalEstrelas + perfilJogador.faseAtual;
+        perfilJogador.saldo += totalEstrelas + Math.ceil((perfilJogador.faseAtual / 3));
         if (valorPontuacao > perfilJogador.recordeEstrelas[0]) {
             perfilJogador.recordeEstrelas[0] = valorPontuacao;
             perfilJogador.recordeEstrelas[1] = dificuldade;
