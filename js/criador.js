@@ -140,12 +140,6 @@ document.addEventListener("keypress", function(event) {
 	}
 });
 
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 let elementoAutomatico;
 let houveElementoAutomatico = false;
 let ultimoElementoComplexo = 0;
@@ -431,17 +425,6 @@ function exibeToast(conteudo, bg = 'seagreen') {
 	}, 5000);
 }
 
-function estadosIguais(estado1, estado2) {
-    let iguais = true;
-    for (let i = 0; i < estado1.length; i++) {
-        if (estado1[i] !== estado2[i]) {
-            iguais = false;
-            break;
-        }
-    }
-    return iguais;
-}
-
 function defineInputsCircuito(estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']) {
 	const inputs = [... document.querySelectorAll('.input')];
 	inputs.forEach((input, index) => {
@@ -452,180 +435,6 @@ function defineInputsCircuito(estadoInicial = ['0', '0', '0', '0', '0', '0', '0'
 		}
 		input.innerText = estadoInicial[index];
 	});
-}
-
-function criaTodasPossibilidadesResposta(posicao_elementos_iniciais) {
-	let quantidadeNecessaria;;
-	if (posicao_elementos_iniciais.length > 0) {
-		quantidadeNecessaria = Math.pow(2, posicao_elementos_iniciais.length);
-	} else {
-		quantidadeNecessaria = 0;
-	}
-	let respostasPossiveisValidas = [];
-	
-	if (quantidadeNecessaria > 0) {
-		do {
-			let estadoInicial = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
-		    for (let i = 0; i < posicao_elementos_iniciais.length; i++) {
-		        estadoInicial[posicao_elementos_iniciais[i] - 140] = getRandomIntInclusive(0, 1).toString();
-		    }
-
-			let jaTem = false;
-			for (let j = 0; j < respostasPossiveisValidas.length; j++) {
-				if (estadosIguais(respostasPossiveisValidas[j], estadoInicial)) {
-					jaTem = true;
-				}
-			}
-
-			if (!jaTem) {
-				respostasPossiveisValidas.push(estadoInicial);
-			}
-		} while(respostasPossiveisValidas.length < quantidadeNecessaria);
-	}
-
-    return respostasPossiveisValidas;
-}
-
-function verificaSolucoesPossiveis(circuitoJSON) {
-	let respostasPossiveisValidas = criaTodasPossibilidadesResposta(circuitoJSON.posicao_elementos_iniciais);
-	let solucoes_possiveis = [];
-	for (let i = 0; i < respostasPossiveisValidas.length; i++) {
-		let r = pegaOutputDePropagacaoVirtual(circuitoJSON, respostasPossiveisValidas[i]);
-		if (r) {
-			let jaTem = false;
-			for (let j = 0; j < solucoes_possiveis.length; j++) {
-				if (estadosIguais(solucoes_possiveis[j], respostasPossiveisValidas[i])) {
-					jaTem = true;
-				}
-			}
-
-			if (!jaTem) {
-				solucoes_possiveis.push(respostasPossiveisValidas[i]);
-			}
-		}
-	}
-
-	return solucoes_possiveis;
-}
-
-function pegaOutputDePropagacaoVirtual(circuitoJSON, estadoInicial = ["0","0","0","0","1","1","0","0","0","0"]) {
-	function ativaAlgumElementoDadaSuaPosicao(posicaoDada) {
-		for (let j = 0; j < circuitoJSON.lista_elementos.length; j++) {
-			if (circuitoJSON.lista_elementos[j].posicao === posicaoDada) {
-				circuitoJSON.lista_elementos[j].estado = 'on';
-			}
-		}
-	}
-
-	function verificaSeDeterminadoElementoEstaAtivo(posicaoDada) {
-		let ativo = false;
-		for (let j = 0; j < circuitoJSON.lista_elementos.length; j++) {
-			if (circuitoJSON.lista_elementos[j].posicao === posicaoDada && circuitoJSON.lista_elementos[j].estado === 'on') {
-				ativo = true;
-			}
-		}
-		return ativo;
-	}
-
-	// coloca o atributo "estado" e dá a ele o valor off para cada um dos elementos
-	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
-		circuitoJSON.lista_elementos[i].estado = 'off';
-	}
-	// realiza a primeira propagação, considerando a posição dos elementos inicias e o estadoInicial passado
-	// percorre o array de posição dos elementos iniciais, para sem seguida verificar se a posição correspondente do estado inicial é 1, porque se for, queremos ativar esse elemento que tá nessa posição inicial
-	for (let i = 0; i < circuitoJSON.posicao_elementos_iniciais.length; i++) {
-		if (estadoInicial[circuitoJSON.posicao_elementos_iniciais[i] - 140] === '1') {
-			ativaAlgumElementoDadaSuaPosicao(circuitoJSON.posicao_elementos_iniciais[i]);
-		}
-	}
-	// realiza o resto da propagação, com base nos elementos iniciais que estão ativos
-	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) { 
-		let nomeElemento = circuitoJSON.lista_elementos[i].elemento.split('-');
-		// linhas normais
-		if (nomeElemento.includes('linha') || nomeElemento.includes('canto') || nomeElemento.includes('cruz') || nomeElemento.includes('t')) {
-			// se tem conexão 0, é porque é um dos primeiros elementos
-			if (circuitoJSON.lista_elementos[i].conexao.length !== 0) {				
-                if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0])) {
-                	circuitoJSON.lista_elementos[i].estado = 'on';
-                } else {
-                	circuitoJSON.lista_elementos[i].estado = 'off';
-                }
-			}
-		}
-		// not: inverte
-		if (circuitoJSON.lista_elementos[i].elemento === 'not') {
-			if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0])) {
-				circuitoJSON.lista_elementos[i].estado = 'off';
-			} else {
-				circuitoJSON.lista_elementos[i].estado = 'on';
-			}
-		}
-		// and: ambas devem ser verdadeiras
-		if (circuitoJSON.lista_elementos[i].elemento === 'and') {
-			if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
-				circuitoJSON.lista_elementos[i].estado = 'on';
-			} else {
-				circuitoJSON.lista_elementos[i].estado = 'off';
-			}
-		}
-		// or: pelo menos uma deve ser verdadeira
-		if (circuitoJSON.lista_elementos[i].elemento === 'or') {
-			if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) || verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
-				circuitoJSON.lista_elementos[i].estado = 'on';
-			} else {
-				circuitoJSON.lista_elementos[i].estado = 'off';
-			}
-		}
-        // nand: falsa se ambas verdadeiras
-        if (circuitoJSON.lista_elementos[i].elemento === 'nand') {
-            if (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
-                circuitoJSON.lista_elementos[i].estado = 'off';
-            } else {
-                circuitoJSON.lista_elementos[i].estado = 'on';
-            }
-        }
-        // nor: nenhuma deve ser verdadeira
-        if (circuitoJSON.lista_elementos[i].elemento === 'nor') {
-            if (!verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && !verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) {
-                circuitoJSON.lista_elementos[i].estado = 'on';
-            } else {
-                circuitoJSON.lista_elementos[i].estado = 'off';
-            }
-        }
-        // xor: só uma pode ser verdadeira
-        if (circuitoJSON.lista_elementos[i].elemento === 'xor') {
-            if ((verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && !verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) || (!verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1]))) {
-                circuitoJSON.lista_elementos[i].estado = 'on';
-            } else {
-                circuitoJSON.lista_elementos[i].estado = 'off';
-            }
-        }
-        // xnor: ou ambas falsas ou ambas verdadeiras
-        if (circuitoJSON.lista_elementos[i].elemento === 'xnor') {
-            if ((!verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && !verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1])) || (verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[0]) && verificaSeDeterminadoElementoEstaAtivo(circuitoJSON.lista_elementos[i].conexao[1]))) {
-                circuitoJSON.lista_elementos[i].estado = 'on';
-            } else {
-                circuitoJSON.lista_elementos[i].estado = 'off';
-            }
-        }
-        // fim
-	}
-	// agora altera o output, verificando se todos os últimos elementos estão ativos
-	let output = true, totalElementosUltimaPosicao = 0;
-	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
-		if (circuitoJSON.lista_elementos[i].posicao < 10) {
-			totalElementosUltimaPosicao++;
-			if (circuitoJSON.lista_elementos[i].estado === 'off') {
-				output = false;
-			}			
-		}
-	}
-	// remove a propriedade "estado" dos elementos, já que ela não será útil mais
-	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
-		delete circuitoJSON.lista_elementos[i].estado;
-	}
-
-	return output && totalElementosUltimaPosicao > 0;
 }
 
 function propaga(circuitoJSON) {
@@ -851,29 +660,6 @@ btnCopiarLink.addEventListener('click', () => {
 		exibeToast('Nenhum circuito foi feito ainda.', 'tomato');
 	}
 });
-
-function realizaSubstituicoes(circuitoJSON, padrao, tipo = 'and') {
-	let total = 0;
-	for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
-		if (circuitoJSON.lista_elementos[i].elemento === tipo) {
-			total++;
-		}
-	}
-
-	if (total === padrao.length) {
-		let posicaoPadrao = 0;
-		for (let i = 0; i < circuitoJSON.lista_elementos.length; i++) {
-			if (circuitoJSON.lista_elementos[i].elemento === tipo) {
-				circuitoJSON.lista_elementos[i].elemento = padrao[posicaoPadrao];
-				posicaoPadrao++;
-			}
-		}
-	}
-
-	circuitoJSON.solucoes_possiveis = verificaSolucoesPossiveis(circuitoJSON);
-
-	return circuitoJSON;
-}
 
 // compressor de circuitos
 function comprimeCircuito(circuitoJSON) {

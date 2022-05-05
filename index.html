@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/jogo.css">
 	<link rel="stylesheet" type="text/css" href="css/loader.css">
+	<script type="text/javascript" src="js/dinamicidade.js" defer></script>
 	<script type="text/javascript" src="js/circuitos.js" defer></script>
 	<script type="text/javascript" src="js/jogo.js" defer></script>
 	<!-- <script src="../../GamesLib/dist/gameslib.min.js" defer></script> -->
@@ -34,11 +35,11 @@
 <div class="bg-modal" id="modalInicial">
 	<div class="modal">
 		<i id="iconeFecharModalInicial" class="bi bi-x icone-fechar-modal"></i>
-		<img id="logo" src="media/logo.png">
+		<a href="index.html"><img id="logo" src="media/logo.png" alt="Logo do jogo" title="Clique na logo para atualizar a página"></a>
 		<div class="container-modal">
 			<div id="infoJogador">
 				<div id="nomeFotoJogador">
-					<img id="fotoJogador" src="https://picsum.photos/200/300">
+					<img id="fotoJogador" src="">
 					<div>
 						<p id="nomeJogador">Nome jogador</p>
 						<p id="generoJogador">Masculino</p>
@@ -505,7 +506,7 @@
 			<p class="pGenerico"><i class="tempo bi bi-hourglass-split"></i> <span id="tempo" title="tempo">...</span></p>
 		</div>
 		<div>
-			<p class="pGenerico pocoes"><img src="media/itens-loja/pocao-tempo.png"> <span id="quantidadePocaoTempo">0</span> <img src="media/itens-loja/pocao-bateria.png"> <span id="quantidadePocaoBateria">0</span></p>
+			<p class="pGenerico pocoes"><span id="pocaoTempo"><img src="media/itens-loja/pocao-tempo.png"> <span id="quantidadePocaoTempo">0</span></span> <span id="pocaoBateria"><img src="media/itens-loja/pocao-bateria.png"> <span id="quantidadePocaoBateria">0</span></span></p>
 		</div>
 	</div>
 	<div id="jogo">

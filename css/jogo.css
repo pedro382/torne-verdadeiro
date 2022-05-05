@@ -9,6 +9,7 @@
 * {
 	font-family: monospace;
 	box-sizing: border-box;
+	user-select: none;
 }
 
 ::-webkit-scrollbar {
@@ -33,11 +34,10 @@
 body {
 	padding: 0;
 	margin: 0;
-	background-color: #111;
 	overflow: hidden;
 	background: var(--bg);
+	background-color: #000;
 	background-size: 250%;
-	animation: moveBg 10s infinite;
 }
 
 .alinhados-verticalmente {
@@ -166,10 +166,19 @@ th {
 .icone-fechar-modal {
 	display: block;
 	position: absolute;
-	top: 5%;
-	right: 5%;
-	font-size: 2rem;
+	top: 1%;
+	right: 1%;
+	font-size: 3rem;
+	font-weight: bolder;
+	color: #fff;
+	background-color: seagreen;
+	padding: 1rem;
+	border-radius: 1rem;
 	cursor: pointer;
+}
+
+.icone-fechar-modal:hover {
+	background-color: tomato;
 }
 
 .modal #logo {
@@ -473,6 +482,15 @@ a {
 }
 
 #estrelas {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: rgba(0, 0, 0, .9);
+	padding: 1rem;
+	border-radius: 1rem;
+	border: 5px solid #fff;
+	text-align: center;
 	font-size: 3rem;
 }
 
@@ -481,6 +499,25 @@ a {
 	margin-bottom: 1rem;
 	text-align: center;
 	color: #fff;
+}
+
+#estrelas i.estrela {
+	color: yellow;	
+}
+
+.bom {
+	box-shadow: 0 0 50px seagreen;
+	border: 5px solid seagreen !important;
+}
+
+.nao-bom {
+	box-shadow: 0 0 50px tomato;
+	border: 5px solid tomato !important;
+}
+
+.bi-star-fill {
+	display: inline-block;
+	animation: pulso 1s infinite;	
 }
 
 @keyframes moveTempo {
@@ -493,15 +530,6 @@ a {
 	100% {
 		transform: rotateX(360deg);
 	}
-}
-
-i.estrela {
-	color: yellow;
-}
-
-.bi-star-fill {
-	display: inline-block;
-	animation: pulso 1s infinite;	
 }
 
 @keyframes pulso {
@@ -632,7 +660,8 @@ i.bateria {
 #pMusica, #pFase, #pDesempenho, .pGenerico {
 	color: #fff;
 	padding: .75rem;
-	border-radius: 1rem;	
+	border-radius: 1rem;
+	background-color: rgba(0, 0, 0, .75);
 }
 
 #pMusica {
@@ -749,22 +778,27 @@ button:hover {
 	margin: 1rem 0;
 }
 
+#pocaoTempo:hover, #pocaoBateria:hover {
+	cursor: pointer;
+	border-bottom: 5px solid seagreen;
+}
+
 @media (min-width: 1500px) {
 	:root {
-		--dimensaoElemento: 50px;
+		--dimensaoElemento: 40px;
 	}
 	.infoJogo {
-		font-size: 5rem;
+		font-size: 4rem;
 	}
 
 	#output, .input {
-		height: 50px;
-		font-size: 3rem;
+		height: 40px;
+		font-size: 2.5rem;
 		line-height: 150%;
 	}
 
 	.input, #ouput {
-		font-size: 3rem !important;
+		font-size: 2.5rem !important;
 	}
 
 	#modalInicial {
@@ -829,17 +863,8 @@ button:hover {
 	}
 
 	#estrelas {
-		position: fixed;
 		width: 75%;
 		font-size: 2rem;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		background-color: rgba(0, 0, 0, .9);
-		padding: 1rem;
-		border-radius: 1rem;
-		border: 2px solid #fff;
-		text-align: center;
 	}
 
 	#infoMusica {

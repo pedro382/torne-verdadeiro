@@ -1,14 +1,6 @@
 // let gc = new gameslib.GameConnection();
 // git rm -r --cached .
 
-// params.getAll('name') # => ["n1", "n2"]
-let params = new URLSearchParams(location.search);
-// console.log(params.get('circuitos'));
-let conjuntoExterno;
-if (params.get('circuitos')) {
-    conjuntoExterno = JSON.parse(descomprimeCircuito(params.get('circuitos')));
-}
-
 const data = new Date();
 const ano = data.getFullYear();
 const dia = data.getDate();
@@ -42,11 +34,15 @@ const btnVoltar = document.querySelector('#btnVoltar');
 const checkboxDesativarEfeitosSonoros = document.querySelector('#checkboxDesativarEfeitosSonoros');
 const checkboxDesativarMusica = document.querySelector('#checkboxDesativarMusica');
 const checkboxDesativarAnimacaoBackground = document.querySelector('#checkboxDesativarAnimacaoBackground');
-let desativarEfeitosSonoros = false;
-let desativarMusica = false;
-let desativarAnimacaoBackground = false;
-let limiteFases = 3;
-let conjuntoInterno;
+let limiteFases;
+
+// params.getAll('name') # => ["n1", "n2"]
+let params = new URLSearchParams(location.search);
+let conjuntoExterno;
+if (params.get('circuitos')) {
+    conjuntoExterno = JSON.parse(descomprimeCircuito(params.get('circuitos')));
+    limiteFases = conjuntoExterno.length;
+}
 
 let elementosLinhasPagina = ['linha-central-vertical', 'linha-central-horizontal', 'linha-lateral-direita', 'linha-lateral-esquerda', 'linha-recentralizadora-direita', 'linha-recentralizadora-esquerda', 'primeiro-canto', 'segundo-canto', 'terceiro-canto', 'quarto-canto', 'cruz', 'cruz-quebrada-direita', 'cruz-quebrada-esquerda', 't'];
 let elementosPortoesPagina = ['primeiro-and', 'segundo-and', 'primeiro-or', 'segundo-or', 'primeiro-nand', 'segundo-nand', 'primeiro-nor', 'segundo-nor', 'primeiro-xor', 'segundo-xor', 'primeiro-xnor', 'segundo-xnor'];
@@ -100,12 +96,15 @@ for (let i = 0; i < lista_elementosPagina.length; i++) {
     elementosPagina.append(img);
 }
 
-let circuitoAtual = 0;
+let jogoIniciou = false;
+let faseAtual = 0;
+let bgAtual = 1;
 let circuitosPassados = 0;
 let tempoInicial = 31; // segundos
 let tempoCorrente;
 let qtdeInicialBateria = 0;
 let qtdeBateria = 0;
+let bonusBateria;
 let vitoria = false;
 let derrota = false;
 let estadoInicial, solucaoPerfeita;
@@ -123,6 +122,11 @@ let intervaloTemporizador;
 let fimJogo = false;
 let primeiraCor = 'seagreen';
 let segundaCor = 'tomato';
+let moldeAtual = 0;
+let alcanceMolde = 0;
+let moldeInicial = 0;
+let combinacoesExploradas = [];
+let circuitoCriado;
 
 const musicaFundo = new Audio(`media/efeitos-sonoros/${nomeMusica} - ${nomeAutor}.mp3`);
 infoMusica.textContent = `Você está ouvindo "${nomeMusica}" por ${nomeAutor}`;
@@ -136,7 +140,7 @@ if (!perfilJogador) {
         nivel: 0,
         expAtual: 0,
         expProximoNivel: 25,
-        saldo: 0,
+        saldo: 10000,
         quantidadePocaoTempo: 0,
         quantidadePocaoBateria: 0,
         itensInventario: [{categoria: 'titulo', titulo: 'Pessoa comum', descricao: 'Título inicial', img: 'media/usuario.png', equipado: true}, {categoria: 'foto', titulo: 'Foto inicial', descricao: 'Foto inicial', img: 'media/usuario.png', equipado: true}],
@@ -150,16 +154,6 @@ if (!perfilJogador) {
         dificuldade: 'facil',
         ultimoLogin: [0, 0, 0] 
     };    
-}
-
-if (perfilJogador.desativarBg) {
-    desativarAnimacaoBackground = true;
-}
-if (perfilJogador.desativarMusica) {
-    desativarMusica = true;
-}
-if (perfilJogador.desativarEfeitosSonoros) {
-    desativarEfeitosSonoros = true;
 }
 
 dificuldade = perfilJogador.dificuldade;
@@ -399,12 +393,22 @@ function temporizador() {
 
 btnJogar.addEventListener('click', () => {
     executaEfeitoSonoro('1');
-    limiteFases = parseInt(document.querySelector('#limiteFases').value);
+    jogoIniciou = true;
+    if (!limiteFases) {
+        limiteFases = parseInt(document.querySelector('#limiteFases').value);
+    }
 
     if (limiteFases == 0 || !limiteFases) {
         limiteFases = Number.POSITIVE_INFINITY;
     }
-    circuitoAtual = 0; 
+
+    // exibe a fase pela primeira vez, começando do 0
+    faseAtual = 0; fase.innerText = faseAtual;
+    moldeAtual = 0;
+    alcanceMolde = 0;
+    moldeInicial = 0;
+    combinacoesExploradas = [];
+    circuitoCriado = null;
     circuitosPassados = 0;
     tempoInicial = 0;
     tempoCorrente = 0;
@@ -413,6 +417,7 @@ btnJogar.addEventListener('click', () => {
     vitoria = false;
     derrota = false;
     valorPontuacao = 0;
+    valorPontuacaoParaDesempenho = 0;
     totalPerfeitos = 0;
     maximoPerfeitos = 0;
     mensagem.style.setProperty('display', 'none');
@@ -431,12 +436,16 @@ btnJogar.addEventListener('click', () => {
 
     if (dificuldade === 'facil') {
         tempoInicial = 45;
+        bonusBateria = 2;
     } else if (dificuldade === 'normal') {
         tempoInicial = 30;
+        bonusBateria = 1;
     } else if (dificuldade === 'dificil') {
         tempoInicial = 20;
+        bonusBateria = 0;
     } else {
         tempoInicial = 10;
+        bonusBateria = 0;
     }
 
     perfilJogador.dificuldade = dificuldade;
@@ -447,6 +456,7 @@ btnJogar.addEventListener('click', () => {
         document.querySelector('#pPontuacao').style.setProperty('display', 'none');
         document.querySelector('#pDesempenho').style.setProperty('display', 'none');
 
+        bonusBateria = 1000;
  		tempoInicial = 1000;
  	}
 
@@ -454,28 +464,10 @@ btnJogar.addEventListener('click', () => {
         document.querySelector('#pFase').style.setProperty('display', 'none');
     }
 
-    if (modoJogo === 'progressivo' || modoJogo === 'infinito') {
-        if (conjuntoExterno) {
-            conjuntoInterno = conjuntoExterno;
-        } else {
-            conjuntoInterno = todosCircuitos;
-        }
-    } else if (modoJogo === 'treino') {
-    	conjuntoInterno = [
-    	'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"linha-central-vertical","posicao":135,"conexao":[145]},{"elemento":"linha-central-vertical","posicao":125,"conexao":[135]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"not","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicao_elementos_iniciais":[145],"solucoes_possiveis":[["0","0","0","0","0","0","0","0","0","0"]]}',
-		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"and","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-direita","posicao":125,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"linha-central-vertical","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","1","1","0","0","0","0"]]}',
-		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"or","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-esquerda","posicao":124,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":114,"conexao":[124]},{"elemento":"linha-central-vertical","posicao":104,"conexao":[114]},{"elemento":"linha-central-vertical","posicao":94,"conexao":[104]},{"elemento":"linha-central-vertical","posicao":84,"conexao":[94]},{"elemento":"linha-central-vertical","posicao":74,"conexao":[84]},{"elemento":"linha-central-vertical","posicao":64,"conexao":[74]},{"elemento":"linha-central-vertical","posicao":54,"conexao":[64]},{"elemento":"linha-central-vertical","posicao":44,"conexao":[54]},{"elemento":"linha-central-vertical","posicao":34,"conexao":[44]},{"elemento":"linha-central-vertical","posicao":24,"conexao":[34]},{"elemento":"linha-central-vertical","posicao":14,"conexao":[24]},{"elemento":"linha-central-vertical","posicao":4,"conexao":[14]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","0","1","0","0","0","0"],["0","0","0","0","1","0","0","0","0","0"],["0","0","0","0","1","1","0","0","0","0"]]}',
-		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"nand","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-direita","posicao":125,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"linha-central-vertical","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","1","0","0","0","0","0"],["0","0","0","0","0","1","0","0","0","0"],["0","0","0","0","0","0","0","0","0","0"]]}',
-		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"xor","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-direita","posicao":125,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"linha-central-vertical","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","0","1","0","0","0","0"],["0","0","0","0","1","0","0","0","0","0"]]}',
-		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"nor","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-direita","posicao":125,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":115,"conexao":[125]},{"elemento":"linha-central-vertical","posicao":105,"conexao":[115]},{"elemento":"linha-central-vertical","posicao":95,"conexao":[105]},{"elemento":"linha-central-vertical","posicao":85,"conexao":[95]},{"elemento":"linha-central-vertical","posicao":75,"conexao":[85]},{"elemento":"linha-central-vertical","posicao":65,"conexao":[75]},{"elemento":"linha-central-vertical","posicao":55,"conexao":[65]},{"elemento":"linha-central-vertical","posicao":45,"conexao":[55]},{"elemento":"linha-central-vertical","posicao":35,"conexao":[45]},{"elemento":"linha-central-vertical","posicao":25,"conexao":[35]},{"elemento":"linha-central-vertical","posicao":15,"conexao":[25]},{"elemento":"linha-central-vertical","posicao":5,"conexao":[15]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","0","0","0","0","0","0"]]}',
-		'{"lista_elementos":[{"elemento":"linha-central-vertical","posicao":144,"conexao":[]},{"elemento":"linha-central-vertical","posicao":145,"conexao":[]},{"elemento":"xnor","posicao":134,"conexao":[144,145]},{"elemento":"linha-recentralizadora-esquerda","posicao":124,"conexao":[134]},{"elemento":"linha-central-vertical","posicao":114,"conexao":[124]},{"elemento":"linha-central-vertical","posicao":104,"conexao":[114]},{"elemento":"linha-central-vertical","posicao":94,"conexao":[104]},{"elemento":"linha-central-vertical","posicao":84,"conexao":[94]},{"elemento":"linha-central-vertical","posicao":74,"conexao":[84]},{"elemento":"linha-central-vertical","posicao":64,"conexao":[74]},{"elemento":"linha-central-vertical","posicao":54,"conexao":[64]},{"elemento":"linha-central-vertical","posicao":44,"conexao":[54]},{"elemento":"linha-central-vertical","posicao":34,"conexao":[44]},{"elemento":"linha-central-vertical","posicao":24,"conexao":[34]},{"elemento":"linha-central-vertical","posicao":14,"conexao":[24]},{"elemento":"linha-central-vertical","posicao":4,"conexao":[14]}],"posicao_elementos_iniciais":[144,145],"solucoes_possiveis":[["0","0","0","0","0","0","0","0","0","0"],["0","0","0","0","1","1","0","0","0","0"]]}'
-	];
-    }
-
     play.classList.remove('bi-play');
     play.classList.add('bi-pause');
    
-    if (!desativarMusica) {
+    if (!perfilJogador.desativarMusica) {
          musicaFundo.play(); musicaFundo.loop = true;
     }
 
@@ -485,34 +477,54 @@ btnJogar.addEventListener('click', () => {
 	}, 3000);
 
     // lida com as poções
-    function lidaPocoes(e) {
+    function lidaPocaoTempo() {
+        if (perfilJogador.quantidadePocaoTempo > 0) {
+            tempoCorrente += 5;
+            perfilJogador.quantidadePocaoTempo--;
+            atualizaSpanPocaoTempo(perfilJogador.quantidadePocaoTempo);
+        }
+    }
+    function lidaPocaoBateria() {
+        if (perfilJogador.quantidadePocaoBateria > 0) {
+            atualizaBateria(1);
+            perfilJogador.quantidadePocaoBateria--;
+            atualizaSpanPocaoBateria(perfilJogador.quantidadePocaoBateria);
+        }  
+    }
+    function lidaTeclaPocoes(e) {
         switch(e.keyCode) {
             case 49: // tecla 1
-                if (perfilJogador.quantidadePocaoTempo > 0) {
-                    tempoCorrente += 5;
-                    perfilJogador.quantidadePocaoTempo--;
-                    atualizaSpanPocaoTempo(perfilJogador.quantidadePocaoTempo);
-                }
+                lidaPocaoTempo();
                 break;
             case 50: // tecla 2
-                if (perfilJogador.quantidadePocaoBateria > 0) {
-                    atualizaBateria(1);
-                    perfilJogador.quantidadePocaoBateria--;
-                    atualizaSpanPocaoBateria(perfilJogador.quantidadePocaoBateria);
-                }
+                lidaPocaoBateria();
                 break;
         }
     }
 
-    document.removeEventListener('keypress', lidaPocoes);
-    document.addEventListener('keypress', lidaPocoes);
+    const pocaoTempo = document.getElementById('pocaoTempo');
+    const pocaoBateria = document.getElementById('pocaoBateria');
+
+    // remoções, antes de adicionar novamente, para evitar stack
+    document.removeEventListener('keypress', lidaTeclaPocoes);
+    pocaoTempo.removeEventListener('click', lidaPocaoTempo);
+    pocaoBateria.removeEventListener('click', lidaPocaoBateria);
+    // adiciona novamente
+    pocaoTempo.addEventListener('click', lidaPocaoTempo);
+    pocaoBateria.addEventListener('click', lidaPocaoBateria);
+    document.addEventListener('keypress', lidaTeclaPocoes);
+
+    if (modoJogo === 'progressivo' || modoJogo === 'infinito') {
+
+    } else if (modoJogo === 'treino') {
+
+    }
 
 	if (conjuntoExterno) {
-        leCircuito(conjuntoExterno[circuitoAtual]);
+        leCircuito(conjuntoExterno[faseAtual]);
     } else {
-        leCircuito(conjuntoInterno[circuitoAtual]);
+        geracaoDinamicaFases();
     }
-	fase.innerText = circuitoAtual + 1;
 	temporizador();
 });
 
@@ -524,49 +536,58 @@ play.addEventListener('click', () => {
 	} else {
 		play.classList.remove('bi-play');
 		play.classList.add('bi-pause');
-        if (!desativarMusica) {
+        if (!perfilJogador.desativarMusica) {
             musicaFundo.play();
         }
 	}
 });
 
-let circuitoAnterior;
 btnProximo.addEventListener('click', () => {
     tempo.innerText = tempoInicial;
     if (modoJogo === 'progressivo') {
-        if (circuitoAtual < conjuntoInterno.length - 1 && circuitoAtual < limiteFases - 1) {
+        // mudança do bg
+        if (faseAtual > 0 && faseAtual % 10 === 0) {
+            if (bgAtual < 56) {
+                bgAtual++;
+            }
+            document.documentElement.style.setProperty('--bg', `url('../media/bg/bg${bgAtual}.png')`);
+        }
+        // penalidades por perder o circuito atual, de acordo com a dificuldade escolhida
+        if (faseAtual < limiteFases - 1) {
             if (derrota) {
                 if (dificuldade === 'facil') {
-                    circuitoAtual = circuitoAtual;
+                    faseAtual = faseAtual;
                 } else if (dificuldade === 'normal') {
-                    if (circuitoAtual > 0) {
-                        circuitoAtual--;
+                    if (faseAtual > 0) {
+                        faseAtual--;
                     } else {
-                        circuitoAtual = 0;
+                        faseAtual = 0;
                     }
                 } else if (dificuldade === 'dificil') {
-                     if (circuitoAtual > 3) {
-                        circuitoAtual -= 3;
+                     if (faseAtual > 3) {
+                        faseAtual -= 3;
                     } else {
-                        circuitoAtual = 0;
+                        faseAtual = 0;
                     }                   
                 } else if (dificuldade === 'impossivel') {
-                     if (circuitoAtual > 5) {
-                        circuitoAtual -= 5;
+                     if (faseAtual > 5) {
+                        faseAtual -= 5;
                     } else {
-                        circuitoAtual = 0;
+                        faseAtual = 0;
                     }    
                 }
+                fase.innerText = faseAtual;
+            // este else é para caso o jogador não tenha perdido o circuito atual
             } else {
-                circuitoAtual++;
-                if (circuitoAtual > perfilJogador.recordeFases[0]) {
-                    perfilJogador.recordeFases[0] = circuitoAtual;
+                fase.innerText = ++faseAtual;
+                if (faseAtual > perfilJogador.recordeFases[0]) {
+                    perfilJogador.recordeFases[0] = faseAtual;
                     perfilJogador.recordeFases[1] = dificuldade;
                 }
 
                 // conquistas de nível
                 if (dificuldade === 'facil') {
-                    if (circuitoAtual === 10) {
+                    if (faseAtual === 10) {
                         if (!verificaSeJaTemConquista('Lógico iniciante')) {
                             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico iniciante', descricao: 'Por atingir a fase 10 no nível fácil.', img: 'media/conquistas/conquista9.png'});
                             atualizaExibicaoPerfilJogador();
@@ -574,28 +595,28 @@ btnProximo.addEventListener('click', () => {
                         }
                     }
                 } else if (dificuldade === 'normal' || dificuldade === 'dificil' || dificuldade === 'impossivel') {
-                    if (circuitoAtual === 25) {
+                    if (faseAtual === 25) {
                         if (!verificaSeJaTemConquista('Lógico persistente')) {
                             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico persistente', descricao: 'Por atingir a fase 25 no nível normal ou mais.', img: 'media/conquistas/conquista10.png'});
                             atualizaExibicaoPerfilJogador();
                             exibeToast('Você obteve uma conquista!', 0);        
                         }
                     }
-                    if (circuitoAtual === 50) {
+                    if (faseAtual === 50) {
                         if (!verificaSeJaTemConquista('Um verdadeiro lógico')) {
                             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Um verdadeiro lógico', descricao: 'Por atingir a fase 50 no nível normal ou mais.', img: 'media/conquistas/conquista11.png'});
                             atualizaExibicaoPerfilJogador();
                             exibeToast('Você obteve uma conquista!', 0);        
                         }
                     }
-                    if (circuitoAtual === 100) {
+                    if (faseAtual === 100) {
                         if (!verificaSeJaTemConquista('Lógico Mestre')) {
                             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Mestre', descricao: 'Por atingir a fase 100 no nível normal ou mais.', img: 'media/conquistas/conquista12.png'});
                             atualizaExibicaoPerfilJogador();
                             exibeToast('Você obteve uma conquista!', 0);        
                         }
                     }
-                    if (circuitoAtual === 1000) {
+                    if (faseAtual === 1000) {
                         if (!verificaSeJaTemConquista('Lógico Deus')) {
                             perfilJogador.itensInventario.push({categoria: 'titulo', titulo: 'Lógico Deus', descricao: 'Por atingir a fase 1000 no nível normal ou mais.', img: 'media/conquistas/conquista13.png'});
                             atualizaExibicaoPerfilJogador();
@@ -606,7 +627,7 @@ btnProximo.addEventListener('click', () => {
                     // captura de monstros
                     let monstroAtual = 1;
                     for (let i = 10; i <= 330; i += 10) {
-                        if (circuitoAtual === i) {
+                        if (faseAtual === i) {
                             if (!verificaSeJaTemConquista(`monstro${monstroAtual}`)) {
                                 perfilJogador.itensInventario.push({categoria: 'monstro', titulo: `monstro${monstroAtual}`, descricao: '', img: ''});
                                 exibeCapturaMonstro(`monstro${monstroAtual}`);
@@ -617,7 +638,7 @@ btnProximo.addEventListener('click', () => {
                     }
                 }
             }
-            fase.innerText = circuitoAtual + 1;
+        // inicia o else abaixo quando atingir o limite de fases
         } else {
             if (!fimJogo) {
                 lidaTotalPerfeitos(false);
@@ -648,34 +669,90 @@ btnProximo.addEventListener('click', () => {
                 fimJogo = true;
             }
         }
-    } else {
-        let circuitoSorteado;
-        if (conjuntoInterno.length > 1) {
-            do {
-                circuitoSorteado = getRandomIntInclusive(0, conjuntoInterno.length - 1);
-            } while(circuitoSorteado === circuitoAnterior);
-        } else {
-            circuitoSorteado = getRandomIntInclusive(0, conjuntoInterno.length - 1);
-        }
-        circuitoAtual = circuitoSorteado;
-        circuitoAnterior = circuitoSorteado;
     }
 
     if (!fimJogo) {
-        vitoria = false;
-        derrota = false;
-        mensagem.style.setProperty('display', 'none');
-        btnProximo.style.setProperty('display', 'none');
-        limpaEstrelas();
-        if (conjuntoExterno) {
-            leCircuito(conjuntoExterno[circuitoAtual]);
-        } else {
-            leCircuito(conjuntoInterno[circuitoAtual]);
-        }
-        temporizador(); 
+        proximaFase();
     }
 
 });
+
+function geracaoDinamicaFases() {
+    let combinacoesBaseMolde;
+    function exploraCombinacoes() {
+        moldeAtual = getRandomIntInclusive(moldeInicial, alcanceMolde);
+        if (dificuldade === 'facil') {
+            combinacoesBaseMolde = obtemCombinacoesAleatoriasComBaseMolde(todosCircuitos[moldeAtual], 1);
+        } else {
+            combinacoesBaseMolde = obtemCombinacoesAleatoriasComBaseMolde(todosCircuitos[moldeAtual], 5);
+        }
+    }
+
+    // impede que um circuito repetido apareça
+    if (combinacoesExploradas.length > 0) {
+        do {
+            exploraCombinacoes();
+        } while(verificaSeCombinacoesJaForam(combinacoesBaseMolde[0], combinacoesBaseMolde[1], combinacoesExploradas));  
+    }  else {
+        exploraCombinacoes();
+    }
+
+    combinacoesExploradas.push(combinacoesBaseMolde);
+    circuitoCriado = criaCircuito(todosCircuitos[moldeAtual], combinacoesBaseMolde[0], combinacoesBaseMolde[1]);
+
+    if (modoJogo === 'progressivo') {
+        if (Math.floor((faseAtual / 10)) > todosCircuitos.length - 1) {
+            alcanceMolde = todosCircuitos.length - 1;
+        } else {
+            alcanceMolde = Math.floor((faseAtual / 10));
+        }
+    } else {
+        alcanceMolde = todosCircuitos.length - 1;
+    }
+
+    if (circuitoCriado.solucoes_possiveis.length > 0) {
+        leCircuito(circuitoCriado);
+    } else {
+        exibeToast('O circuito gerado não possui soluções possíveis.', 0);
+    }
+}
+
+function proximaFase() {
+    // aqui verifica-se se o modo de jogo é progressivo, infinito ou treino, bem como se há um conjunto externo
+    vitoria = false;
+    derrota = false;
+    mensagem.style.setProperty('display', 'none');
+    btnProximo.style.setProperty('display', 'none');
+    limpaEstrelas();
+    temporizador();
+
+    switch(modoJogo) {
+        case 'progressivo':
+            if (conjuntoExterno) {
+                leCircuito(conjuntoExterno[faseAtual]);
+            } else {
+                // geração dinâmica de fases
+                geracaoDinamicaFases();
+            }
+            break;
+        case 'infinito':
+            if (conjuntoExterno) {
+                leCircuito(conjuntoExterno[faseAtual]);
+            } else {
+                // geração dinâmica de fases
+                geracaoDinamicaFases();
+            }
+            break;
+        case 'treino':
+            if (conjuntoExterno) {
+                leCircuito(conjuntoExterno[faseAtual]);
+            } else {
+                // geração dinâmica de fases
+                geracaoDinamicaFases();
+            }
+            break;
+    }
+}
 
 function exibeBtnProximo() {
 	btnProximo.style.setProperty('animation', 'pulso infinite 1s');
@@ -724,38 +801,45 @@ function exibeEstrelas() {
 		totalEstrelas += 1;
 	}
 
-	if (dificuldade == 'normal' || dificuldade == 'facil') {
-		if (qtdeCliques >= qtdeInicialBateria) {
-			totalEstrelas--;
-		}
-	} else {
-		if (qtdeCliques > qtdeInicialBateria) {
-			totalEstrelas--;
-		}
-	}
+    if (qtdeCliques > qtdeInicialBateria - bonusBateria) {
+        let valorUltrapassado = qtdeCliques - (qtdeInicialBateria - bonusBateria);
+        totalEstrelas -= valorUltrapassado;
+    }
 
 	if (totalEstrelas === 5) {
 		comentarioEstrelas.innerText = 'Perfeito!';
 		colocaEstrelas(5);
+        estrelas.classList.remove('nao-bom');
+        estrelas.classList.add('bom');
 	} else if (totalEstrelas === 4) {
 		colocaEstrelas(4);
 		colocaEstrelas(1, true);
 		comentarioEstrelas.innerText = 'Bom!';
+        estrelas.classList.remove('nao-bom');
+        estrelas.classList.add('bom');
 	} else if (totalEstrelas === 3) {
 		colocaEstrelas(3);
 		colocaEstrelas(2, true);
 		comentarioEstrelas.innerText = 'Razoável';
+        estrelas.classList.add('nao-bom');
+        estrelas.classList.remove('bom');
 	} else if (totalEstrelas === 2) {
 		colocaEstrelas(2);
 		colocaEstrelas(3, true);
 		comentarioEstrelas.innerText = 'Ruim';
+         estrelas.classList.add('nao-bom');
+         estrelas.classList.remove('bom');
 	} else if (totalEstrelas === 1) {
 		colocaEstrelas(1);
 		colocaEstrelas(4, true);
 		comentarioEstrelas.innerText = 'Muito ruim!';
+        estrelas.classList.add('nao-bom');
+        estrelas.classList.remove('bom');
 	} else {
         colocaEstrelas(5, true);
         comentarioEstrelas.innerText = 'Horrível.';
+        estrelas.classList.add('nao-bom');
+        estrelas.classList.remove('bom');
     }
 
 	if (totalEstrelas < 5) {
@@ -782,7 +866,7 @@ function exibeEstrelas() {
     valorPontuacaoParaDesempenho += totalEstrelas;
 
     if (modoJogo !== 'treino') {
-        perfilJogador.saldo += totalEstrelas;
+        perfilJogador.saldo += totalEstrelas + faseAtual;
         if (valorPontuacao > perfilJogador.recordeEstrelas[0]) {
             perfilJogador.recordeEstrelas[0] = valorPontuacao;
             perfilJogador.recordeEstrelas[1] = dificuldade;
@@ -840,20 +924,7 @@ function defineBateria(estadoInicial, solucaoPerfeita) {
 		}
 	}
 
-    let bonus;
-    if (dificuldade === 'facil') {
-        bonus = 2;
-    } else if (dificuldade === 'normal') {
-        bonus = 1;
-    } else if (dificuldade === 'dificil' || dificuldade === 'impossivel') {
-        bonus = 0;
-    }
-
-    if (modoJogo === 'treino') {
-    	bonus += 100;
-    }
-
-	return total + bonus;
+	return total + bonusBateria;
 }
 
 // cria os espaços do circuito
@@ -1215,9 +1286,9 @@ for (let i = 0; i < inputs.length; i++) {
 			}
 			atualizaBateria();
 			if (conjuntoExterno) {
-                propaga(conjuntoExterno[circuitoAtual].lista_elementos);
+                propaga(conjuntoExterno[faseAtual].lista_elementos);
             } else {
-                propaga(conjuntoInterno[circuitoAtual].lista_elementos);
+                propaga(circuitoCriado.lista_elementos);
             }
 			alteraOutput();
 		} else if (qtdeBateria === 0 && !derrota && !vitoria && modoJogo !== 'treino') {
@@ -1266,8 +1337,12 @@ function exibeToast(mensagem, valor = -1) {
 }
 
 iconeFecharModalInicial.addEventListener('click', () => {
-    modalInicial.style.setProperty('display', 'none');
-    temporizador();
+    if (jogoIniciou) {
+        modalInicial.style.setProperty('display', 'none');
+        temporizador();
+    } else {
+        exibeToast('Primeiro inicie o jogo.', 0);
+    }
 });
 
 btnVoltar.addEventListener('click', () => {
@@ -1287,38 +1362,42 @@ opcaoMenu.addEventListener('click', () => {
 
 // checkbox limites configuração
 checkboxDesativarEfeitosSonoros.addEventListener('click', () => {
-    if (desativarEfeitosSonoros) {
-        desativarEfeitosSonoros = false;
+    if (perfilJogador.desativarEfeitosSonoros) {
+        perfilJogador.desativarEfeitosSonoros = false;
     } else {
-        desativarEfeitosSonoros = true;
+        perfilJogador.desativarEfeitosSonoros = true;
     }
-    perfilJogador.desativarEfeitosSonoros = desativarEfeitosSonoros;
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
 });
 
 checkboxDesativarMusica.addEventListener('click', () => {
-    if (desativarMusica) {
-        desativarMusica = false;
+    if (perfilJogador.desativarMusica) {
+        perfilJogador.desativarMusica = false;
         musicaFundo.play();
     } else {
-        desativarMusica = true;
+        perfilJogador.desativarMusica = true;
         musicaFundo.pause();
     }
-    perfilJogador.desativarMusica = desativarMusica;
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
 });
 
-checkboxDesativarAnimacaoBackground.addEventListener('click', () => {
-    if (desativarAnimacaoBackground) {
-        desativarAnimacaoBackground = false;
-        document.querySelector('body').style.setProperty('animation', 'moveBg 10s infinite;');
+function lidaAnimacaoBackground() {
+    if (perfilJogador.desativarAnimacaoBackground) {
+        document.querySelector('body').style.animation = 'none';
+        document.querySelector('body').style.backgroundSize = 'cover';
     } else {
-        desativarAnimacaoBackground = true;
-        document.querySelector('body').style.setProperty('animation', 'none');
+        document.querySelector('body').style.animation = 'moveBg 10s infinite';
     }
-    perfilJogador.desativarAnimacaoBackground = desativarAnimacaoBackground;
+}
+
+checkboxDesativarAnimacaoBackground.addEventListener('click', () => {
+    if (perfilJogador.desativarAnimacaoBackground) {
+        perfilJogador.desativarAnimacaoBackground = false;
+    } else {
+        perfilJogador.desativarAnimacaoBackground = true;
+    }
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
 });
@@ -1365,7 +1444,7 @@ function fechaDivsAbertura(excecao) {
 }
 
 function executaEfeitoSonoro(nome, extensao = 'wav', loop = false) {
-    if (!desativarEfeitosSonoros) {
+    if (!perfilJogador.desativarEfeitosSonoros) {
         const efeitoSonoro = new Audio(`media/efeitos-sonoros/${nome}.${extensao}`);
         efeitoSonoro.loop = loop;
         efeitoSonoro.play();
@@ -1661,17 +1740,23 @@ function atualizaResumoConfiguracoes() {
     let msgs = ['', '', ''];
     if (perfilJogador.desativarAnimacaoBackground) {
         msgs[0] = 'sem animação no background';
+        checkboxDesativarAnimacaoBackground.checked = true;
     } else {
         msgs[0] = 'com animação no background';
+        checkboxDesativarAnimacaoBackground.checked = false;
     }
     if (perfilJogador.desativarEfeitosSonoros) {
         msgs[1] = 'sem efeitos sonoros';
+        checkboxDesativarEfeitosSonoros.checked = true;
     } else {
         msgs[1] = 'com efeitos sonoros';
+        checkboxDesativarEfeitosSonoros.checked = false;
     }
     if (perfilJogador.desativarMusica) {
+        checkboxDesativarMusica.checked = true;
         msgs[2] = 'sem música'
     } else {
+        checkboxDesativarMusica.checked = false;
         msgs[2] = 'com música'
     }
 
@@ -1690,7 +1775,8 @@ function atualizaResumoConfiguracoes() {
             break;
     }
 
-    resumoConfiguracoes.innerText = `Você está configurado para jogar no nível ${perfilJogador.dificuldade}; ${msgs[0]}; ${msgs[1]}; ${msgs[2]}.`;
+    resumoConfiguracoes.innerText = `Você está configurado para jogar no nível ${perfilJogador.dificuldade}; ${msgs[0]}; ${msgs[1]}; ${msgs[2]}; modo de jogo ${document.querySelector('input[name="radioModoJogo"]:checked').value}.`;
+    lidaAnimacaoBackground();   
 }
 
 atualizaResumoConfiguracoes();
@@ -1732,3 +1818,26 @@ function resetaLocalStorage() {
 }
 
 resetaLocalStorage();
+
+// // impede o usuário de inspecionar o jogo
+// document.addEventListener('contextmenu', e => {
+//     e.preventDefault();
+// });
+
+// document.onkeydown = function(e) {
+//     if (event.keyCode == 123) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+//         return false;
+//     }
+// }
