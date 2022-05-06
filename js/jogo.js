@@ -189,7 +189,7 @@ function lidaNivelJogador(xp) {
         executaEfeitoSonoro('fogo-1');
         setTimeout(() => {
             mensagemUpou.style.setProperty('display', 'none');
-        }, 1500);
+        }, 5000);
     }
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
@@ -208,6 +208,10 @@ const btnExcluirPerfilCerteza = document.getElementById('btnExcluirPerfilCerteza
 btnExcluirPerfil.addEventListener('click', () => {
     btnExcluirPerfil.style.setProperty('display', 'none');
     btnExcluirPerfilCerteza.style.setProperty('display', 'block');
+    setTimeout(() => {
+        btnExcluirPerfil.style.setProperty('display', 'block');
+        btnExcluirPerfilCerteza.style.setProperty('display', 'none');
+    }, 3000);
 })
 
 btnExcluirPerfilCerteza.addEventListener('click', () => {
@@ -1874,7 +1878,7 @@ function resetaLocalStorage() {
 
 resetaLocalStorage();
 
-impede o usuário de inspecionar o jogo
+// impede o usuário de inspecionar o jogo
 document.addEventListener('contextmenu', e => {
     e.preventDefault();
 });

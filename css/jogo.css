@@ -59,7 +59,11 @@ body {
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
-	min-height: 250px;
+	min-height: 300px;
+}
+
+.alinhados-verticalmente button, .alinhados-verticalmente input[type="text"], .alinhados-verticalmente select {
+	margin-bottom: 1rem;
 }
 
 .alinhados-horizontalmente {
@@ -149,6 +153,19 @@ th {
 	align-items: center;
 }
 
+.alinhados-centralizados {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 75%;
+	margin: 0 auto;
+}
+
+.paragrafo-explicativo {
+	background-color: #eee;
+	padding: .5rem;
+}
+
 .ilustracao {
 	width: 100px;
 }
@@ -232,7 +249,7 @@ th {
 	flex-direction: column;
 	justify-content: center;
 	align-items: flex-start;
-	width: 25%;
+	width: 35%;
 	border: 1px dashed #ccc;
 	margin: 1rem auto;
 }
@@ -411,8 +428,9 @@ input[type="number"]:focus, input[type="text"]:focus {
 }
 
 #abrirCriador {
-	background-color: var(--segundaCor);
+	background-color: dodgerblue;
 	margin-top: 1rem;
+	text-shadow: 0 0 3px black;
 }
 
 #abrirCriador:hover {
@@ -461,7 +479,7 @@ h3 {
 
 #creditos {
 	font-size: .75rem;
-	margin: 3rem 0 0 0;
+	margin: 1rem 0 0 0;
 	color: #606060;
 }
 
@@ -749,6 +767,7 @@ button:hover {
 }
 
 #btnJogar, #btnProximo {
+	margin-top: 1rem;
 	background: linear-gradient(to right, var(--segundaCor), var(--primeiraCor));
 	font-size: var(--tamanhoLetra5);
 }
@@ -830,6 +849,12 @@ button:hover {
 
 	body {
 		overflow: scroll;
+	}
+
+	.alinhados-centralizados {
+		flex-direction: column;
+		justify-content: center;
+		align-items: space-around;
 	}
 
 	#opcaoMenu {

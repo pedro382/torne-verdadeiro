@@ -63,87 +63,102 @@
 				<button id="btnCompartilharPerfil">Compartilhar perfil</button>
 			</div>
 			<p id="resumoConfiguracoes"></p>
-			<h2 id="abrirCriador" class="abridores">Criar circuitos</h2>
+			<h2 id="abrirCriador" class="abridores">Crie seus próprios circuitos!</h2>
 			<h2 id="abrirComoJogar" class="abridores">Como jogar?</h2>
 			<div id="divComoJogar" class="divsAbertura esconde">
-				<p>O objetivo do jogo é tornar o circuito verdadeiro. Para isso, você deve fazer a corrente elétrica chegar até o final.</p>
+				<p class="paragrafo-explicativo">O objetivo do jogo é tornar o circuito verdadeiro. Para isso, você deve fazer a corrente elétrica chegar até o final.</p>
 				<p>Clique no 1 para ativar a linha acima e clique no 0 para desativá-la.</p>
-				<p>A porta <strong>AND</strong>, ilustrada abaixo, exige que as duas linhas que se conectam a ela estejam ativas.</p>
-				<img class="ilustracao" src="media/elementos/and-preto.png">
-				<table>
-					<caption>Tabela Verdade - AND</caption>
-					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-					<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
-					<tr><td>0</td><td>0</td><td>Falso</td></tr>
-					<tr><td>0</td><td>1</td><td>Falso</td></tr>
-					<tr><td>1</td><td>0</td><td>Falso</td></tr>
-				</table>
-				<img class="exemplo" src="media/exemplos/exemplo-and.png">
-				<p>A porta <strong>OR</strong>, ilustrada abaixo, exige que pelo menos uma linha que se conecta a ela esteja ativa.</p>
-				<img class="ilustracao" src="media/elementos/or-preto.png">
-				<table>
-					<caption>Tabela Verdade - OR</caption>
-					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-					<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
-					<tr><td>0</td><td>0</td><td>Falso</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
-				</table>
-				<img class="exemplo" src="media/exemplos/exemplo-or.png">
-				<p>A porta <strong>NOT</strong> inverte o valor da linha conectada a ela. Se estiver ativa, então ela ficará desativada. Se estiver desativada, então ela ficará ativada.</p>
-				<img class="ilustracao" src="media/elementos/not-preto.png">
-				<table>
-					<caption>Tabela Verdade - NOT</caption>
-					<tr><th>Entrada</th><th>Saída</th></tr>
-					<tr class="linha-verdadeira-tabela"><td>0</td><td>Verdadeiro</td></tr>
-					<tr><td>1</td><td>Falso</td></tr>
-				</table>
-				<img class="exemplo" src="media/exemplos/exemplo-not.png">
-				<p>A porta <strong>XOR</strong> exige que só uma conexão esteja ativa.</p>
-				<img class="ilustracao" src="media/elementos/xor-preto.png">
-				<table>
-					<caption>Tabela Verdade - XOR</caption>
-					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-					<tr><td>1</td><td>1</td><td>Falso</td></tr>
-					<tr><td>0</td><td>0</td><td>Falso</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
-				</table>
-				<img class="exemplo" src="media/exemplos/exemplo-xor.png">
-				<p>A porta <strong>NOR</strong> exige que nenhuma conexão esteja ativa.</p>
-				<img class="ilustracao" src="media/elementos/nor-preto.png">
-				<table>
-					<caption>Tabela Verdade - NOR</caption>
-					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-					<tr><td>1</td><td>1</td><td>Falso</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
-					<tr><td>0</td><td>1</td><td>Falso</td></tr>
-					<tr><td>1</td><td>0</td><td>Falso</td></tr>
-				</table>
-				<img class="exemplo" src="media/exemplos/exemplo-nor.png">
-				<p>A porta <strong>XNOR</strong> exige que ou ambas as conexões estejam ativas ou ambas estejam falsas.</p>
-				<table>
-					<caption>Tabela Verdade - XNOR</caption>
-					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-					<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
-					<tr><td>0</td><td>1</td><td>Falso</td></tr>
-					<tr><td>1</td><td>0</td><td>Falso</td></tr>
-				</table>
-				<img class="ilustracao" src="media/elementos/xnor-preto.png">
-				<p>A porta <strong>NAND</strong> só será falsa se ambas as suas conexões forem verdadeiras.</p>
-				<img class="ilustracao" src="media/elementos/nand-preto.png">
-				<table>
-					<caption>Tabela Verdade - NAND</caption>
-					<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
-					<tr><td>1</td><td>1</td><td>Falso</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
-					<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
-				</table>
-				<img class="exemplo" src="media/exemplos/exemplo-nand.png">
 				<p>Cada circuito possui um tempo determinado <i class="tempo bi bi-hourglass-split"></i>. Se o tempo acabar, você perde. Além disso, eles também possuem uma quantidade de bateria disponível <i class="bateria bi bi-battery-charging"></i>. Isso significa que a cada clique dado, você perde uma bateria. Se as baterias acabarem você perde.</p>
-				<p>A ideia é resolver o circuito no menor tempo possível e com a menor quantidade de cliques. Boa sorte.</p>
+				<p>A ideia é resolver o circuito no menor tempo possível e com a menor quantidade de cliques, mas você ainda pode comprar poções de tempo e bateria na loja, caso sinta que vá precisar. Além disso, avançar no jogo o fará liberar conquistas e capturar figurinhas de monstros. Divirta-se!</p>
+				<p class="paragrafo-explicativo">A porta <strong>AND</strong>, ilustrada abaixo, exige que as duas linhas que se conectam a ela estejam ativas.</p>
+				<div class="alinhados-centralizados">
+					<img class="ilustracao" src="media/elementos/and-preto.png">
+					<table>
+						<caption>Tabela Verdade - AND</caption>
+						<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
+						<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
+						<tr><td>0</td><td>0</td><td>Falso</td></tr>
+						<tr><td>0</td><td>1</td><td>Falso</td></tr>
+						<tr><td>1</td><td>0</td><td>Falso</td></tr>
+					</table>
+					<img class="exemplo" src="media/exemplos/exemplo-and.png">
+				</div>
+				<p class="paragrafo-explicativo">A porta <strong>OR</strong>, ilustrada abaixo, exige que pelo menos uma linha que se conecta a ela esteja ativa.</p>
+				<div class="alinhados-centralizados">
+					<img class="ilustracao" src="media/elementos/or-preto.png">
+					<table>
+						<caption>Tabela Verdade - OR</caption>
+						<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
+						<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
+						<tr><td>0</td><td>0</td><td>Falso</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
+					</table>
+					<img class="exemplo" src="media/exemplos/exemplo-or.png">
+				</div>
+				<p class="paragrafo-explicativo">A porta <strong>NOT</strong> inverte o valor da linha conectada a ela. Se estiver ativa, então ela ficará desativada. Se estiver desativada, então ela ficará ativada.</p>
+				<div class="alinhados-centralizados">
+					<img class="ilustracao" src="media/elementos/not-preto.png">
+					<table>
+						<caption>Tabela Verdade - NOT</caption>
+						<tr><th>Entrada</th><th>Saída</th></tr>
+						<tr class="linha-verdadeira-tabela"><td>0</td><td>Verdadeiro</td></tr>
+						<tr><td>1</td><td>Falso</td></tr>
+					</table>
+					<img class="exemplo" src="media/exemplos/exemplo-not.png">
+				</div>
+				<p class="paragrafo-explicativo">A porta <strong>XOR</strong> exige que só uma conexão esteja ativa.</p>
+				<div class="alinhados-centralizados">
+					<img class="ilustracao" src="media/elementos/xor-preto.png">
+					<table>
+						<caption>Tabela Verdade - XOR</caption>
+						<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
+						<tr><td>1</td><td>1</td><td>Falso</td></tr>
+						<tr><td>0</td><td>0</td><td>Falso</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
+					</table>
+					<img class="exemplo" src="media/exemplos/exemplo-xor.png">
+				</div>
+				<p class="paragrafo-explicativo">A porta <strong>NOR</strong> exige que nenhuma conexão esteja ativa.</p>
+				<div class="alinhados-centralizados">
+					<img class="ilustracao" src="media/elementos/nor-preto.png">
+					<table>
+						<caption>Tabela Verdade - NOR</caption>
+						<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
+						<tr><td>1</td><td>1</td><td>Falso</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
+						<tr><td>0</td><td>1</td><td>Falso</td></tr>
+						<tr><td>1</td><td>0</td><td>Falso</td></tr>
+					</table>
+					<img class="exemplo" src="media/exemplos/exemplo-nor.png">
+				</div>
+				<p class="paragrafo-explicativo">A porta <strong>XNOR</strong> exige que ou ambas as conexões estejam ativas ou ambas estejam falsas.</p>
+				<div class="alinhados-centralizados">
+					<img class="ilustracao" src="media/elementos/xnor-preto.png">
+					<table>
+						<caption>Tabela Verdade - XNOR</caption>
+						<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
+						<tr class="linha-verdadeira-tabela"><td>1</td><td>1</td><td>Verdadeiro</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
+						<tr><td>0</td><td>1</td><td>Falso</td></tr>
+						<tr><td>1</td><td>0</td><td>Falso</td></tr>
+					</table>
+					<img class="exemplo" src="media/exemplos/exemplo-xnor.png">
+				</div>
+				<p class="paragrafo-explicativo">A porta <strong>NAND</strong> só será falsa se ambas as suas conexões forem verdadeiras.</p>
+				<div class="alinhados-centralizados">
+					<img class="ilustracao" src="media/elementos/nand-preto.png">
+					<table>
+						<caption>Tabela Verdade - NAND</caption>
+						<tr><th>Entrada</th><th>Entrada</th><th>Saída</th></tr>
+						<tr><td>1</td><td>1</td><td>Falso</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>0</td><td>0</td><td>Verdadeiro</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>0</td><td>1</td><td>Verdadeiro</td></tr>
+						<tr class="linha-verdadeira-tabela"><td>1</td><td>0</td><td>Verdadeiro</td></tr>
+					</table>
+					<img class="exemplo" src="media/exemplos/exemplo-nand.png">
+				</div>
 			</div>
 
 			<h2 id="abrirConfiguracoes" class="abridores">Configurações</h2>
@@ -185,8 +200,9 @@
 			<div id="divEditarPerfil" class="divsAbertura esconde">
 				<div class="alinhados-verticalmente item">
 					<p>Logo abaixo você pode alterar o seu nickname, bem como seu gênero. Perguntamos o gênero para que possamos adaptar a linguagem dos títulos.</p>
+					<p>Não se preocupe, você pode mudar o nickname quantas vezes quiser!</p>
 					<label for="inputNome">Nome: </label>
-					<input type="text" id="inputNome">
+					<input type="text" id="inputNome" placeholder="Digite aqui o nome que deseja usar">
 					<label for="selectGenero">Gênero: </label>
 					<select id="selectGenero">
 						<option value="m">Masculino</option>
