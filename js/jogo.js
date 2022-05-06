@@ -479,13 +479,16 @@ btnJogar.addEventListener('click', () => {
 
     if (limiteFases !== Number.POSITIVE_INFINITY) {
         fase.innerText = 0;
-        perfilJogador.faseAtual = 0;  
+        perfilJogador.faseAtual = 0;
+        desempenho.innerText = '0.00%';
+        pontuacao.innerText = 0;
+        perfilJogador.circuitosPassadosAtual = 0;
+        perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = 0;
     }  
 
     perfilJogador.dificuldade = dificuldade;
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
-    calculaDesempenho();
 
  	if (modoJogo === 'treino') {
         document.querySelector('#pPontuacao').style.setProperty('display', 'none');
@@ -1098,7 +1101,6 @@ function limpaCircuito() {
 
 // apenas lê o array com os objetos do circuito e insere os backgrounds nas devidas posições
 function leCircuito(circuitoJSON) {
-	perfilJogador.circuitosPassadosAtual++;
 	limpaCircuito();
 	tempoCorrente = tempoInicial;
 	let resultadoCriacaoEstadoInicial = criaEstadoInicial(circuitoJSON.solucoes_possiveis, circuitoJSON.posicao_elementos_iniciais);
@@ -1143,6 +1145,7 @@ function leCircuito(circuitoJSON) {
 	}
 	propaga(circuitoJSON);
 	alteraOutput();
+    perfilJogador.circuitosPassadosAtual++;
 }
 
 function propaga(circuitoJSON) {
@@ -1883,20 +1886,20 @@ document.addEventListener('contextmenu', e => {
     e.preventDefault();
 });
 
-document.onkeydown = function(e) {
-    if (event.keyCode == 123) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-        return false;
-    }
-}
+// document.onkeydown = function(e) {
+//     if (event.keyCode == 123) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+//         return false;
+//     }
+// }

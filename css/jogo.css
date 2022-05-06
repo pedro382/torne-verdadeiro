@@ -67,6 +67,7 @@ body {
 }
 
 .alinhados-horizontalmente {
+	margin-top: 1rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -767,7 +768,6 @@ button:hover {
 }
 
 #btnJogar, #btnProximo {
-	margin-top: 1rem;
 	background: linear-gradient(to right, var(--segundaCor), var(--primeiraCor));
 	font-size: var(--tamanhoLetra5);
 }
