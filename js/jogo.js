@@ -1863,7 +1863,7 @@ function resetaLocalStorage() {
         }, 3000);
     }
     if (perfilJogador.ultimoLogin) {
-        if ((perfilJogador.ultimoLogin[0] < 5 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
+        if ((perfilJogador.ultimoLogin[0] < 6 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
             reseta();
         }
     } else {
@@ -1874,25 +1874,25 @@ function resetaLocalStorage() {
 
 resetaLocalStorage();
 
-// impede o usuário de inspecionar o jogo
-// document.addEventListener('contextmenu', e => {
-//     e.preventDefault();
-// });
+impede o usuário de inspecionar o jogo
+document.addEventListener('contextmenu', e => {
+    e.preventDefault();
+});
 
-// document.onkeydown = function(e) {
-//     if (event.keyCode == 123) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-//         return false;
-//     }
-// }
+document.onkeydown = function(e) {
+    if (event.keyCode == 123) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+        return false;
+    }
+}
