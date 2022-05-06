@@ -1,13 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
 :root {
 	--dimensaoElemento: 35px;
 	--elementosPorColuna: 10;
 	--primeiraCor: seagreen;
 	--segundaCor: tomato;
-	--bg: url('../media/bg/bg1.png');
+	--terceiraCor: dodgerblue;
+	--bg: url('../media/bg1.jpg');
+	/* letras padrão */
+	--tamanhoLetra1: 1rem;
+	/* letras pequenas */
+	--tamanhoLetra2: 1rem;
+	/* letras médias */
+	--tamanhoLetra3: 1.5rem;
+	/* letras grandes  */
+	--tamanhoLetra4: 2.5rem;
+	--tamanhoLetra5: 2rem;
+	/* letras muito grandes */
+	--tamanhoLetra6: 3rem;
 }
 
 * {
-	font-family: monospace;
+	font-family: 'Space Mono', monospace;
 	box-sizing: border-box;
 	user-select: none;
 }
@@ -35,9 +49,9 @@ body {
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
-	background: var(--bg);
 	background-color: #000;
 	background-size: 250%;
+	background-image: var(--bg);
 }
 
 .alinhados-verticalmente {
@@ -96,13 +110,13 @@ th {
 	width: 75%;
 	padding: 1rem;
 	border-radius: 1rem;
-	background-color: #000;
+	background-color: rgba(0, 0, 0, .9);
 	box-shadow: 0 0 100px #fff;
 	z-index: 10000;
 	display: none;
 	text-align: center;
 	color: #fff;
-	font-size: 1.5rem;
+	font-size: var(--tamanhoLetra1);
 }
 
 #toast img {
@@ -124,7 +138,7 @@ th {
 	text-align: center;
 	text-transform: uppercase;
 	font-weight: bolder;
-	font-size: 1.5rem;
+	font-size: var(--tamanhoLetra1);
 	color: #fff;
 	display: none;
 }
@@ -168,17 +182,17 @@ th {
 	position: absolute;
 	top: 1%;
 	right: 1%;
-	font-size: 3rem;
+	font-size: var(--tamanhoLetra5);
 	font-weight: bolder;
 	color: #fff;
-	background-color: seagreen;
+	background-color: var(--primeiraCor);
 	padding: 1rem;
 	border-radius: 1rem;
 	cursor: pointer;
 }
 
 .icone-fechar-modal:hover {
-	background-color: tomato;
+	background-color: var(--segundaCor);
 }
 
 .modal #logo {
@@ -257,7 +271,7 @@ th {
 	margin-bottom: 0;
 	color: var(--primeiraCor);
 	text-transform: uppercase;
-	font-size: 1.25rem;
+	font-size: var(--tamanhoLetra2);
 }
 
 .img-item {
@@ -279,7 +293,7 @@ th {
 }
 
 #saldo {
-	font-size: 2rem;
+	font-size: var(--tamanhoLetra3);
 }
 
 .grupo-conquistas {
@@ -307,8 +321,8 @@ th {
 }
 
 #infoJogador p span {
-	color: dodgerblue;
-	font-size: 1.25rem;
+	color: var(--terceiraCor);
+	font-size: var(--tamanhoLetra2);
 }
 
 #nomeFotoJogador {
@@ -334,7 +348,7 @@ th {
 }
 
 #infoJogador p#tituloJogador {
-	color: dodgerblue;
+	color: var(--terceiraCor);
 }
 
 .container-barra-progresso {
@@ -357,16 +371,16 @@ th {
 	bottom: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: #000;
-	box-shadow: 0 0 100px green;
+	background-color: rgba(46, 139, 87, .9);
+	box-shadow: 0 0 100px #fff;
 	padding: 1rem;
 	text-align: center;
 	width: 75%;
 	border-radius: 1rem;
 	display: none;
 	color: #fff;
-	font-size: 2rem;
-	border: 3px solid #fff;
+	font-size: var(--tamanhoLetra3);
+	border-left: 5px solid #fff;
 	z-index: 999;
 }
 
@@ -378,7 +392,7 @@ th {
 input[type="number"], input[type="text"] {
 	border: none;
 	border-bottom: 1px solid #ccc;
-	font-size: 1.25rem;
+	font-size: var(--tamanhoLetra2);
 	width: 35%;
 	color: var(--primeiraCor) !important;
 	font-weight: bolder !important;
@@ -397,7 +411,7 @@ input[type="number"]:focus, input[type="text"]:focus {
 }
 
 #abrirCriador {
-	background-color: tomato;
+	background-color: var(--segundaCor);
 	margin-top: 1rem;
 }
 
@@ -418,7 +432,7 @@ h2, h3 {
 
 h2:hover {
 	opacity: .9;
-	transform: scale(1.1);
+	transform: scale(1.025);
 	cursor: pointer;
 	border-left: 3px solid var(--segundaCor);
 	border-bottom: 3px solid var(--segundaCor);
@@ -442,7 +456,7 @@ h3 {
 	position: fixed;
 	top: 5%;
 	right: 5%;
-	font-size: 2rem;
+	font-size: var(--tamanhoLetra3);
 }
 
 #creditos {
@@ -488,7 +502,7 @@ a {
 	overflow: hidden;
 	border-radius: 1rem;
 	width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
-	font-size: 1.5rem;
+	font-size: var(--tamanhoLetra1);
 	margin-top: 1rem;
 }
 
@@ -497,12 +511,11 @@ a {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: rgba(0, 0, 0, .9);
+	background-color: rgba(46, 139, 87, .75);
 	padding: 1rem;
 	border-radius: 1rem;
-	border: 5px solid #fff;
 	text-align: center;
-	font-size: 3rem;
+	font-size: var(--tamanhoLetra5);
 }
 
 #estrelas #comentarioEstrelas {
@@ -514,16 +527,6 @@ a {
 
 #estrelas i.estrela {
 	color: yellow;	
-}
-
-.bom {
-	box-shadow: 0 0 50px seagreen;
-	border: 5px solid seagreen !important;
-}
-
-.nao-bom {
-	box-shadow: 0 0 50px tomato;
-	border: 5px solid tomato !important;
 }
 
 .bi-star-fill {
@@ -620,30 +623,28 @@ a {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: brown;
+	background-color: var(--terceiraCor);
 	color: #fff;
 	padding: 1.5rem;
-	font-size: 2rem;
-	border-radius: 1rem;
+	font-size: var(--tamanhoLetra3);
 	width: 75%;
 	text-align: center;
 	box-shadow: 0 0 100px black;
-	border: 5px solid #fff;
+	border-left: 15px dashed #fff;
 	z-index: 10;
 }
 
 #infoMusica {
 	z-index: 5;
-	background-color: var(--primeiraCor);
+	background-color: dodgerblue;
 	color: #fff;
 	padding: 1rem;
 	border-radius: 1rem;
-	border: 2px solid #fff;
 	position: fixed;
-	top: 50%;
-	left: 90%;
-	transform: translate(-90%, -50%);
-	width: 10vw;
+	top: 75%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 15vw;
 	display: none;
 }
 
@@ -660,11 +661,11 @@ i.pontuacao {
 }
 
 i.bateria {
-	color: dodgerblue;
+	color: var(--terceiraCor);
 }
 
 .infoJogo {
-	font-size: 3rem;
+	font-size: var(--tamanhoLetra5);
 }
 
 .infoJogo p {
@@ -680,7 +681,7 @@ i.bateria {
 }
 
 #pMusica {
-	background-color: dodgerblue;
+	background-color: var(--terceiraCor);
 }
 
 #pFase {
@@ -706,7 +707,7 @@ i.bateria {
 	color: #fff;
 	padding: 1rem;
 	margin: 0;
-	font-size: 2rem;
+	font-size: var(--tamanhoLetra3);
 	text-align: center;
 	position: fixed;
 	top: 0;
@@ -749,7 +750,7 @@ button:hover {
 
 #btnJogar, #btnProximo {
 	background: linear-gradient(to right, var(--segundaCor), var(--primeiraCor));
-	font-size: 3rem;
+	font-size: var(--tamanhoLetra5);
 }
 
 #btnJogar:hover, #btnProximo:hover {
@@ -772,9 +773,9 @@ button:hover {
 }
 
 #btnVoltar {
-	background-color: dodgerblue;
+	background-color: var(--terceiraCor);
 	display: none;
-	font-size: 3rem;
+	font-size: var(--tamanhoLetra5);
 	margin-left: 1rem;
 }
 
@@ -796,7 +797,7 @@ button:hover {
 
 #pocaoTempo:hover, #pocaoBateria:hover {
 	cursor: pointer;
-	border-bottom: 5px solid seagreen;
+	border-bottom: 5px solid var(--primeiraCor);
 }
 
 @media (min-width: 1500px) {
@@ -804,21 +805,21 @@ button:hover {
 		--dimensaoElemento: 40px;
 	}
 	.infoJogo {
-		font-size: 4rem;
+		font-size: var(--tamanhoLetra6);
 	}
 
 	#output, .input {
 		height: 40px;
-		font-size: 2.5rem;
+		font-size: var(--tamanhoLetra4);
 		line-height: 150%;
 	}
 
 	.input, #ouput {
-		font-size: 2.5rem !important;
+		font-size: var(--tamanhoLetra4) !important;
 	}
 
 	#modalInicial {
-		font-size: 2rem;
+		font-size: var(--tamanhoLetra3);
 	}
 }
 
@@ -836,7 +837,7 @@ button:hover {
 		color: #fff;
 		padding: .5rem;
 		margin: 0;
-		font-size: 2rem;
+		font-size: var(--tamanhoLetra3);
 		text-align: center;
 		position: relative;
 		top: 0;
@@ -855,7 +856,7 @@ button:hover {
 	}
 
 	#btnJogar, #btnVoltar {
-		font-size: 1.5rem;
+		font-size: var(--tamanhoLetra1);
 	}
 
 	.div-inputs-configuracao {
@@ -880,7 +881,7 @@ button:hover {
 
 	#estrelas {
 		width: 75%;
-		font-size: 2rem;
+		font-size: var(--tamanhoLetra3);
 	}
 
 	#infoMusica {
@@ -896,7 +897,7 @@ button:hover {
 
 	#output, .input {
 		height: 35px;
-		font-size: 1.25rem;
+		font-size: var(--tamanhoLetra2);
 		line-height: 250%;
 	}
 

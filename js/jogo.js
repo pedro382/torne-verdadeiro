@@ -98,7 +98,6 @@ for (let i = 0; i < lista_elementosPagina.length; i++) {
 
 let jogoIniciou = false;
 let bgAtual = 1;
-let circuitosPassados = 0;
 let tempoInicial = 31; // segundos
 let tempoCorrente;
 let qtdeInicialBateria = 0;
@@ -108,7 +107,6 @@ let vitoria = false;
 let derrota = false;
 let estadoInicial, solucaoPerfeita;
 let valorPontuacao = 0;
-let valorPontuacaoParaDesempenho = 0;
 let totalPerfeitos = 0;
 let totalPerfeitosRelativo = 0;
 let maximoPerfeitos = 0;
@@ -134,8 +132,8 @@ let perfilJogador = JSON.parse(localStorage.getItem('perfilJogador'));
 
 if (!perfilJogador) {
     perfilJogador = {
-        nome: 'Sem Nome',
-        genero: 'Masculino',
+        nome: 'Defina Um Nome',
+        genero: '',
         nivel: 0,
         expAtual: 0,
         expProximoNivel: 25,
@@ -153,11 +151,20 @@ if (!perfilJogador) {
         dificuldade: 'facil',
         ultimoLogin: [0, 0, 0],
         fasesAtingidas: [0, 0, 0, 0],
-        faseAtual: 0
+        pontuacoesAtingidas: [0, 0, 0, 0],
+        circuitosPassados: [0, 0, 0, 0],
+        faseAtual: 0,
+        pontuacaoAtingidaParaDesempenhoAtual: 0,
+        circuitosPassadosAtual: 0
     };    
 }
 
 dificuldade = perfilJogador.dificuldade;
+document.getElementById('faseAtualFacil').innerText = perfilJogador.fasesAtingidas[0];
+document.getElementById('faseAtualNormal').innerText = perfilJogador.fasesAtingidas[1];
+document.getElementById('faseAtualDificil').innerText = perfilJogador.fasesAtingidas[2];
+document.getElementById('faseAtualImpossivel').innerText = perfilJogador.fasesAtingidas[3];
+
 
 function salvaPerfilJogador() {
     perfilJogador.ultimoLogin[0] = dia;
@@ -405,7 +412,6 @@ btnJogar.addEventListener('click', () => {
     moldeInicial = 0;
     combinacoesExploradas = [];
     circuitoCriado = null;
-    circuitosPassados = 0;
     tempoInicial = 0;
     tempoCorrente = 0;
     qtdeInicialBateria = 0;
@@ -413,7 +419,6 @@ btnJogar.addEventListener('click', () => {
     vitoria = false;
     derrota = false;
     valorPontuacao = 0;
-    valorPontuacaoParaDesempenho = 0;
     totalPerfeitos = 0;
     maximoPerfeitos = 0;
     mensagem.style.setProperty('display', 'none');
@@ -433,23 +438,39 @@ btnJogar.addEventListener('click', () => {
     if (dificuldade === 'facil') {
         tempoInicial = 45;
         bonusBateria = 2;
-        fase.innerText = perfilJogador.fasesAtingidas[0];
-        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[0];
+        let indice = 0;
+        fase.innerText = perfilJogador.fasesAtingidas[indice];
+        pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
+        perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
     } else if (dificuldade === 'normal') {
         tempoInicial = 30;
         bonusBateria = 1;
-        fase.innerText = perfilJogador.fasesAtingidas[1];
-        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[1];
+        let indice = 1;
+        fase.innerText = perfilJogador.fasesAtingidas[indice];
+        pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
+        perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
     } else if (dificuldade === 'dificil') {
         tempoInicial = 20;
         bonusBateria = 0;
-        fase.innerText = perfilJogador.fasesAtingidas[2];
-        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[2];
+        let indice = 2;
+        fase.innerText = perfilJogador.fasesAtingidas[indice];
+        pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
+        perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
     } else {
         tempoInicial = 10;
         bonusBateria = 0;
-        fase.innerText = perfilJogador.fasesAtingidas[3];
-        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[3];
+        let indice = 3;
+        fase.innerText = perfilJogador.fasesAtingidas[indice];
+        pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
+        perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
+        perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
     }
 
     if (limiteFases !== Number.POSITIVE_INFINITY) {
@@ -460,6 +481,7 @@ btnJogar.addEventListener('click', () => {
     perfilJogador.dificuldade = dificuldade;
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
+    calculaDesempenho();
 
  	if (modoJogo === 'treino') {
         document.querySelector('#pPontuacao').style.setProperty('display', 'none');
@@ -521,19 +543,13 @@ btnJogar.addEventListener('click', () => {
     pocaoBateria.addEventListener('click', lidaPocaoBateria);
     document.addEventListener('keypress', lidaTeclaPocoes);
 
-    if (modoJogo === 'progressivo' || modoJogo === 'infinito') {
-
-    } else if (modoJogo === 'treino') {
-
-    }
-
 	if (conjuntoExterno) {
         leCircuito(conjuntoExterno[0]);
     } else {
         geracaoDinamicaFases();
     }
 	temporizador();
-    exibeToast(`Você está jogando na dificuldade ${dificuldade} e no modo de jogo ${modoJogo}.`, 0);
+    exibeToast(`Você está jogando na dificuldade ${dificuldade} e no modo de jogo ${modoJogo}.`, 0, 3000);
 });
 
 play.addEventListener('click', () => {
@@ -557,19 +573,16 @@ function tetoQuantiaPercentual(percentual, valor) {
     return Math.ceil(percentual * valor);
 }
 
-btnProximo.addEventListener('click', () => {
+function lidaPassagemFase() {
     tempo.innerText = tempoInicial;
     if (modoJogo === 'progressivo') {
-        // mudança do bg
-        if (perfilJogador.faseAtual > 0 && perfilJogador.faseAtual % 10 === 0) {
-            if (bgAtual < 56) {
-                bgAtual++;
-            }
-            document.documentElement.style.setProperty('--bg', `url('../media/bg/bg${bgAtual}.png')`);
+        // gera uma cor de backgorund aleatória, de acordo com a fase em que o usuário está
+        if (perfilJogador.faseAtual % 5 === 0) {
+            document.querySelector('body').style.setProperty('background-color', `#${getRandomIntInclusive(0, 2)}${getRandomIntInclusive(0, 2)}${getRandomIntInclusive(0, 2)}`);
         }
         // penalidades por perder o circuito atual, de acordo com a dificuldade escolhida
         if (perfilJogador.faseAtual < limiteFases - 1) {
-            if (derrota) {
+            if (derrota && limiteFases === Number.POSITIVE_INFINITY) {
                 if (dificuldade === 'facil') {
                     if (perfilJogador.faseAtual > 0) {
                         perfilJogador.faseAtual -= tetoQuantiaPercentual(5, perfilJogador.faseAtual);
@@ -600,20 +613,24 @@ btnProximo.addEventListener('click', () => {
             } else {
                 fase.innerText = ++perfilJogador.faseAtual;
                 if (limiteFases === Number.POSITIVE_INFINITY || limiteFases === 0 || !limiteFases) {
+                    let indice;
                     switch(dificuldade){
                         case 'facil':
-                            perfilJogador.fasesAtingidas[0] = perfilJogador.faseAtual;
+                            indice = 0;
                             break;
                         case 'normal':
-                            perfilJogador.fasesAtingidas[1] = perfilJogador.faseAtual;
+                            indice = 1;
                             break;
                         case 'dificil':
-                            perfilJogador.fasesAtingidas[2] = perfilJogador.faseAtual;
+                            indice = 2;
                             break;
                         case 'impossivel':
-                            perfilJogador.fasesAtingidas[3] = perfilJogador.faseAtual;
+                            indice = 3;
                             break;
                     }
+                    perfilJogador.fasesAtingidas[indice] = perfilJogador.faseAtual;
+                    perfilJogador.pontuacoesAtingidas[indice] = perfilJogador.pontuacaoAtingidaParaDesempenhoAtual;
+                    perfilJogador.circuitosPassados[indice] = perfilJogador.circuitosPassadosAtual;
                     salvaPerfilJogador();
                 }
                 // determina o recorde de fases
@@ -711,8 +728,21 @@ btnProximo.addEventListener('click', () => {
     if (!fimJogo) {
         proximaFase();
     }
+}
 
+btnProximo.addEventListener('click', lidaPassagemFase);
+
+
+document.addEventListener('keypress', (e) => {
+    switch(e.keyCode) {
+        case 32:
+        case 13:
+            if (vitoria || derrota) {
+                lidaPassagemFase();
+            }
+    }
 });
+
 
 function geracaoDinamicaFases() {
     let combinacoesBaseMolde;
@@ -846,37 +876,25 @@ function exibeEstrelas() {
 	if (totalEstrelas === 5) {
 		comentarioEstrelas.innerText = 'Perfeito!';
 		colocaEstrelas(5);
-        estrelas.classList.remove('nao-bom');
-        estrelas.classList.add('bom');
 	} else if (totalEstrelas === 4) {
 		colocaEstrelas(4);
 		colocaEstrelas(1, true);
 		comentarioEstrelas.innerText = 'Bom!';
-        estrelas.classList.remove('nao-bom');
-        estrelas.classList.add('bom');
 	} else if (totalEstrelas === 3) {
 		colocaEstrelas(3);
 		colocaEstrelas(2, true);
 		comentarioEstrelas.innerText = 'Razoável';
-        estrelas.classList.add('nao-bom');
-        estrelas.classList.remove('bom');
 	} else if (totalEstrelas === 2) {
 		colocaEstrelas(2);
 		colocaEstrelas(3, true);
 		comentarioEstrelas.innerText = 'Ruim';
-         estrelas.classList.add('nao-bom');
-         estrelas.classList.remove('bom');
 	} else if (totalEstrelas === 1) {
 		colocaEstrelas(1);
 		colocaEstrelas(4, true);
 		comentarioEstrelas.innerText = 'Muito ruim!';
-        estrelas.classList.add('nao-bom');
-        estrelas.classList.remove('bom');
 	} else {
         colocaEstrelas(5, true);
         comentarioEstrelas.innerText = 'Horrível.';
-        estrelas.classList.add('nao-bom');
-        estrelas.classList.remove('bom');
     }
 
 	if (totalEstrelas < 5) {
@@ -900,7 +918,7 @@ function exibeEstrelas() {
     }
 
     valorPontuacao += totalEstrelas + bonusPontuacao;
-    valorPontuacaoParaDesempenho += totalEstrelas;
+    perfilJogador.pontuacaoAtingidaParaDesempenhoAtual += totalEstrelas;
 
     if (modoJogo !== 'treino') {
         perfilJogador.saldo += totalEstrelas + Math.ceil((perfilJogador.faseAtual / 3));
@@ -1076,7 +1094,7 @@ function limpaCircuito() {
 
 // apenas lê o array com os objetos do circuito e insere os backgrounds nas devidas posições
 function leCircuito(circuitoJSON) {
-	circuitosPassados++;
+	perfilJogador.circuitosPassadosAtual++;
 	limpaCircuito();
 	tempoCorrente = tempoInicial;
 	let resultadoCriacaoEstadoInicial = criaEstadoInicial(circuitoJSON.solucoes_possiveis, circuitoJSON.posicao_elementos_iniciais);
@@ -1215,7 +1233,7 @@ function propaga(circuitoJSON) {
 }
 
 function calculaDesempenho() {
-	desempenho.innerText = `${ (( valorPontuacaoParaDesempenho / (circuitosPassados * 5)) * 100).toFixed(2) }%`;
+	desempenho.innerText = `${ (( perfilJogador.pontuacaoAtingidaParaDesempenhoAtual / (perfilJogador.circuitosPassadosAtual * 5)) * 100).toFixed(2) }%`;
 }
 
 function lidaVitoria() {
@@ -1233,7 +1251,7 @@ function lidaVitoria() {
         let elogios = ['Uau!', 'Incrível!', 'Fabuloso!', 'Impressionante.', 'Estou sem palavras.', 'Você é mesmo humano?'];
         if (totalPerfeitos % 5 === 0) {
             let elogio = elogios[getRandomIntInclusive(0, elogios.length - 1)];
-            exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos);
+            exibeToast(`${elogio} ${totalPerfeitos} perfeitos seguidos!`, totalPerfeitos, 3000);
             // conquistas de streak
             if (dificuldade === 'facil') {
                 if (!verificaSeJaTemConquista('Ligeirinho')) {
@@ -1268,14 +1286,14 @@ function lidaVitoria() {
 
 function lidaDerrota(tipo) {
     if (tipo === 'bateria') {
-        mensagem.innerText = 'A sua bateria acabou :(';
+        mensagem.innerText = 'A sua bateria acabou!';
         executaEfeitoSonoro('bateria', 'mp3');
     } else if (tipo === 'tempo') {
-        mensagem.innerText = 'O seu tempo acabou :(';
+        mensagem.innerText = 'O seu tempo acabou . . .';
         executaEfeitoSonoro('fracasso');
     }
 
-    mensagem.style.setProperty('background-color', 'brown');
+    mensagem.style.setProperty('background-color', 'rgba(255, 99, 71, .75)');
     mensagem.style.setProperty('box-shadow', 'none');
     mensagem.style.setProperty('display', 'block');
     clearInterval(intervaloTemporizador);
@@ -1345,7 +1363,7 @@ function exibeCapturaMonstro(monstro) {
     }, 2000);
 }
 
-function exibeToast(mensagem, valor = -1) {
+function exibeToast(mensagem, valor = -1, tempo = 5000) {
 	const toast = document.getElementById('toast');
 	toast.style.setProperty('display', 'block');
 	toast.innerText = mensagem;
@@ -1370,7 +1388,7 @@ function exibeToast(mensagem, valor = -1) {
 
 	setTimeout(() => {
 		toast.style.setProperty('display', 'none');
-	}, 5000);
+	}, tempo);
 }
 
 iconeFecharModalInicial.addEventListener('click', () => {
@@ -1857,24 +1875,24 @@ function resetaLocalStorage() {
 resetaLocalStorage();
 
 // impede o usuário de inspecionar o jogo
-document.addEventListener('contextmenu', e => {
-    e.preventDefault();
-});
+// document.addEventListener('contextmenu', e => {
+//     e.preventDefault();
+// });
 
-document.onkeydown = function(e) {
-    if (event.keyCode == 123) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-        return false;
-    }
-}
+// document.onkeydown = function(e) {
+//     if (event.keyCode == 123) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+//         return false;
+//     }
+// }
