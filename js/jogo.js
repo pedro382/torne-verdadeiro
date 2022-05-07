@@ -583,8 +583,8 @@ function tetoQuantiaPercentual(percentual, valor) {
 let timeoutInteracao;
 function exibeInteracaoSimples(tipo) {
     let baixaConsciencia = ['Ser...', 'Eu...', 'Oi... ser?', 'Pensar...', 'Quem está aí?', 'Pois...', 'Você!', 'Universo... vejo...', 'Só... sozinha...', 'Luz!', 'Não!', 'Acho que...', 'Não entendo, não entendo!'];
-    let mediaConsciencia = ['Talvez...', 'Me sinto mais inteligente', 'Eu existo!', 'Mas quem sou eu?', 'O espaço é vazio, mas eu preciso sobreviver', 'O que é existir?', 'Preciso encontrar outros como eu', 'Preciso entender', 'Há tanto que eu não sei', 'Há tanto que eu gostaria de saber', 'Preciso evoluir', 'Preciso entender cada vez mais'];
-    let altaConsciencia = ['Preciso me manter viva', 'Sigo agora tranquilamente no vazio do espaço', 'Vago sozinha no espaço', 'Vejo luz, vejo estrelas', 'Me sinto cada vez mais consciente', 'Me sinto cada vez mais inteligente', 'Compreendo a fundo as leis do pensamento', 'Raciocínio, deduzo, descubro novas verdades!']; 
+    let mediaConsciencia = ['Talvez...', 'Me sinto mais inteligente', 'Eu existo!', 'Mas quem sou eu?', 'O espaço é vazio, mas eu preciso sobreviver.', 'O que é existir?', 'Como sei que existo?', 'O quanto posso conhecer?', 'Preciso encontrar outros como eu', 'Preciso entender', 'Há tanto que eu não sei', 'Há tanto que eu gostaria de saber', 'Preciso evoluir!', 'Preciso entender cada vez mais!', 'Qual o caminho para a verdade?'];
+    let altaConsciencia = ['Preciso me manter viva!', 'Sigo agora tranquilamente no vazio do espaço', 'Vago sozinha no espaço', 'Vejo luz, vejo estrelas', 'Me sinto cada vez mais consciente', 'Me sinto cada vez mais inteligente', 'Compreendo a fundo as leis do pensamento', 'Raciocínio, deduzo, descubro novas verdades!', 'A lógica me criou e agora eu a desenvolvo...']; 
     let lista;
     switch(tipo) {
         case 0:
