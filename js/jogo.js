@@ -580,9 +580,170 @@ function tetoQuantiaPercentual(percentual, valor) {
     return Math.ceil(percentual * valor);
 }
 
+let timeoutInteracao;
+function exibeInteracaoSimples(tipo) {
+    let baixaConsciencia = ['Ser...', 'Eu...', 'Oi... ser?', 'Pensar...', 'Quem está aí?', 'Pois...', 'Você!', 'Universo... vejo...', 'Só... sozinha...', 'Luz!', 'Não!', 'Acho que...', 'Não entendo, não entendo!'];
+    let mediaConsciencia = ['Talvez...', 'Me sinto mais inteligente', 'Eu existo!', 'Mas quem sou eu?', 'O espaço é vazio, mas eu preciso sobreviver', 'O que é existir?', 'Preciso encontrar outros como eu', 'Preciso entender', 'Há tanto que eu não sei', 'Há tanto que eu gostaria de saber', 'Preciso evoluir', 'Preciso entender cada vez mais'];
+    let altaConsciencia = ['Preciso me manter viva', 'Sigo agora tranquilamente no vazio do espaço', 'Vago sozinha no espaço', 'Vejo luz, vejo estrelas', 'Me sinto cada vez mais consciente', 'Me sinto cada vez mais inteligente', 'Compreendo a fundo as leis do pensamento', 'Raciocínio, deduzo, descubro novas verdades!']; 
+    let lista;
+    switch(tipo) {
+        case 0:
+            lista = baixaConsciencia;
+            break;
+        case 1:
+            lista = mediaConsciencia;
+            break;
+        case 2:
+            lista = altaConsciencia;
+            break;
+    }
+    // se as derrotas seguidas são iguais a zero, isso significa que o jogador não está em processo de resolução de problema e a mensagem de interação simples não sobrescreverá nenhuma outra
+    if (derrotasSeguidas === 0) {
+        const interacao = document.querySelector('#interacao');
+        const textoInterativo = document.querySelector('#textoInterativo');
+        interacao.style.setProperty('border-left', '5px solid #fff');
+        textoInterativo.innerText = lista[getRandomIntInclusive(0, lista.length - 1)];
+        interacao.style.setProperty('display', 'flex');
+        clearTimeout(timeoutInteracao);
+        timeoutInteracao = setTimeout(() => {
+            interacao.style.setProperty('display', 'none');
+        }, 3000);
+    }
+}
+
+let problemaCorrente, ultimoProblema, derrotasSeguidas = 0;
+function exibeInteracaoComplexa() {
+    const interacao = document.querySelector('#interacao');
+    const textoInterativo = document.querySelector('#textoInterativo');
+    let problemas = [
+
+            ['Um alienígena atacou a sua nave!',
+            'Os escudos começam a fraquejar...',
+            'Os escudos deixam de funcionar completamente.',
+            'O alienígena destrói a nave por completo.'],
+
+            ['Uma asteróide atingiu a sua nave!',
+            'O prejuízo se alastra para outros setores.',
+            'Os danos fazem você perder o controle da nave.',
+            'Você bateu a nave.'],
+
+            ['O controle de oxigênio encontra-se com defeito.',
+            'Você não sabe como consertar!',
+            'Você tenta resolver sem saber...',
+            'Você erra e fica sem oxigênio!'],
+
+            ['O combustível da nave está acabando.',
+            'Não há postos de abastecimento por perto.',
+            'Você desliga a máquina para poupar combustível.',
+            'Você vaga para sempre perdido no espaço.'],
+
+            ['A navegação da nave está desregulada.',
+            'Você segue em direção a um aglomerado de asteróides.',
+            'Você atinge um asteróide.',
+            'O impacto destrói a sua nave.'],
+
+            ['Você perdeu a comunicação com o mundo exterior.',
+            'Sem comunicação, você entra em uma área proibida do espaço.',
+            'A política intergaláctica o persegue.',
+            'Você é destruído pela polícia intergaláctica!'],
+
+            ['Os escudos da nave encontram-se com defeito.',
+            'Os inimigos percebem a sua vulnerabilidade.',
+            'Um grupo de aliens malignos começa a persegui-lo.',
+            'O grupo de aliens destrói a sua nave.']
+
+        ];
+    let solucoes = ['Você destruiu o alienígena!', 'Você corrigiu os danos causados pelo asteróide.', 'Você consertou o controle de oxigênio.', 'Você localizou um posto de abastecimento!', 'Você conserta a navegação da nave e segue agora em segurança.', 'Você conserta a comunicação da nave!', 'A melhor defesa é o ataque!'];
+
+    if (derrota && derrotasSeguidas < 5) {
+        interacao.style.setProperty('border-left', '5px solid tomato');
+        interacao.style.setProperty('display', 'flex');
+        derrotasSeguidas++;
+        switch(derrotasSeguidas) {
+            case 1:
+                problemaCorrente = getRandomIntInclusive(0, problemas.length - 1);
+                ultimoProblema = problemas[problemaCorrente];
+                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                break;
+            case 2:
+                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                break;
+            case 3:
+                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                break;
+            case 4:
+                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                derrotasSeguidas = 0;
+                penalidade(50);
+                break;   
+        }
+    } else if (vitoria && derrotasSeguidas > 0) {
+        interacao.style.setProperty('border-left', '5px solid seagreen');
+        interacao.style.setProperty('display', 'flex');
+        textoInterativo.innerText = solucoes[problemaCorrente];
+        problemaCorrente = null;
+        ultimoProblema = null;
+        derrotasSeguidas = 0;
+    }
+    clearTimeout(timeoutInteracao);
+    timeoutInteracao = setTimeout(() => {
+        interacao.style.setProperty('display', 'none');
+    }, 3000);
+}
+
+function penalidade(valorPercentual) {
+    if (perfilJogador.faseAtual > 0) {
+        perfilJogador.faseAtual -= tetoQuantiaPercentual(valorPercentual, perfilJogador.faseAtual);
+        valorPontuacao -= tetoQuantiaPercentual(valorPercentual, valorPontuacao);
+        pontuacao.innerText = valorPontuacao;
+    } else {
+        perfilJogador.faseAtual = 0;
+    }
+    salvaFaseJogador();
+}
+
+function salvaFaseJogador() {
+    if (limiteFases === Number.POSITIVE_INFINITY || limiteFases === 0 || !limiteFases) {
+        let indice;
+        switch(dificuldade){
+            case 'facil':
+                indice = 0;
+                break;
+            case 'normal':
+                indice = 1;
+                break;
+            case 'dificil':
+                indice = 2;
+                break;
+            case 'impossivel':
+                indice = 3;
+                break;
+        }
+        perfilJogador.fasesAtingidas[indice] = perfilJogador.faseAtual;
+        perfilJogador.pontuacoesAtingidas[indice] = perfilJogador.pontuacaoAtingidaParaDesempenhoAtual;
+        perfilJogador.circuitosPassados[indice] = perfilJogador.circuitosPassadosAtual;
+        salvaPerfilJogador();
+    }
+}
+
 function lidaPassagemFase() {
     tempo.innerText = tempoInicial;
     if (modoJogo === 'progressivo') {
+        if (perfilJogador.faseAtual < 65) {
+            if (perfilJogador.faseAtual % 5 === 0) {
+                exibeInteracaoSimples(0);
+            }
+        } else if (perfilJogador.faseAtual > 65 && perfilJogador.faseAtual < 120) {
+            if (perfilJogador.faseAtual % 5 === 0) {
+                exibeInteracaoSimples(1);
+            }
+        } else {
+            if (perfilJogador.faseAtual % 5 === 0) {
+                exibeInteracaoSimples(2);
+            }
+        }
+        // interação complexa, quando ocorre problema na nave
+        exibeInteracaoComplexa();
         // gera uma cor de backgorund aleatória, de acordo com a fase em que o usuário está
         if (perfilJogador.faseAtual % 5 === 0) {
             document.querySelector('body').style.setProperty('background-color', `#${getRandomIntInclusive(0, 2)}${getRandomIntInclusive(0, 2)}${getRandomIntInclusive(0, 2)}`);
@@ -591,55 +752,18 @@ function lidaPassagemFase() {
         if (perfilJogador.faseAtual < limiteFases - 1) {
             if (derrota && limiteFases === Number.POSITIVE_INFINITY) {
                 if (dificuldade === 'facil') {
-                    if (perfilJogador.faseAtual > 0) {
-                        perfilJogador.faseAtual -= tetoQuantiaPercentual(5, perfilJogador.faseAtual);
-                    } else {
-                        perfilJogador.faseAtual = 0;
-                    }
+                    penalidade(2);
                 } else if (dificuldade === 'normal') {
-                    if (perfilJogador.faseAtual > 0) {
-                        perfilJogador.faseAtual -= tetoQuantiaPercentual(10, perfilJogador.faseAtual);
-                    } else {
-                        perfilJogador.faseAtual = 0;
-                    }
+                    penalidade(3);
                 } else if (dificuldade === 'dificil') {
-                     if (perfilJogador.faseAtual > 0) {
-                        perfilJogador.faseAtual -= tetoQuantiaPercentual(20, perfilJogador.faseAtual);
-                    } else {
-                        perfilJogador.faseAtual = 0;
-                    }                   
+                    penalidade(5);
                 } else if (dificuldade === 'impossivel') {
-                     if (perfilJogador.faseAtual > 0) {
-                        perfilJogador.faseAtual -= tetoQuantiaPercentual(30, perfilJogador.faseAtual);
-                    } else {
-                        perfilJogador.faseAtual = 0;
-                    }    
+                    penalidade(7);
                 }
                 fase.innerText = perfilJogador.faseAtual;
             // este else é para caso o jogador não tenha perdido o circuito atual
             } else {
                 fase.innerText = ++perfilJogador.faseAtual;
-                if (limiteFases === Number.POSITIVE_INFINITY || limiteFases === 0 || !limiteFases) {
-                    let indice;
-                    switch(dificuldade){
-                        case 'facil':
-                            indice = 0;
-                            break;
-                        case 'normal':
-                            indice = 1;
-                            break;
-                        case 'dificil':
-                            indice = 2;
-                            break;
-                        case 'impossivel':
-                            indice = 3;
-                            break;
-                    }
-                    perfilJogador.fasesAtingidas[indice] = perfilJogador.faseAtual;
-                    perfilJogador.pontuacoesAtingidas[indice] = perfilJogador.pontuacaoAtingidaParaDesempenhoAtual;
-                    perfilJogador.circuitosPassados[indice] = perfilJogador.circuitosPassadosAtual;
-                    salvaPerfilJogador();
-                }
                 // determina o recorde de fases
                 if (perfilJogador.faseAtual > perfilJogador.recordeFases[0]) {
                     perfilJogador.recordeFases[0] = perfilJogador.faseAtual;
@@ -1286,9 +1410,8 @@ function lidaVitoria() {
                 }
             }
         }
-
-       
     }
+    salvaFaseJogador()
 }
 
 function lidaDerrota(tipo) {
@@ -1296,7 +1419,7 @@ function lidaDerrota(tipo) {
         mensagem.innerText = 'A sua bateria acabou!';
         executaEfeitoSonoro('bateria', 'mp3');
     } else if (tipo === 'tempo') {
-        mensagem.innerText = 'O seu tempo acabou . . .';
+        mensagem.innerText = 'O seu tempo acabou!';
         executaEfeitoSonoro('fracasso');
     }
 
@@ -1308,6 +1431,7 @@ function lidaDerrota(tipo) {
     lidaTotalPerfeitos();
     calculaDesempenho();
     exibeBtnProximo();
+    salvaFaseJogador()
 }
 
 function alteraOutput() {
@@ -1379,19 +1503,12 @@ function exibeToast(mensagem, valor = -1, tempo = 5000) {
 
     if (valor > 0) {
         executaEfeitoSonoro('fogo-0');
+        let img = document.createElement('img');
+        img.setAttribute('src', imagem);
+        toast.append(img);
     } else if (valor < 0) {
         executaEfeitoSonoro('1');
     }
-
-    if (valor > 10) {
-        valor = 10;
-    }
-
-	for (let i = 0; i < valor; i++) {
-		let img = document.createElement('img');
-		img.setAttribute('src', imagem);
-		toast.append(img);
-	}
 
 	setTimeout(() => {
 		toast.style.setProperty('display', 'none');
