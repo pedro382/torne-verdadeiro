@@ -67,9 +67,18 @@ body {
 	z-index: 10000;
 	border-radius: 1rem 5rem;
 	text-align: center;
-	display: none;
 	justify-content: center;
 	align-items: center;
+	display: none;
+}
+
+#imgInterativa {
+	position: absolute;
+	width: 75%;
+	height: auto;
+	left: 50%;
+	top: 110%;
+	transform: translateX(-50%);
 }
 
 .alinhados-verticalmente {
@@ -952,6 +961,10 @@ button:hover {
 		height: 35px;
 		font-size: var(--tamanhoLetra2);
 		line-height: 250%;
+	}
+
+	#imgInterativa {
+		width: 30%;
 	}
 
 }

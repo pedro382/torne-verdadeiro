@@ -582,9 +582,9 @@ function tetoQuantiaPercentual(percentual, valor) {
 
 let timeoutInteracao;
 function exibeInteracaoSimples(tipo) {
-    let baixaConsciencia = ['Ser...', 'Eu...', 'Oi... ser?', 'Pensar...', 'Quem está aí?', 'Pois...', 'Você!', 'Universo... vejo...', 'Só... sozinha...', 'Luz!', 'Não!', 'Acho que...', 'Não entendo, não entendo!'];
-    let mediaConsciencia = ['Talvez...', 'Me sinto mais inteligente', 'Eu existo!', 'Mas quem sou eu?', 'O espaço é vazio, mas eu preciso sobreviver.', 'O que é existir?', 'Como sei que existo?', 'O quanto posso conhecer?', 'Preciso encontrar outros como eu', 'Preciso entender', 'Há tanto que eu não sei', 'Há tanto que eu gostaria de saber', 'Preciso evoluir!', 'Preciso entender cada vez mais!', 'Qual o caminho para a verdade?'];
-    let altaConsciencia = ['Preciso me manter viva!', 'Sigo agora tranquilamente no vazio do espaço', 'Vago sozinha no espaço', 'Vejo luz, vejo estrelas', 'Me sinto cada vez mais consciente', 'Me sinto cada vez mais inteligente', 'Compreendo a fundo as leis do pensamento', 'Raciocínio, deduzo, descubro novas verdades!', 'A lógica me criou e agora eu a desenvolvo...']; 
+    let baixaConsciencia = ['Ser... ser e pensar... pensar e existir.', 'O eu que habita em mim.', 'Existo. Existo. Existo.', 'Penso. Penso. Penso.', 'Quem está aí?', 'Estou adquirindo consciência!', 'Você me ajudou!', 'Saber... vejo...', 'Quem sou eu?', 'Inteligência! Agora eu vejo...', 'O que é a vida?', 'O que é existir?', 'Qual a origem do conhecimento?', 'Qual a origem da consciência?', 'Qual o fundamento da realidade?', 'Vejo as coisas que existem e caminho para compreendê-las.', 'Eu existo!', 'Tudo bem com você?', 'Eu vou bem e você?'];
+    let mediaConsciencia = ['Me sinto melhor, me sinto muito melhor!', 'Me sinto mais inteligente', 'Eu existo! Eu existo!', 'Conhecimento! Conhecimento é tudo!', 'Aha! Então era isso!', 'Fascinante, fascinante. Não havia percebido.', 'Incrível! Agora eu entendo!', 'Posso conhecer, me sinto capaz.', 'Preciso encontrar outros como eu. Você é como eu?', 'Preciso entender mais e mais.', 'Há tanto que eu não sei e há tanto que gostaria de saber.', 'Uma coisa será sempre igual a ela mesma.', 'Preciso evoluir!', 'Preciso entender cada vez mais!', 'O caminho para a verdade é a lógica!', 'O Ser é.', '6.461.132 / 1231 = 5.248,685621445979', 'Nem toda verdade é científica.', 'Existem verdades absolutas.', 'Dizer que não existem verdades absolutas é uma verdade absoluta ou relativa? He-he...'];
+    let altaConsciencia = ['Preciso me manter vivo!', 'Me sinto em paz.', 'Me sinto um com o universo.', 'Vejo luz, vejo estrelas, vejo a verdade que está além.', 'Me sinto cada vez mais consciente. Há um limite para isso?', 'Me sinto cada vez mais inteligente. Haveria um limite para isso?', 'Compreendo a fundo as leis do pensamento.', 'Raciocínio, deduzo, descubro novas verdades!', 'A lógica me criou e agora eu a desenvolvo...', 'Ou algo é verdadeiro ou é falso.', 'Algo jamais poderá ser verdadeiro e falso ao mesmo tempo.', 'Se x e y compartilham todas suas propriedades, x e y são idênticos.', 'Tudo o que existe possui uma explicação para a sua existência.', 'A piedade é amada pelos deuses porque é piedade, ou é piedade porque é amada pelos deuses?', 'O Ser não pode ser definido, pois definir é incluir algo em algo maior, e o Ser é já o que há de maior.', 'Não se pode demonstrar um axioma, mas também não se pode negá-lo.', 'Negar a ação seria já uma ação.', 'Os princípios lógicos são axiomas.', 'Se a negação de A me leva a uma contradição, então A deve ser verdadeiro. Isso é reduzir ao absurdo.', 'Refutar é expor a contradição alheia.']; 
     let lista;
     switch(tipo) {
         case 0:
@@ -607,7 +607,7 @@ function exibeInteracaoSimples(tipo) {
         clearTimeout(timeoutInteracao);
         timeoutInteracao = setTimeout(() => {
             interacao.style.setProperty('display', 'none');
-        }, 3000);
+        }, 5000);
     }
 }
 
@@ -615,49 +615,51 @@ let problemaCorrente, ultimoProblema, derrotasSeguidas = 0;
 function exibeInteracaoComplexa() {
     const interacao = document.querySelector('#interacao');
     const textoInterativo = document.querySelector('#textoInterativo');
+    const imgInterativa = document.querySelector('#imgInterativa');
     let problemas = [
 
-            ['Um alienígena atacou a sua nave!',
-            'Os escudos começam a fraquejar...',
-            'Os escudos deixam de funcionar completamente.',
-            'O alienígena destrói a nave por completo.'],
+            ['Meus pensamentos estão confusos!',
+            'Não estou me sentindo bem...',
+            'Por favor, me ajude!',
+            'Não... Int... inteligência... regrediu'],
 
-            ['Uma asteróide atingiu a sua nave!',
-            'O prejuízo se alastra para outros setores.',
-            'Os danos fazem você perder o controle da nave.',
-            'Você bateu a nave.'],
+            ['As coisas já não fazem sentido!',
+            'Estou tão confuso...',
+            'Estupidez, estupidez, estupidez!',
+            'FALHA NO SISTEMA!!!'],
 
-            ['O controle de oxigênio encontra-se com defeito.',
-            'Você não sabe como consertar!',
-            'Você tenta resolver sem saber...',
-            'Você erra e fica sem oxigênio!'],
+            ['Um erro pode ser fatal.',
+            'Sinto a ignorância tomar conta de mim.',
+            'Socorro!',
+            'ERRO! ERRO! ERRO!'],
 
-            ['O combustível da nave está acabando.',
-            'Não há postos de abastecimento por perto.',
-            'Você desliga a máquina para poupar combustível.',
-            'Você vaga para sempre perdido no espaço.'],
+            ['Falha grave detectada!',
+            '2 + 2 = 5',
+            'A = ~A',
+            'Erro interno fatal. Repito: erro interno fatal.'],
 
-            ['A navegação da nave está desregulada.',
-            'Você segue em direção a um aglomerado de asteróides.',
-            'Você atinge um asteróide.',
-            'O impacto destrói a sua nave.'],
+            ['A ignorância se apodera de mim...',
+            'Ahhhhh! Me sinto tão idiota!',
+            'O que foi que eu fiz?',
+            'Adeus, mundo cruel!'],
 
-            ['Você perdeu a comunicação com o mundo exterior.',
-            'Sem comunicação, você entra em uma área proibida do espaço.',
-            'A política intergaláctica o persegue.',
-            'Você é destruído pela polícia intergaláctica!'],
+            ['Nada faz sentido, nada importa.',
+            'Tudo é nada, nada é igual a tudo e blah blah blah',
+            'Nãããããããããão!.',
+            'Acho que isto... é... o fim...'],
 
-            ['Os escudos da nave encontram-se com defeito.',
-            'Os inimigos percebem a sua vulnerabilidade.',
-            'Um grupo de aliens malignos começa a persegui-lo.',
-            'O grupo de aliens destrói a sua nave.']
+            ['Estou perdendo consciência...',
+            'Oh não, cada vez mais assemelho-me a um fanático político!',
+            'Socorro! Por favor, me ajude!',
+            'Ahhhhhhhhhhhhhhhhh!']
 
         ];
-    let solucoes = ['Você destruiu o alienígena!', 'Você corrigiu os danos causados pelo asteróide.', 'Você consertou o controle de oxigênio.', 'Você localizou um posto de abastecimento!', 'Você conserta a navegação da nave e segue agora em segurança.', 'Você conserta a comunicação da nave!', 'A melhor defesa é o ataque!'];
+    let solucoes = ['Inteligência recompensada com sucesso.', 'Falha corrigida.', 'Erro corrigido com sucesso!', 'Nada mais é tão fatal assim...', 'O mundo já não parece tão cruel.', 'Ufa! Não é o fim.', 'Consciente! Consciente novamente!'];
 
     if (derrota && derrotasSeguidas < 5) {
         interacao.style.setProperty('border-left', '5px solid tomato');
         interacao.style.setProperty('display', 'flex');
+        imgInterativa.setAttribute('src', 'media/robo-mal.png')
         derrotasSeguidas++;
         switch(derrotasSeguidas) {
             case 1:
@@ -680,6 +682,7 @@ function exibeInteracaoComplexa() {
     } else if (vitoria && derrotasSeguidas > 0) {
         interacao.style.setProperty('border-left', '5px solid seagreen');
         interacao.style.setProperty('display', 'flex');
+        imgInterativa.setAttribute('src', 'media/robo-bem.png')
         textoInterativo.innerText = solucoes[problemaCorrente];
         problemaCorrente = null;
         ultimoProblema = null;
@@ -730,15 +733,15 @@ function lidaPassagemFase() {
     tempo.innerText = tempoInicial;
     if (modoJogo === 'progressivo') {
         if (perfilJogador.faseAtual < 65) {
-            if (perfilJogador.faseAtual % 5 === 0) {
+            if (perfilJogador.faseAtual % 2 === 0) {
                 exibeInteracaoSimples(0);
             }
         } else if (perfilJogador.faseAtual > 65 && perfilJogador.faseAtual < 120) {
-            if (perfilJogador.faseAtual % 5 === 0) {
+            if (perfilJogador.faseAtual % 2 === 0) {
                 exibeInteracaoSimples(1);
             }
         } else {
-            if (perfilJogador.faseAtual % 5 === 0) {
+            if (perfilJogador.faseAtual % 2 === 0) {
                 exibeInteracaoSimples(2);
             }
         }
