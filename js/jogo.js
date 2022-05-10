@@ -1320,6 +1320,8 @@ function propaga(circuitoJSON) {
 
 function calculaDesempenho() {
 	desempenho.innerText = `${ (( perfilJogador.pontuacaoAtingidaParaDesempenhoAtual / (perfilJogador.circuitosPassadosAtual * 5)) * 100).toFixed(2) }%`;
+
+    return `${ (( perfilJogador.pontuacaoAtingidaParaDesempenhoAtual / (perfilJogador.circuitosPassadosAtual * 5)) * 100).toFixed(2) }%`;
 }
 
 function lidaVitoria() {
@@ -1807,7 +1809,7 @@ btnCompartilharPerfil.addEventListener('click', () => {
         }
     }
 
-    navigator.clipboard.writeText(`Perfil - Jogo TORNE VERDADEIRO\n\n• Nome: ${perfilJogador.nome}\n• Título: ${tituloEquipado}\n• Nível: ${perfilJogador.nivel}\n• Recorde de fases: ${perfilJogador.recordeFases[0]} (no ${perfilJogador.recordeFases[1]})\n• Recorde de estrelas: ${perfilJogador.recordeEstrelas[0]} (no ${perfilJogador.recordeEstrelas[1]})`);
+    navigator.clipboard.writeText(`💥 Perfil - TORNE VERDADEIRO 💥\n\n🗨 Nome: ${perfilJogador.nome}\n🗨 Título: ${tituloEquipado}\n🗨 Nível: ${perfilJogador.nivel}\n🗨 Recorde de fases: ${perfilJogador.recordeFases[0]} (no ${perfilJogador.recordeFases[1]})\n🗨 Recorde de estrelas: ${perfilJogador.recordeEstrelas[0]} (no ${perfilJogador.recordeEstrelas[1]})\n🗨 Desempenho: ${calculaDesempenho()}\n\n👉 Acesse: ${window.location.href} para jogar!`);
     exibeToast('Perfil copiado para a área de transferência.', 0)
 });
 
