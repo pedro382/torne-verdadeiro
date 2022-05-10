@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
-
 :root {
-	--dimensaoElemento: 35px;
+	--dimensaoElemento: 32px;
 	--elementosPorColuna: 10;
 	--primeiraCor: seagreen;
 	--segundaCor: tomato;
@@ -21,7 +19,7 @@
 }
 
 * {
-	font-family: 'Space Mono', monospace;
+	font-family: Arial, sans-serif;
 	box-sizing: border-box;
 	user-select: none;
 }
@@ -49,27 +47,9 @@ body {
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
-	background-color: #000;
-	background-size: 250%;
+	background-color: #333;
+	background-size: 400%;
 	background-image: var(--bg);
-}
-
-#interacao {
-	position: fixed;
-	top: 20%;
-	left: 50%;
-	width: 15%;
-	padding: 1rem;
-	transform: translate(-50%, -20%);
-	border-left: 15px solid #fff;
-	color: #fff;
-	background-color: rgba(0, 0, 0, .9);
-	z-index: 10000;
-	border-radius: 1rem 5rem;
-	text-align: center;
-	justify-content: center;
-	align-items: center;
-	display: none;
 }
 
 #imgInterativa {
@@ -181,6 +161,13 @@ th {
 	align-items: center;
 }
 
+.alinhamento-jogo {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 1rem;
+}
+
 .alinhados-centralizados {
 	display: flex;
 	justify-content: space-around;
@@ -248,11 +235,6 @@ th {
 
 #modalFinal {
 	display: none;
-}
-
-#opcaoAjuda:hover, #opcaoMenu:hover {
-	cursor: pointer;
-	text-decoration: underline;
 }
 
 .container-modal {
@@ -547,10 +529,9 @@ a {
 	justify-content: center;
 	background: rgba(0, 0, 0, .9);
 	overflow: hidden;
-	border-radius: 1rem 1rem 0 0;
+	border-radius: 1rem;
 	width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
 	font-size: var(--tamanhoLetra1);
-	margin-top: 1rem;
 }
 
 #estrelas {
@@ -609,15 +590,31 @@ a {
 	}
 }
 
-#output, #input, #solucaoPerfeita {
+#output, #input, #mensagem {
 	width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
 	background-color: #aaa;
 	text-align: center;
 	font-weight: bolder;
+	text-shadow: 0 0 5px black;
+}
+
+#output, #input {
 	line-height: 200%;
 }
 
-#input, #solucaoPerfeita {
+#opcaoMenu {
+	cursor: pointer;
+}
+
+#mensagem {
+	color: #fff;
+	border-radius: 0rem 0rem 1rem 1rem;
+	background-color: #000;
+	border-top: 1px solid white;
+	padding: .5rem;
+}
+
+#input {
 	display: grid;
 	grid-template-columns: repeat(var(--elementosPorColuna), 1fr);
 }
@@ -668,23 +665,6 @@ a {
 	background-size: cover;
 }
 
-#mensagem {
-	display: none;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: var(--terceiraCor);
-	color: #fff;
-	padding: 1.5rem;
-	font-size: var(--tamanhoLetra3);
-	width: 17%;
-	text-align: center;
-	box-shadow: 0 0 100px black;
-	border-left: 15px dashed #fff;
-	z-index: 10;
-}
-
 #infoMusica {
 	z-index: 5;
 	background-color: rgba(30, 144, 255, .8);
@@ -692,14 +672,18 @@ a {
 	padding: 1rem;
 	border-radius: 1rem;
 	position: fixed;
-	top: 75%;
+	top: 50%;
 	left: 50%;
-	transform: translateX(-50%);
+	transform: translate(-50%, -50%);
 	width: 15vw;
 	display: none;
 }
 
-/* info jogo */
+/* info jogo */]
+
+#infoJogo {
+
+}
 
 i.tempo {
 	color: var(--segundaCor);
@@ -715,56 +699,18 @@ i.bateria {
 	color: var(--terceiraCor);
 }
 
-.infoJogo {
-	font-size: var(--tamanhoLetra5);
-}
-
-.infoJogo p {
-	color: #fff;
-	margin: 5px;
-}
-
-#pMusica, #pFase, #pDesempenho, .pGenerico {
+.pGenerico {
+	font-size: var(--tamanhoLetra1);
 	color: #fff;
 	padding: .75rem;
-	border-radius: 1rem;
 	background-color: rgba(0, 0, 0, .75);
 	text-align: center;
-}
-
-#pMusica {
-	background-color: var(--terceiraCor);
-}
-
-#pFase {
-	background-color: rgba(46, 139, 87, .8);
-}
-
-#pDesempenho {
-	background-color: rgba(255, 165, 0, .8);
-}
-
-.pGenerico {
-	/*outline: 1px solid white;*/
-	text-align: center;
+	border-radius: 1rem 0rem 0rem 1rem;
 }
 
 .pocoes img {
-	width: 35px;
+	width: 15px;
 	height: auto;
-}
-
-#opcaoMenu {
-	background-color: #000;
-	color: #fff;
-	padding: 1rem;
-	margin: 0;
-	font-size: var(--tamanhoLetra3);
-	text-align: center;
-	position: fixed;
-	top: 0;
-	right: 0;
-	border-radius: 0 0 0 1rem;
 }
 
 #play {
@@ -883,28 +829,10 @@ button:hover {
 	body {
 		overflow: scroll;
 	}
-
-	#mensagem, #interacao {
-		width: 75%;
-	}
-
 	.alinhados-centralizados {
 		flex-direction: column;
 		justify-content: center;
 		align-items: space-around;
-	}
-
-	#opcaoMenu {
-		background-color: #000;
-		color: #fff;
-		padding: .5rem;
-		margin: 0;
-		font-size: var(--tamanhoLetra3);
-		text-align: center;
-		position: relative;
-		top: 0;
-		right: 0;
-		border-radius: 0;
 	}
 
 	.alinhados {
@@ -922,14 +850,6 @@ button:hover {
 	}
 
 	.div-inputs-configuracao {
-		width: 100%;
-	}
-
-	.infoJogo {
-		margin-top: 1px;
-		display: flex;
-		justify-content: space-around;
-		align-items: space-around;
 		width: 100%;
 	}
 
@@ -951,10 +871,6 @@ button:hover {
 		left: 50%;
 		transform: translate(-50%, -50%);
 		width: auto;
-	}
-
-	.infoJogo {
-		font-size: 1rem;
 	}
 
 	#output, .input {

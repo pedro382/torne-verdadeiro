@@ -27,11 +27,6 @@
 
 <div id="toast"></div>
 
-<div id="interacao">
-	<p id="textoInterativo">Teste</p>
-	<img src="media/robo-bem.png" id="imgInterativa">
-</div>
-
 <div id="capturouMonstro">
 	<p>Você capturou um monstro!</p>
 	<img src="media/monstros/monstro33.png" id="imgMonstroCapturado">
@@ -499,6 +494,7 @@
 					<p class="conquista" id="conquistaOCacadorDivino">Ter caçado todos os monstros (ganha o título "O Caçador Divino")</p>
 				</div>
 			</div>
+
 			<div class="alinhados-horizontalmente">
 				<button id="btnJogar">Novo jogo!</button><br>
 				<button id="btnVoltar">Voltar à partida</button>
@@ -516,39 +512,29 @@
 	</div>
 </div>
 
-<p id="mensagem"></p>
 <p id="mensagemUpou"></p>
 
 <div id="infoMusica">
 	Você está ouvindo "Lazy Walk" por Cheel
 </div>
-
-<p id="opcaoMenu"><i class="bi bi-list"></i> Menu</p>
-<div class="alinhados">
-	<div class="infoJogo" id="informacoesSuperiores">
-		<div>
-			<p id="pMusica"><i id="play" class="bi bi-pause"></i> <span title="música">Música</span></p>
-			<p id="pFase"><i class="bi bi-boxes"></i> Fase <span id="fase" title="fase"></span></p>
-		</div>
-		<div>
-			<p id="pDesempenho"><i class="bi bi-graph-up-arrow"></i> <span id="desempenho" title="desempenho">0.00%</span></p>
-			<p class="pGenerico" id="pPontuacao"><i class="pontuacao bi bi-hand-thumbs-up"></i> <span id="pontuacao" title="pontuação">0</span></p>
-		</div>
-		<div>
-			<p class="pGenerico"><i class="bateria bi bi-battery-charging"></i> <span id="bateria" title="bateria">0</span></p>
-			<p class="pGenerico"><i class="tempo bi bi-hourglass-split"></i> <span id="tempo" title="tempo">...</span></p>
-		</div>
-		<div>
-			<p class="pGenerico pocoes"><span id="pocaoTempo"><img src="media/itens-loja/pocao-tempo.png"> <span id="quantidadePocaoTempo">0</span></span> <span id="pocaoBateria"><img src="media/itens-loja/pocao-bateria.png"> <span id="quantidadePocaoBateria">0</span></span></p>
-		</div>
+<p id="estrelas"><span id="comentarioEstrelas"></span></p>
+<button id="btnProximo"><i class="bi bi-arrow-right"></i></button>
+<div class="alinhamento-jogo">
+	<div class="infoJogo">
+		<p id="opcaoMenu" class="pGenerico"><i class="bi bi-list"></i> Menu</p>
+<!-- 		<p class="pGenerico" id="pMusica"><i id="play" class="bi bi-pause"></i></p>
+ -->		<p class="pGenerico" id="pFase"><i class="bi bi-boxes"></i> <span id="fase" title="fase"></span></p>
+<!-- 		<p class="pGenerico" id="pDesempenho"><i class="bi bi-graph-up-arrow"></i> <span id="desempenho" title="desempenho">0.00%</span></p> -->
+		<p class="pGenerico" id="pPontuacao"><i class="pontuacao bi bi-hand-thumbs-up"></i> <span id="pontuacao" title="pontuação">0</span> <i class="bateria bi bi-battery-charging"></i> <span id="bateria" title="bateria">0</span></p>
+		<p class="pGenerico"><i class="tempo bi bi-hourglass-split"></i> <span id="tempo" title="tempo">...</span></p>
+		<p class="pGenerico pocoes"><span id="pocaoTempo"><img src="media/itens-loja/pocao-tempo.png"> <span id="quantidadePocaoTempo">0</span></span> <span id="pocaoBateria"><img src="media/itens-loja/pocao-bateria.png"> <span id="quantidadePocaoBateria">0</span></span></p>
 	</div>
 	<div id="jogo">
 		<div id="output">Indeterminado</div>
 		<div id="circuito"></div>
 		<div id="input"></div>
+		<div id="mensagem">...</div>
 	</div>
-	<p id="estrelas"><span id="comentarioEstrelas"></span></p>
-	<button id="btnProximo"><i class="bi bi-arrow-right"></i></button>
 </div>
 
 <script type="text/javascript">

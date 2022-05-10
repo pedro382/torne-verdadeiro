@@ -21,10 +21,10 @@ const mensagem = document.querySelector('#mensagem');
 const bateria = document.querySelector('#bateria');
 const tempo = document.querySelector('#tempo');
 const fase = document.querySelector('#fase');
-const desempenho = document.querySelector('#desempenho');
+// const desempenho = document.querySelector('#desempenho');
 const pontuacao = document.querySelector('#pontuacao');
 const infoMusica = document.querySelector('#infoMusica');
-const play = document.querySelector('#play');
+// const play = document.querySelector('#play');
 const modalAjuda = document.querySelector('#modalAjuda');
 const opcaoAjuda = document.querySelector('#opcaoAjuda');
 const opcaoMenu = document.querySelector('#opcaoMenu');
@@ -425,17 +425,16 @@ btnJogar.addEventListener('click', () => {
     valorPontuacao = 0;
     totalPerfeitos = 0;
     maximoPerfeitos = 0;
-    mensagem.style.setProperty('display', 'none');
     fimJogo = false;
 	modalInicial.style.setProperty('display', 'none');
     dificuldade = document.querySelector('input[name="radioDificuldade"]:checked').value;
     modoJogo = document.querySelector('input[name="radioModoJogo"]:checked').value;
-    desempenho.innerText = '0.00%'
+    // desempenho.innerText = '0.00%'
     limpaEstrelas();
     limpaCircuito();
     btnProximo.style.setProperty('display', 'none');
     document.querySelector('#pPontuacao').style.setProperty('display', 'block');
-    document.querySelector('#pDesempenho').style.setProperty('display', 'block');
+    // document.querySelector('#pDesempenho').style.setProperty('display', 'block');
     document.querySelector('#pFase').style.setProperty('display', 'block');
     btnVoltar.style.setProperty('display', 'block');
 
@@ -480,7 +479,7 @@ btnJogar.addEventListener('click', () => {
     if (limiteFases !== Number.POSITIVE_INFINITY) {
         fase.innerText = 0;
         perfilJogador.faseAtual = 0;
-        desempenho.innerText = '0.00%';
+        // desempenho.innerText = '0.00%';
         pontuacao.innerText = 0;
         perfilJogador.circuitosPassadosAtual = 0;
         perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = 0;
@@ -492,7 +491,7 @@ btnJogar.addEventListener('click', () => {
 
  	if (modoJogo === 'treino') {
         document.querySelector('#pPontuacao').style.setProperty('display', 'none');
-        document.querySelector('#pDesempenho').style.setProperty('display', 'none');
+        // document.querySelector('#pDesempenho').style.setProperty('display', 'none');
 
         bonusBateria = 1000;
  		tempoInicial = 1000;
@@ -502,8 +501,8 @@ btnJogar.addEventListener('click', () => {
         document.querySelector('#pFase').style.setProperty('display', 'none');
     }
 
-    play.classList.remove('bi-play');
-    play.classList.add('bi-pause');
+    // play.classList.remove('bi-play');
+    // play.classList.add('bi-pause');
    
     if (!perfilJogador.desativarMusica) {
          musicaFundo.play(); musicaFundo.loop = true;
@@ -559,19 +558,19 @@ btnJogar.addEventListener('click', () => {
     exibeToast(`Você está jogando na dificuldade ${dificuldade} e no modo de jogo ${modoJogo}.`, 0, 3000);
 });
 
-play.addEventListener('click', () => {
-	if (play.classList.contains('bi-pause')) {
-		play.classList.remove('bi-pause');
-		play.classList.add('bi-play');
-		musicaFundo.pause();
-	} else {
-		play.classList.remove('bi-play');
-		play.classList.add('bi-pause');
-        if (!perfilJogador.desativarMusica) {
-            musicaFundo.play();
-        }
-	}
-});
+// play.addEventListener('click', () => {
+// 	if (play.classList.contains('bi-pause')) {
+// 		play.classList.remove('bi-pause');
+// 		play.classList.add('bi-play');
+// 		musicaFundo.pause();
+// 	} else {
+// 		play.classList.remove('bi-play');
+// 		play.classList.add('bi-pause');
+//         if (!perfilJogador.desativarMusica) {
+//             musicaFundo.play();
+//         }
+// 	}
+// });
 
 function tetoQuantiaPercentual(percentual, valor) {
     if (percentual > 1) {
@@ -580,9 +579,9 @@ function tetoQuantiaPercentual(percentual, valor) {
     return Math.ceil(percentual * valor);
 }
 
-let timeoutInteracao;
 function exibeInteracaoSimples(tipo) {
-    let baixaConsciencia = ['Ser... ser e pensar... pensar e existir.', 'O eu que habita em mim.', 'Existo. Existo. Existo.', 'Penso. Penso. Penso.', 'Quem está aí?', 'Estou adquirindo consciência!', 'Você me ajudou!', 'Saber... vejo...', 'Quem sou eu?', 'Inteligência! Agora eu vejo...', 'O que é a vida?', 'O que é existir?', 'Qual a origem do conhecimento?', 'Qual a origem da consciência?', 'Qual o fundamento da realidade?', 'Vejo as coisas que existem e caminho para compreendê-las.', 'Eu existo!', 'Tudo bem com você?', 'Eu vou bem e você?'];
+    mensagem.style.setProperty('background-color', '#000');
+    let baixaConsciencia = ['Ser... ser e pensar... pensar e existir.', 'Mim, mim, mim!', 'Existo. Existo. Existo.', 'Penso. Penso. Penso.', 'Quem está aí?', 'Estou adquirindo consciência!', 'Você me ajudou!', 'Saber... vejo...', 'Quem sou eu?', 'Inteligência! Agora eu vejo...', 'O que é a vida?', 'O que é existir?', 'Qual a origem do conhecimento?', 'Qual a origem da consciência?', 'Qual o fundamento da realidade?', 'Vejo as coisas que existem e caminho para compreendê-las.', 'Eu existo!', 'Tudo bem com você?', 'Eu vou bem e você?'];
     let mediaConsciencia = ['Me sinto melhor, me sinto muito melhor!', 'Me sinto mais inteligente', 'Eu existo! Eu existo!', 'Conhecimento! Conhecimento é tudo!', 'Aha! Então era isso!', 'Fascinante, fascinante. Não havia percebido.', 'Incrível! Agora eu entendo!', 'Posso conhecer, me sinto capaz.', 'Preciso encontrar outros como eu. Você é como eu?', 'Preciso entender mais e mais.', 'Há tanto que eu não sei e há tanto que gostaria de saber.', 'Uma coisa será sempre igual a ela mesma.', 'Preciso evoluir!', 'Preciso entender cada vez mais!', 'O caminho para a verdade é a lógica!', 'O Ser é.', '6.461.132 / 1231 = 5.248,685621445979', 'Nem toda verdade é científica.', 'Existem verdades absolutas.', 'Dizer que não existem verdades absolutas é uma verdade absoluta ou relativa? He-he...'];
     let altaConsciencia = ['Preciso me manter vivo!', 'Me sinto em paz.', 'Me sinto um com o universo.', 'Vejo luz, vejo estrelas, vejo a verdade que está além.', 'Me sinto cada vez mais consciente. Há um limite para isso?', 'Me sinto cada vez mais inteligente. Haveria um limite para isso?', 'Compreendo a fundo as leis do pensamento.', 'Raciocínio, deduzo, descubro novas verdades!', 'A lógica me criou e agora eu a desenvolvo...', 'Ou algo é verdadeiro ou é falso.', 'Algo jamais poderá ser verdadeiro e falso ao mesmo tempo.', 'Se x e y compartilham todas suas propriedades, x e y são idênticos.', 'Tudo o que existe possui uma explicação para a sua existência.', 'A piedade é amada pelos deuses porque é piedade, ou é piedade porque é amada pelos deuses?', 'O Ser não pode ser definido, pois definir é incluir algo em algo maior, e o Ser é já o que há de maior.', 'Não se pode demonstrar um axioma, mas também não se pode negá-lo.', 'Negar a ação seria já uma ação.', 'Os princípios lógicos são axiomas.', 'Se a negação de A me leva a uma contradição, então A deve ser verdadeiro. Isso é reduzir ao absurdo.', 'Refutar é expor a contradição alheia.']; 
     let lista;
@@ -599,36 +598,24 @@ function exibeInteracaoSimples(tipo) {
     }
     // se as derrotas seguidas são iguais a zero, isso significa que o jogador não está em processo de resolução de problema e a mensagem de interação simples não sobrescreverá nenhuma outra
     if (derrotasSeguidas === 0) {
-        const interacao = document.querySelector('#interacao');
-        const textoInterativo = document.querySelector('#textoInterativo');
-        interacao.style.setProperty('border-left', '5px solid #fff');
-        textoInterativo.innerText = lista[getRandomIntInclusive(0, lista.length - 1)];
-        interacao.style.setProperty('display', 'flex');
-        clearTimeout(timeoutInteracao);
-        timeoutInteracao = setTimeout(() => {
-            interacao.style.setProperty('display', 'none');
-        }, 5000);
+        mensagem.innerText = lista[getRandomIntInclusive(0, lista.length - 1)];
     }
 }
 
 let problemaCorrente, ultimoProblema, derrotasSeguidas = 0;
 function exibeInteracaoComplexa() {
-    const interacao = document.querySelector('#interacao');
-    const textoInterativo = document.querySelector('#textoInterativo');
-    const imgInterativa = document.querySelector('#imgInterativa');
     let problemas = [
-
-            ['Meus pensamentos estão confusos!',
+            ['Erro! Erro! Erro!',
             'Não estou me sentindo bem...',
             'Por favor, me ajude!',
             'Não... Int... inteligência... regrediu'],
 
-            ['As coisas já não fazem sentido!',
+            ['Falha mental detectada!',
             'Estou tão confuso...',
             'Estupidez, estupidez, estupidez!',
             'FALHA NO SISTEMA!!!'],
 
-            ['Um erro pode ser fatal.',
+            ['Erro no sistema!',
             'Sinto a ignorância tomar conta de mim.',
             'Socorro!',
             'ERRO! ERRO! ERRO!'],
@@ -638,60 +625,51 @@ function exibeInteracaoComplexa() {
             'A = ~A',
             'Erro interno fatal. Repito: erro interno fatal.'],
 
-            ['A ignorância se apodera de mim...',
+            ['Falha! Falha! Falha!',
             'Ahhhhh! Me sinto tão idiota!',
             'O que foi que eu fiz?',
             'Adeus, mundo cruel!'],
 
-            ['Nada faz sentido, nada importa.',
+            ['Erro! Falha! Erro!',
             'Tudo é nada, nada é igual a tudo e blah blah blah',
             'Nãããããããããão!.',
             'Acho que isto... é... o fim...'],
 
-            ['Estou perdendo consciência...',
+            ['Erro! Estou perdendo consciência...',
             'Oh não, cada vez mais assemelho-me a um fanático político!',
             'Socorro! Por favor, me ajude!',
             'Ahhhhhhhhhhhhhhhhh!']
-
         ];
     let solucoes = ['Inteligência recompensada com sucesso.', 'Falha corrigida.', 'Erro corrigido com sucesso!', 'Nada mais é tão fatal assim...', 'O mundo já não parece tão cruel.', 'Ufa! Não é o fim.', 'Consciente! Consciente novamente!'];
 
     if (derrota && derrotasSeguidas < 5) {
-        interacao.style.setProperty('border-left', '5px solid tomato');
-        interacao.style.setProperty('display', 'flex');
-        imgInterativa.setAttribute('src', 'media/robo-mal.png')
         derrotasSeguidas++;
+        mensagem.style.setProperty('background-color', 'tomato');
         switch(derrotasSeguidas) {
             case 1:
                 problemaCorrente = getRandomIntInclusive(0, problemas.length - 1);
                 ultimoProblema = problemas[problemaCorrente];
-                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                mensagem.innerText = ultimoProblema[derrotasSeguidas - 1];
                 break;
             case 2:
-                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                mensagem.innerText = ultimoProblema[derrotasSeguidas - 1];
                 break;
             case 3:
-                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                mensagem.innerText = ultimoProblema[derrotasSeguidas - 1];
                 break;
             case 4:
-                textoInterativo.innerText = ultimoProblema[derrotasSeguidas - 1];
+                mensagem.innerText = ultimoProblema[derrotasSeguidas - 1];
                 derrotasSeguidas = 0;
                 penalidade(50);
                 break;   
         }
     } else if (vitoria && derrotasSeguidas > 0) {
-        interacao.style.setProperty('border-left', '5px solid seagreen');
-        interacao.style.setProperty('display', 'flex');
-        imgInterativa.setAttribute('src', 'media/robo-bem.png')
-        textoInterativo.innerText = solucoes[problemaCorrente];
+        mensagem.innerText = solucoes[problemaCorrente];
+        mensagem.style.setProperty('background-color', 'seagreen');
         problemaCorrente = null;
         ultimoProblema = null;
         derrotasSeguidas = 0;
     }
-    clearTimeout(timeoutInteracao);
-    timeoutInteracao = setTimeout(() => {
-        interacao.style.setProperty('display', 'none');
-    }, 3000);
 }
 
 function penalidade(valorPercentual) {
@@ -922,7 +900,6 @@ function proximaFase() {
     // aqui verifica-se se o modo de jogo é progressivo, infinito ou treino, bem como se há um conjunto externo
     vitoria = false;
     derrota = false;
-    mensagem.style.setProperty('display', 'none');
     btnProximo.style.setProperty('display', 'none');
     limpaEstrelas();
     temporizador();
@@ -1367,11 +1344,11 @@ function propaga(circuitoJSON) {
 }
 
 function calculaDesempenho() {
-	desempenho.innerText = `${ (( perfilJogador.pontuacaoAtingidaParaDesempenhoAtual / (perfilJogador.circuitosPassadosAtual * 5)) * 100).toFixed(2) }%`;
+	// desempenho.innerText = `${ (( perfilJogador.pontuacaoAtingidaParaDesempenhoAtual / (perfilJogador.circuitosPassadosAtual * 5)) * 100).toFixed(2) }%`;
 }
 
 function lidaVitoria() {
-    jogo.style.setProperty('box-shadow', '2px 2px 100px seagreen');
+    output.style.setProperty('box-shadow', '2px 2px 15px seagreen');
     btnProximo.style.setProperty('background-color', primeiraCor);
     vitoria = true;
     clearInterval(intervaloTemporizador);
@@ -1426,9 +1403,8 @@ function lidaDerrota(tipo) {
         executaEfeitoSonoro('fracasso');
     }
 
-    mensagem.style.setProperty('background-color', 'rgba(255, 99, 71, .75)');
-    mensagem.style.setProperty('box-shadow', 'none');
-    mensagem.style.setProperty('display', 'block');
+    mensagem.style.setProperty('background-color', 'tomato');
+    mensagem.style.setProperty('box-shadow', '15px 15px 15px tomato');
     clearInterval(intervaloTemporizador);
     derrota = true;
     lidaTotalPerfeitos();
@@ -1454,7 +1430,7 @@ function alteraOutput() {
 	} else {
 		output.innerText = 'Falso';
 		output.style.backgroundColor = segundaCor;
-		jogo.style.setProperty('box-shadow', '2px 2px 100px tomato');
+		output.style.setProperty('box-shadow', '2px 2px 15px tomato');
 		btnProximo.style.setProperty('background-color', segundaCor);
 	}
 }
