@@ -544,6 +544,7 @@ a {
 	text-align: center;
 	font-size: var(--tamanhoLetra5);
 	border-left: 15px dashed #fff;
+	box-shadow: 0 0 10px #fff;
 }
 
 #estrelas #comentarioEstrelas {
@@ -680,10 +681,6 @@ a {
 }
 
 /* info jogo */]
-
-#infoJogo {
-
-}
 
 i.tempo {
 	color: var(--segundaCor);
@@ -881,6 +878,31 @@ button:hover {
 
 	#imgInterativa {
 		width: 30%;
+	}
+
+	.infoJogo {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		background-color: rgba(0, 0, 0, .9);
+		width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
+		border-radius: 1rem 1rem 0rem 0rem;
+	}
+
+	body {
+		animation: none;
+	}
+
+	#jogo {
+		margin-top: 0;
+	}
+
+	.alinhamento-jogo {
+		flex-direction: column;
+	}
+
+	.pGenerico {
+		background-color: none;
 	}
 
 }
