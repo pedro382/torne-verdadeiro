@@ -707,6 +707,10 @@ a {
 	border-radius: 1rem 0rem 0rem 1rem;
 }
 
+.pGenerico:hover {
+	opacity: .9;
+}
+
 i.bi-hourglass-split {
 	animation: moveTempo 2s infinite;
 	color: var(--segundaCor);

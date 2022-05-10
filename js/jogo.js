@@ -1453,17 +1453,13 @@ function exibeCapturaMonstro(monstro) {
 function exibeToast(mensagem, valor = -1, tempo = 5000) {
 	const toast = document.getElementById('toast');
 	toast.style.setProperty('display', 'block');
-	toast.innerText = mensagem;
-
-	let imagem = 'media/fogo.png';;
 
     if (valor > 0) {
         executaEfeitoSonoro('fogo-0');
-        let img = document.createElement('img');
-        img.setAttribute('src', imagem);
-        toast.append(img);
+        toast.innerText = `🔥 ${mensagem} 🔥`;
     } else if (valor < 0) {
         executaEfeitoSonoro('1');
+        toast.innerText = mensagem;
     }
 
 	setTimeout(() => {
