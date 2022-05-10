@@ -6,7 +6,7 @@
 	--primeiraCor: seagreen;
 	--segundaCor: tomato;
 	--terceiraCor: rgba(30, 144, 255, .9);
-	--bg: url('../media/bg1.jpg');
+	--bg: url('../media/bg.jpg');
 	/* letras padrão */
 	--tamanhoLetra1: 1rem;
 	/* letras pequenas */
@@ -51,7 +51,7 @@ body {
 	overflow: hidden;
 	background-color: #110000;
 	background-size: cover;
-	/*background-image: var(--bg);*/
+	background-image: var(--bg);
 }
 
 #imgInterativa {
