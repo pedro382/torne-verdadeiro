@@ -32,6 +32,7 @@ const iconeFecharModalInicial = document.querySelector('#iconeFecharModalInicial
 const btnVoltar = document.querySelector('#btnVoltar');
 const checkboxDesativarEfeitosSonoros = document.querySelector('#checkboxDesativarEfeitosSonoros');
 const checkboxDesativarMusica = document.querySelector('#checkboxDesativarMusica');
+const desempenho = document.querySelector('#desempenho');
 let limiteFases;
 
 // params.getAll('name') # => ["n1", "n2"]
@@ -183,7 +184,7 @@ function lidaNivelJogador(xp) {
         const mensagemUpou = document.getElementById('mensagemUpou');
         mensagemUpou.style.setProperty('display', 'block');
         mensagemUpou.innerText = 'Parabéns, você passou de nível!';
-        executaEfeitoSonoro('fogo-1');
+        executaEfeitoSonoro('fogo-0');
         setTimeout(() => {
             mensagemUpou.style.setProperty('display', 'none');
         }, 5000);
@@ -381,6 +382,7 @@ function atualizaExibicaoPerfilJogador() {
         resetaLocalStorage();
     }
     atualizaResumoConfiguracoes();
+    calculaDesempenho();
 }
 
 function temporizador() {
@@ -426,12 +428,11 @@ btnJogar.addEventListener('click', () => {
 	modalInicial.style.setProperty('display', 'none');
     dificuldade = document.querySelector('input[name="radioDificuldade"]:checked').value;
     modoJogo = document.querySelector('input[name="radioModoJogo"]:checked').value;
-    // desempenho.innerText = '0.00%'
+    desempenho.innerText = '0.00%'
     limpaEstrelas();
     limpaCircuito();
     btnProximo.style.setProperty('display', 'none');
     document.querySelector('#pPontuacao').style.setProperty('display', 'block');
-    // document.querySelector('#pDesempenho').style.setProperty('display', 'block');
     document.querySelector('#pFase').style.setProperty('display', 'block');
     btnVoltar.style.setProperty('display', 'block');
 
@@ -441,6 +442,7 @@ btnJogar.addEventListener('click', () => {
         let indice = 0;
         fase.innerText = perfilJogador.fasesAtingidas[indice];
         pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        valorPontuacao = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
         perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
@@ -450,6 +452,7 @@ btnJogar.addEventListener('click', () => {
         let indice = 1;
         fase.innerText = perfilJogador.fasesAtingidas[indice];
         pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        valorPontuacao = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
         perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
@@ -459,6 +462,7 @@ btnJogar.addEventListener('click', () => {
         let indice = 2;
         fase.innerText = perfilJogador.fasesAtingidas[indice];
         pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        valorPontuacao = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
         perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
@@ -468,6 +472,7 @@ btnJogar.addEventListener('click', () => {
         let indice = 3;
         fase.innerText = perfilJogador.fasesAtingidas[indice];
         pontuacao.innerText = perfilJogador.pontuacoesAtingidas[indice];
+        valorPontuacao = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.faseAtual = perfilJogador.fasesAtingidas[indice];
         perfilJogador.pontuacaoAtingidaParaDesempenhoAtual = perfilJogador.pontuacoesAtingidas[indice];
         perfilJogador.circuitosPassadosAtual = perfilJogador.circuitosPassados[indice];
@@ -485,7 +490,8 @@ btnJogar.addEventListener('click', () => {
     perfilJogador.dificuldade = dificuldade;
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
-
+    calculaDesempenho();
+    
  	if (modoJogo === 'treino') {
         document.querySelector('#pPontuacao').style.setProperty('display', 'none');
         // document.querySelector('#pDesempenho').style.setProperty('display', 'none');
@@ -784,26 +790,20 @@ function lidaPassagemFase() {
                 lidaTotalPerfeitos(false);
                 let valorDesempenho = parseFloat((desempenho.innerText).split('%')[0]);
                 let textoFinal;
-
                 if (valorDesempenho <= 33.33) {
-                    mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Você chegou ao fim com certa dificuldade, mas não desanime. Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeito(s) seguidos.`;
                     executaEfeitoSonoro('fracasso');
                 } else if (valorDesempenho > 33.33 && valorDesempenho <= 66.66) {
-                    mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Olha, você não foi mal! Continue praticando! Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
                     executaEfeitoSonoro('fogo-0');
                 } else if (valorDesempenho > 66.66 && valorDesempenho < 99.99) {
-                    mensagem.style.setProperty('background-color', 'teal');
                     textoFinal = `Impressionante! Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
                     executaEfeitoSonoro('super-sucesso');
                 } else {
-                    mensagem.style.setProperty('background-color', 'darkgreen');
-                    mensagem.style.setProperty('box-shadow', '0 0 100px green');
                     textoFinal = `Você é mesmo humano? Seu desempenho foi de ${desempenho.innerText}, com o máximo obtido de ${maximoPerfeitos} perfeitos seguidos.`;
                     executaEfeitoSonoro('fogo-2');
                 }
-
+                mensagem.style.setProperty('background-color', 'teal');
                 mensagem.innerText = textoFinal;
                 mensagem.style.setProperty('display', 'block');
                 fimJogo = true;
@@ -1318,7 +1318,7 @@ function propaga(circuitoJSON) {
 }
 
 function calculaDesempenho() {
-	// desempenho.innerText = `${ (( perfilJogador.pontuacaoAtingidaParaDesempenhoAtual / (perfilJogador.circuitosPassadosAtual * 5)) * 100).toFixed(2) }%`;
+	desempenho.innerText = `${ (( perfilJogador.pontuacaoAtingidaParaDesempenhoAtual / (perfilJogador.circuitosPassadosAtual * 5)) * 100).toFixed(2) }%`;
 }
 
 function lidaVitoria() {
