@@ -169,6 +169,7 @@ th {
 	align-items: center;
 	margin-top: 1rem;
 	margin-left: -7%;
+	z-index: -1;
 }
 
 .alinhados-centralizados {

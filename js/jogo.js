@@ -491,7 +491,7 @@ btnJogar.addEventListener('click', () => {
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
     calculaDesempenho();
-    
+
  	if (modoJogo === 'treino') {
         document.querySelector('#pPontuacao').style.setProperty('display', 'none');
         // document.querySelector('#pDesempenho').style.setProperty('display', 'none');
@@ -629,6 +629,7 @@ function exibeInteracaoComplexa() {
         ];
     let solucoes = ['Inteligência recompensada com sucesso.', 'Falha corrigida.', 'Erro corrigido com sucesso!', 'Nada mais é tão fatal assim...', 'O mundo já não parece tão cruel.', 'Ufa! Não é o fim.', 'Consciente! Consciente novamente!'];
     if (derrota && derrotasSeguidas < 5) {
+        divMensagem.style.setProperty('background-color', 'darkorange');
         derrotasSeguidas++;
         switch(derrotasSeguidas) {
             case 1:
@@ -1370,7 +1371,7 @@ function lidaVitoria() {
 
 function lidaDerrota(tipo) {
     if (tipo === 'bateria') {
-        mensagem.innerText = '🔋 A sua bateria acabou! 🔋';
+        mensagem.innerText = '💥 A sua bateria acabou! 💥';
         executaEfeitoSonoro('bateria', 'mp3');
     } else if (tipo === 'tempo') {
         mensagem.innerText = '⏳ O seu tempo acabou! ⏳';
