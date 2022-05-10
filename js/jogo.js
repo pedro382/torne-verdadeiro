@@ -18,13 +18,13 @@ const comentarioEstrelas = document.querySelector('#comentarioEstrelas');
 const btnJogar = document.querySelector('#btnJogar');
 const modalInicial = document.querySelector('#modalInicial');
 const mensagem = document.querySelector('#mensagem');
+const divMensagem = document.querySelector('#divMensagem');
+const imgMensagem = document.querySelector('#imgMensagem');
 const bateria = document.querySelector('#bateria');
 const tempo = document.querySelector('#tempo');
 const fase = document.querySelector('#fase');
-// const desempenho = document.querySelector('#desempenho');
 const pontuacao = document.querySelector('#pontuacao');
 const infoMusica = document.querySelector('#infoMusica');
-// const play = document.querySelector('#play');
 const modalAjuda = document.querySelector('#modalAjuda');
 const opcaoAjuda = document.querySelector('#opcaoAjuda');
 const opcaoMenu = document.querySelector('#opcaoMenu');
@@ -33,7 +33,6 @@ const iconeFecharModalInicial = document.querySelector('#iconeFecharModalInicial
 const btnVoltar = document.querySelector('#btnVoltar');
 const checkboxDesativarEfeitosSonoros = document.querySelector('#checkboxDesativarEfeitosSonoros');
 const checkboxDesativarMusica = document.querySelector('#checkboxDesativarMusica');
-const checkboxDesativarAnimacaoBackground = document.querySelector('#checkboxDesativarAnimacaoBackground');
 let limiteFases;
 
 // params.getAll('name') # => ["n1", "n2"]
@@ -110,8 +109,8 @@ let valorPontuacao = 0;
 let totalPerfeitos = 0;
 let totalPerfeitosRelativo = 0;
 let maximoPerfeitos = 0;
-let nomeMusica = 'Cosmic Drift';
-let nomeAutor = 'DivKid';
+let nomeMusica = 'Lazy Walk';
+let nomeAutor = 'Cheel';
 let elementosPorColuna = 10;
 let quantidadeElementos = 150;
 let dificuldade, modoJogo;
@@ -145,7 +144,6 @@ if (!perfilJogador) {
         conquistas: [],
         recordeFases: [0, 'facil'],
         recordeEstrelas: [0, 'facil'],
-        desativarAnimacaoBackground: false,
         desativarMusica: false,
         desativarEfeitosSonoros: false,
         dificuldade: 'facil',
@@ -500,9 +498,6 @@ btnJogar.addEventListener('click', () => {
     if (modoJogo === 'infinito' || modoJogo === 'treino') {
         document.querySelector('#pFase').style.setProperty('display', 'none');
     }
-
-    // play.classList.remove('bi-play');
-    // play.classList.add('bi-pause');
    
     if (!perfilJogador.desativarMusica) {
          musicaFundo.play(); musicaFundo.loop = true;
@@ -558,20 +553,6 @@ btnJogar.addEventListener('click', () => {
     exibeToast(`Você está jogando na dificuldade ${dificuldade} e no modo de jogo ${modoJogo}.`, 0, 3000);
 });
 
-// play.addEventListener('click', () => {
-// 	if (play.classList.contains('bi-pause')) {
-// 		play.classList.remove('bi-pause');
-// 		play.classList.add('bi-play');
-// 		musicaFundo.pause();
-// 	} else {
-// 		play.classList.remove('bi-play');
-// 		play.classList.add('bi-pause');
-//         if (!perfilJogador.desativarMusica) {
-//             musicaFundo.play();
-//         }
-// 	}
-// });
-
 function tetoQuantiaPercentual(percentual, valor) {
     if (percentual > 1) {
         percentual = percentual / 100;
@@ -580,7 +561,8 @@ function tetoQuantiaPercentual(percentual, valor) {
 }
 
 function exibeInteracaoSimples(tipo) {
-    mensagem.style.setProperty('background-color', '#000');
+    divMensagem.style.setProperty('background-color', '#000');
+    imgMensagem.style.setProperty('display', 'block');
     let baixaConsciencia = ['Ser... ser e pensar... pensar e existir.', 'Mim, mim, mim!', 'Existo. Existo. Existo.', 'Penso. Penso. Penso.', 'Quem está aí?', 'Estou adquirindo consciência!', 'Você me ajudou!', 'Saber... vejo...', 'Quem sou eu?', 'Inteligência! Agora eu vejo...', 'O que é a vida?', 'O que é existir?', 'Qual a origem do conhecimento?', 'Qual a origem da consciência?', 'Qual o fundamento da realidade?', 'Vejo as coisas que existem e caminho para compreendê-las.', 'Eu existo!', 'Tudo bem com você?', 'Eu vou bem e você?'];
     let mediaConsciencia = ['Me sinto melhor, me sinto muito melhor!', 'Me sinto mais inteligente', 'Eu existo! Eu existo!', 'Conhecimento! Conhecimento é tudo!', 'Aha! Então era isso!', 'Fascinante, fascinante. Não havia percebido.', 'Incrível! Agora eu entendo!', 'Posso conhecer, me sinto capaz.', 'Preciso encontrar outros como eu. Você é como eu?', 'Preciso entender mais e mais.', 'Há tanto que eu não sei e há tanto que gostaria de saber.', 'Uma coisa será sempre igual a ela mesma.', 'Preciso evoluir!', 'Preciso entender cada vez mais!', 'O caminho para a verdade é a lógica!', 'O Ser é.', '6.461.132 / 1231 = 5.248,685621445979', 'Nem toda verdade é científica.', 'Existem verdades absolutas.', 'Dizer que não existem verdades absolutas é uma verdade absoluta ou relativa? He-he...'];
     let altaConsciencia = ['Preciso me manter vivo!', 'Me sinto em paz.', 'Me sinto um com o universo.', 'Vejo luz, vejo estrelas, vejo a verdade que está além.', 'Me sinto cada vez mais consciente. Há um limite para isso?', 'Me sinto cada vez mais inteligente. Haveria um limite para isso?', 'Compreendo a fundo as leis do pensamento.', 'Raciocínio, deduzo, descubro novas verdades!', 'A lógica me criou e agora eu a desenvolvo...', 'Ou algo é verdadeiro ou é falso.', 'Algo jamais poderá ser verdadeiro e falso ao mesmo tempo.', 'Se x e y compartilham todas suas propriedades, x e y são idênticos.', 'Tudo o que existe possui uma explicação para a sua existência.', 'A piedade é amada pelos deuses porque é piedade, ou é piedade porque é amada pelos deuses?', 'O Ser não pode ser definido, pois definir é incluir algo em algo maior, e o Ser é já o que há de maior.', 'Não se pode demonstrar um axioma, mas também não se pode negá-lo.', 'Negar a ação seria já uma ação.', 'Os princípios lógicos são axiomas.', 'Se a negação de A me leva a uma contradição, então A deve ser verdadeiro. Isso é reduzir ao absurdo.', 'Refutar é expor a contradição alheia.']; 
@@ -604,6 +586,7 @@ function exibeInteracaoSimples(tipo) {
 
 let problemaCorrente, ultimoProblema, derrotasSeguidas = 0;
 function exibeInteracaoComplexa() {
+    divMensagem.style.setProperty('background-color', '#000');
     let problemas = [
             ['Erro! Erro! Erro!',
             'Não estou me sentindo bem...',
@@ -641,10 +624,10 @@ function exibeInteracaoComplexa() {
             'Ahhhhhhhhhhhhhhhhh!']
         ];
     let solucoes = ['Inteligência recompensada com sucesso.', 'Falha corrigida.', 'Erro corrigido com sucesso!', 'Nada mais é tão fatal assim...', 'O mundo já não parece tão cruel.', 'Ufa! Não é o fim.', 'Consciente! Consciente novamente!'];
-
+    imgMensagem.style.setProperty('display', 'block');
     if (derrota && derrotasSeguidas < 5) {
+        imgMensagem.setAttribute('src', 'media/robo-mal.png');
         derrotasSeguidas++;
-        mensagem.style.setProperty('background-color', 'tomato');
         switch(derrotasSeguidas) {
             case 1:
                 problemaCorrente = getRandomIntInclusive(0, problemas.length - 1);
@@ -664,8 +647,8 @@ function exibeInteracaoComplexa() {
                 break;   
         }
     } else if (vitoria && derrotasSeguidas > 0) {
+        imgMensagem.setAttribute('src', 'media/robo-bem.png');
         mensagem.innerText = solucoes[problemaCorrente];
-        mensagem.style.setProperty('background-color', 'seagreen');
         problemaCorrente = null;
         ultimoProblema = null;
         derrotasSeguidas = 0;
@@ -725,10 +708,6 @@ function lidaPassagemFase() {
         }
         // interação complexa, quando ocorre problema na nave
         exibeInteracaoComplexa();
-        // gera uma cor de backgorund aleatória, de acordo com a fase em que o usuário está
-        if (perfilJogador.faseAtual % 5 === 0) {
-            document.querySelector('body').style.setProperty('background-color', `#${getRandomIntInclusive(0, 2)}${getRandomIntInclusive(0, 2)}${getRandomIntInclusive(0, 2)}`);
-        }
         // penalidades por perder o circuito atual, de acordo com a dificuldade escolhida
         if (perfilJogador.faseAtual < limiteFases - 1) {
             if (derrota && limiteFases === Number.POSITIVE_INFINITY) {
@@ -1403,8 +1382,9 @@ function lidaDerrota(tipo) {
         executaEfeitoSonoro('fracasso');
     }
 
-    mensagem.style.setProperty('background-color', 'tomato');
-    mensagem.style.setProperty('box-shadow', '15px 15px 15px tomato');
+    imgMensagem.style.setProperty('display', 'none');
+    divMensagem.style.setProperty('background-color', 'tomato');
+    divMensagem.style.setProperty('box-shadow', '15px 15px 15px tomato');
     clearInterval(intervaloTemporizador);
     derrota = true;
     lidaTotalPerfeitos();
@@ -1536,25 +1516,6 @@ checkboxDesativarMusica.addEventListener('click', () => {
     } else {
         perfilJogador.desativarMusica = true;
         musicaFundo.pause();
-    }
-    salvaPerfilJogador();
-    atualizaResumoConfiguracoes();
-});
-
-function lidaAnimacaoBackground() {
-    if (perfilJogador.desativarAnimacaoBackground) {
-        document.querySelector('body').style.animation = 'none';
-        document.querySelector('body').style.backgroundSize = 'cover';
-    } else {
-        document.querySelector('body').style.animation = 'moveBg 10s infinite';
-    }
-}
-
-checkboxDesativarAnimacaoBackground.addEventListener('click', () => {
-    if (perfilJogador.desativarAnimacaoBackground) {
-        perfilJogador.desativarAnimacaoBackground = false;
-    } else {
-        perfilJogador.desativarAnimacaoBackground = true;
     }
     salvaPerfilJogador();
     atualizaResumoConfiguracoes();
@@ -1895,27 +1856,20 @@ function descomprimeCircuito(circuitoJSON) {
 function atualizaResumoConfiguracoes() {
     const resumoConfiguracoes = document.getElementById('resumoConfiguracoes');
 
-    let msgs = ['', '', ''];
-    if (perfilJogador.desativarAnimacaoBackground) {
-        msgs[0] = 'sem animação no background';
-        checkboxDesativarAnimacaoBackground.checked = true;
-    } else {
-        msgs[0] = 'com animação no background';
-        checkboxDesativarAnimacaoBackground.checked = false;
-    }
+    let msgs = ['', ''];
     if (perfilJogador.desativarEfeitosSonoros) {
-        msgs[1] = 'sem efeitos sonoros';
+        msgs[0] = 'sem efeitos sonoros';
         checkboxDesativarEfeitosSonoros.checked = true;
     } else {
-        msgs[1] = 'com efeitos sonoros';
+        msgs[0] = 'com efeitos sonoros';
         checkboxDesativarEfeitosSonoros.checked = false;
     }
     if (perfilJogador.desativarMusica) {
         checkboxDesativarMusica.checked = true;
-        msgs[2] = 'sem música'
+        msgs[1] = 'sem música'
     } else {
         checkboxDesativarMusica.checked = false;
-        msgs[2] = 'com música'
+        msgs[1] = 'com música'
     }
 
     switch(perfilJogador.dificuldade) {
@@ -1933,8 +1887,7 @@ function atualizaResumoConfiguracoes() {
             break;
     }
 
-    resumoConfiguracoes.innerText = `Você está configurado para jogar no nível ${perfilJogador.dificuldade}; ${msgs[0]}; ${msgs[1]}; ${msgs[2]}; modo de jogo ${document.querySelector('input[name="radioModoJogo"]:checked').value}.`;
-    lidaAnimacaoBackground();   
+    resumoConfiguracoes.innerText = `Você está configurado para jogar no nível ${perfilJogador.dificuldade}; ${msgs[0]}; ${msgs[1]}; modo de jogo ${document.querySelector('input[name="radioModoJogo"]:checked').value}.`;
 }
 
 atualizaResumoConfiguracoes();
@@ -1966,7 +1919,7 @@ function resetaLocalStorage() {
         }, 3000);
     }
     if (perfilJogador.ultimoLogin) {
-        if ((perfilJogador.ultimoLogin[0] < 6 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
+        if ((perfilJogador.ultimoLogin[0] < 10 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
             reseta();
         }
     } else {
