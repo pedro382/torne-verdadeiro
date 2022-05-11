@@ -508,24 +508,6 @@ a {
 	font-weight: bolder;
 }
 
-@keyframes moveBg {
-	0% {
-		background-position: 0% 0%;
-	}
-	50% {
-		background-position: 0% 50%;
-	}
-	75% {
-		background-position: 50% 75%;
-	}
-	90% {
-		background-position: 75% 50%;
-	}
-	100% {
-		background-position: 0% 0%;
-	}
-}
-
 #jogo {
 	display: flex;
 	flex-direction: column;
@@ -863,6 +845,10 @@ button:hover {
 		margin-top: .5rem;
 	}
 
+	#jogo, #output {
+		border-radius: 0rem 0rem 1rem 1rem;
+	}
+
 	#btnJogar, #btnVoltar {
 		font-size: var(--tamanhoLetra1);
 	}
@@ -875,7 +861,8 @@ button:hover {
 		width: 15px;
 	}
 
-	#pMusica, #pFase, #pDesempenho, .pGenerico {
+	.pGenerico {
+		background-color: transparent;
 		padding: .25rem;
 	}
 
@@ -917,11 +904,6 @@ button:hover {
 	.alinhamento-jogo {
 		flex-direction: column;
 	}
-
-	.pGenerico {
-		background-color: none;
-	}
-
 }
 
 .esconde {
