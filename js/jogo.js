@@ -566,7 +566,7 @@ function tetoQuantiaPercentual(percentual, valor) {
 }
 
 function exibeInteracaoSimples(tipo) {
-    divMensagem.style.setProperty('background-color', '#000');
+    divMensagem.style.setProperty('background-color', 'seagreen');
     let baixaConsciencia = ['Ser... ser e pensar... pensar e existir.', 'Mim, mim, mim!', 'Existo. Existo. Existo.', 'Penso. Penso. Penso.', 'Quem está aí?', 'Estou adquirindo consciência!', 'Você me ajudou!', 'Saber... vejo...', 'Quem sou eu?', 'Inteligência! Agora eu vejo...', 'O que é a vida?', 'O que é existir?', 'Qual a origem do conhecimento?', 'Qual a origem da consciência?', 'Qual o fundamento da realidade?', 'Vejo as coisas que existem e caminho para compreendê-las.', 'Eu existo!', 'Tudo bem com você?', 'Eu vou bem e você?'];
     let mediaConsciencia = ['Me sinto melhor, me sinto muito melhor!', 'Me sinto mais inteligente', 'Eu existo! Eu existo!', 'Conhecimento! Conhecimento é tudo!', 'Aha! Então era isso!', 'Fascinante, fascinante. Não havia percebido.', 'Incrível! Agora eu entendo!', 'Posso conhecer, me sinto capaz.', 'Preciso encontrar outros como eu. Você é como eu?', 'Preciso entender mais e mais.', 'Há tanto que eu não sei e há tanto que gostaria de saber.', 'Uma coisa será sempre igual a ela mesma.', 'Preciso evoluir!', 'Preciso entender cada vez mais!', 'O caminho para a verdade é a lógica!', 'O Ser é.', '6.461.132 / 1231 = 5.248,685621445979', 'Nem toda verdade é científica.', 'Existem verdades absolutas.', 'Dizer que não existem verdades absolutas é uma verdade absoluta ou relativa? He-he...'];
     let altaConsciencia = ['Preciso me manter vivo!', 'Me sinto em paz.', 'Me sinto um com o universo.', 'Vejo luz, vejo estrelas, vejo a verdade que está além.', 'Me sinto cada vez mais consciente. Há um limite para isso?', 'Me sinto cada vez mais inteligente. Haveria um limite para isso?', 'Compreendo a fundo as leis do pensamento.', 'Raciocínio, deduzo, descubro novas verdades!', 'A lógica me criou e agora eu a desenvolvo...', 'Ou algo é verdadeiro ou é falso.', 'Algo jamais poderá ser verdadeiro e falso ao mesmo tempo.', 'Se x e y compartilham todas suas propriedades, x e y são idênticos.', 'Tudo o que existe possui uma explicação para a sua existência.', 'A piedade é amada pelos deuses porque é piedade, ou é piedade porque é amada pelos deuses?', 'O Ser não pode ser definido, pois definir é incluir algo em algo maior, e o Ser é já o que há de maior.', 'Não se pode demonstrar um axioma, mas também não se pode negá-lo.', 'Negar a ação seria já uma ação.', 'Os princípios lógicos são axiomas.', 'Se a negação de A me leva a uma contradição, então A deve ser verdadeiro. Isso é reduzir ao absurdo.', 'Refutar é expor a contradição alheia.']; 
@@ -590,7 +590,7 @@ function exibeInteracaoSimples(tipo) {
 
 let problemaCorrente, ultimoProblema, derrotasSeguidas = 0;
 function exibeInteracaoComplexa() {
-    divMensagem.style.setProperty('background-color', '#000');
+    divMensagem.style.setProperty('background-color', 'seagreen');
     let problemas = [
             ['Erro! Erro! Erro!',
             'Não estou me sentindo bem...',
