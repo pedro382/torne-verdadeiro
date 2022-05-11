@@ -1457,7 +1457,7 @@ function exibeToast(mensagem, valor = -1, tempo = 5000) {
     if (valor > 0) {
         executaEfeitoSonoro('fogo-0');
         toast.innerText = `🔥 ${mensagem} 🔥`;
-    } else if (valor < 0) {
+    } else if (valor <= 0) {
         executaEfeitoSonoro('1');
         toast.innerText = mensagem;
     }
@@ -1912,7 +1912,7 @@ function resetaLocalStorage() {
         }, 3000);
     }
     if (perfilJogador.ultimoLogin) {
-        if ((perfilJogador.ultimoLogin[0] < 10 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
+        if ((perfilJogador.ultimoLogin[0] < 11 && perfilJogador.ultimoLogin[1] <= 5 && perfilJogador.ultimoLogin[2] <= 2022)) {
             reseta();
         }
     } else {
@@ -1928,20 +1928,20 @@ document.addEventListener('contextmenu', e => {
     e.preventDefault();
 });
 
-// document.onkeydown = function(e) {
-//     if (event.keyCode == 123) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-//         return false;
-//     }
-// }
+document.onkeydown = function(e) {
+    if (event.keyCode == 123) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+        return false;
+    }
+}

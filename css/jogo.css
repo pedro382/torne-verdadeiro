@@ -533,7 +533,7 @@ a {
 	justify-content: center;
 	background: rgba(0, 0, 0, .9);
 	overflow: hidden;
-	border-radius: 0rem 0rem 1rem 1rem;
+	border-radius: 1rem;
 	width: calc(var(--elementosPorColuna) * var(--dimensaoElemento));
 	font-size: var(--tamanhoLetra1);
 }
@@ -652,6 +652,7 @@ a {
 	text-transform: uppercase;
 	background-color: #000;
 	color: #fff;
+	border-radius: 1rem 1rem 0rem 0rem;
 }
 
 #circuito {
