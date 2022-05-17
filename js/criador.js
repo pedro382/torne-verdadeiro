@@ -8,7 +8,7 @@ window.addEventListener('load', () => {
 });
 
 const circuito = document.querySelector('#circuito');
-const solucaoPerfeita = document.querySelector('#solucaoPerfeita');
+const input = document.querySelector('#input');
 const output = document.querySelector('#output');
 
 const DIMENSAO_ELEMENTO = '35px';
@@ -32,9 +32,11 @@ for (let i = 0; i < QUANTIDADE_ELEMENTOS; i++) {
 // coloca os inputs de solução
 for (let i = 0; i < ELEMENTOS_POR_COLUNA; i++) {
 	const div = document.createElement('div');
-	div.classList.add('input-solucao-perfeita', 'input');
+	div.classList.add('input');
+	div.style.setProperty('background-color', 'tomato');
+	div.style.setProperty('color', '#fff');
 	div.innerText = 0;
-	solucaoPerfeita.appendChild(div); // input é a div com flexbox
+	input.appendChild(div); // input é a div com flexbox
 }
 
 const elementos = [... document.querySelectorAll('.elemento')];
@@ -398,16 +400,16 @@ for (let i = 0; i < espacosElementos.length; i++) {
 }
 
 // event listeners nos inputs de solução perfeita
-const inputsSolucaoPerfeita = document.querySelectorAll('.input-solucao-perfeita');
-for (let i = 0; i < inputsSolucaoPerfeita.length; i++) {
-	inputsSolucaoPerfeita[i].addEventListener('click', () => {
-		if (inputsSolucaoPerfeita[i].innerText === '0') {
-			inputsSolucaoPerfeita[i].innerText = '1';
-			inputsSolucaoPerfeita[i].style.setProperty('background-color', 'seagreen');
+const inputs = document.querySelectorAll('.input');
+for (let i = 0; i < inputs.length; i++) {
+	inputs[i].addEventListener('click', () => {
+		if (inputs[i].innerText === '0') {
+			inputs[i].innerText = '1';
+			inputs[i].style.setProperty('background-color', 'seagreen');
 			const music = new Audio('media/efeitos-sonoros/1.wav'); music.play(); music.loop = false;
 		} else {
-			inputsSolucaoPerfeita[i].innerText = '0';
-			inputsSolucaoPerfeita[i].style.setProperty('background-color', 'tomato');
+			inputs[i].innerText = '0';
+			inputs[i].style.setProperty('background-color', 'tomato');
 
 			const music = new Audio('media/efeitos-sonoros/0.wav'); music.play(); music.loop = false;
 		}
