@@ -405,7 +405,7 @@ btnJogar.addEventListener('click', () => {
     executaEfeitoSonoro('1');
     fechaDivsAbertura();
     jogoIniciou = true;
-    limiteFases = conjuntoExterno.length > 0 ? limiteFases : parseInt(document.querySelector('#limiteFases').value);
+    limiteFases = conjuntoExterno ? limiteFases : parseInt(document.querySelector('#limiteFases').value);
     if (limiteFases == 0 || !limiteFases) {
         limiteFases = Number.POSITIVE_INFINITY;
     }
@@ -1016,7 +1016,7 @@ function exibeEstrelas() {
         }
     }
 
-    gc.sendScore(valorPontuacao);
+    // gc.sendScore(valorPontuacao);
 	pontuacao.innerText = valorPontuacao;
 	estrelas.style.setProperty('display', 'block');
 
@@ -1926,24 +1926,24 @@ function resetaLocalStorage() {
 resetaLocalStorage();
 
 // impede o usuário de inspecionar o jogo
-document.addEventListener('contextmenu', e => {
-    e.preventDefault();
-});
+// document.addEventListener('contextmenu', e => {
+//     e.preventDefault();
+// });
 
-document.onkeydown = function(e) {
-    if (event.keyCode == 123) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-        return false;
-    }
-}
+// document.onkeydown = function(e) {
+//     if (event.keyCode == 123) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+//         return false;
+//     }
+// }
