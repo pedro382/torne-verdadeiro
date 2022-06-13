@@ -43,6 +43,8 @@ if (params.get('circuitos')) {
     limiteFases = conjuntoExterno.length;
 }
 
+let faseAtualConjuntoExterno = 0;
+
 let elementosLinhasPagina = ['linha-central-vertical', 'linha-central-horizontal', 'linha-lateral-direita', 'linha-lateral-esquerda', 'linha-recentralizadora-direita', 'linha-recentralizadora-esquerda', 'primeiro-canto', 'segundo-canto', 'terceiro-canto', 'quarto-canto', 'cruz', 'cruz-quebrada-direita', 'cruz-quebrada-esquerda', 't'];
 let elementosPortoesPagina = ['primeiro-and', 'segundo-and', 'primeiro-or', 'segundo-or', 'primeiro-nand', 'segundo-nand', 'primeiro-nor', 'segundo-nor', 'primeiro-xor', 'segundo-xor', 'primeiro-xnor', 'segundo-xnor'];
 const elementosPagina = document.querySelector('#elementosPagina');
@@ -404,7 +406,7 @@ btnJogar.addEventListener('click', () => {
     executaEfeitoSonoro('1');
     fechaDivsAbertura();
     jogoIniciou = true;
-    limiteFases = parseInt(document.querySelector('#limiteFases').value);
+    limiteFases = conjuntoExterno.length > 0 ? limiteFases : parseInt(document.querySelector('#limiteFases').value);
     if (limiteFases == 0 || !limiteFases) {
         limiteFases = Number.POSITIVE_INFINITY;
     }
@@ -550,7 +552,7 @@ btnJogar.addEventListener('click', () => {
     document.addEventListener('keypress', lidaTeclaPocoes);
 
 	if (conjuntoExterno) {
-        leCircuito(conjuntoExterno[0]);
+        leCircuito(conjuntoExterno[faseAtualConjuntoExterno]);
     } else {
         geracaoDinamicaFases();
     }
@@ -882,7 +884,7 @@ function proximaFase() {
     switch(modoJogo) {
         case 'progressivo':
             if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[perfilJogador.faseAtual]);
+                leCircuito(conjuntoExterno[++faseAtualConjuntoExterno]);
             } else {
                 // geração dinâmica de fases
                 geracaoDinamicaFases();
@@ -890,7 +892,7 @@ function proximaFase() {
             break;
         case 'infinito':
             if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[perfilJogador.faseAtual]);
+                leCircuito(conjuntoExterno[++faseAtualConjuntoExterno]);
             } else {
                 // geração dinâmica de fases
                 geracaoDinamicaFases();
@@ -898,7 +900,7 @@ function proximaFase() {
             break;
         case 'treino':
             if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[perfilJogador.faseAtual]);
+                leCircuito(conjuntoExterno[++faseAtualConjuntoExterno]);
             } else {
                 // geração dinâmica de fases
                 geracaoDinamicaFases();
@@ -1428,7 +1430,7 @@ for (let i = 0; i < inputs.length; i++) {
 			}
 			atualizaBateria();
 			if (conjuntoExterno) {
-                propaga(conjuntoExterno[perfilJogador.faseAtual].lista_elementos);
+                propaga(conjuntoExterno[0].lista_elementos);
             } else {
                 propaga(circuitoCriado.lista_elementos);
             }
@@ -1924,24 +1926,24 @@ function resetaLocalStorage() {
 resetaLocalStorage();
 
 // impede o usuário de inspecionar o jogo
-document.addEventListener('contextmenu', e => {
-    e.preventDefault();
-});
+// document.addEventListener('contextmenu', e => {
+//     e.preventDefault();
+// });
 
-document.onkeydown = function(e) {
-    if (event.keyCode == 123) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-        return false;
-    }
-    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-        return false;
-    }
-}
+// document.onkeydown = function(e) {
+//     if (event.keyCode == 123) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+//         return false;
+//     }
+// }
