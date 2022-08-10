@@ -834,42 +834,44 @@ document.addEventListener('keypress', (e) => {
 
 
 function geracaoDinamicaFases() {
-    let combinacoesBaseMolde;
-    function exploraCombinacoes() {
-        moldeAtual = getRandomIntInclusive(moldeInicial, alcanceMolde);
-        if (dificuldade === 'facil') {
-            combinacoesBaseMolde = obtemCombinacoesAleatoriasComBaseMolde(todosCircuitos[moldeAtual], 1);
-        } else {
-            combinacoesBaseMolde = obtemCombinacoesAleatoriasComBaseMolde(todosCircuitos[moldeAtual], 5);
+    if (!conjuntoExterno) {
+        let combinacoesBaseMolde;
+        function exploraCombinacoes() {
+            moldeAtual = getRandomIntInclusive(moldeInicial, alcanceMolde);
+            if (dificuldade === 'facil') {
+                combinacoesBaseMolde = obtemCombinacoesAleatoriasComBaseMolde(todosCircuitos[moldeAtual], 1);
+            } else {
+                combinacoesBaseMolde = obtemCombinacoesAleatoriasComBaseMolde(todosCircuitos[moldeAtual], 5);
+            }
         }
-    }
 
-    // impede que um circuito repetido apareça
-    if (combinacoesExploradas.length > 0) {
-        do {
+        // impede que um circuito repetido apareça
+        if (combinacoesExploradas.length > 0) {
+            do {
+                exploraCombinacoes();
+            } while(verificaSeCombinacoesJaForam(combinacoesBaseMolde[0], combinacoesBaseMolde[1], combinacoesExploradas));  
+        }  else {
             exploraCombinacoes();
-        } while(verificaSeCombinacoesJaForam(combinacoesBaseMolde[0], combinacoesBaseMolde[1], combinacoesExploradas));  
-    }  else {
-        exploraCombinacoes();
-    }
-
-    combinacoesExploradas.push(combinacoesBaseMolde);
-    circuitoCriado = criaCircuito(todosCircuitos[moldeAtual], combinacoesBaseMolde[0], combinacoesBaseMolde[1]);
-
-    if (modoJogo === 'progressivo') {
-        if (Math.floor((perfilJogador.faseAtual / 10)) > todosCircuitos.length - 1) {
-            alcanceMolde = todosCircuitos.length - 1;
-        } else {
-            alcanceMolde = Math.floor((perfilJogador.faseAtual / 10));
         }
-    } else {
-        alcanceMolde = todosCircuitos.length - 1;
-    }
 
-    if (circuitoCriado.solucoes_possiveis.length > 0) {
-        leCircuito(circuitoCriado);
-    } else {
-        exibeToast('O circuito gerado não possui soluções possíveis.', 0);
+        combinacoesExploradas.push(combinacoesBaseMolde);
+        circuitoCriado = criaCircuito(todosCircuitos[moldeAtual], combinacoesBaseMolde[0], combinacoesBaseMolde[1]);
+
+        if (modoJogo === 'progressivo') {
+            if (Math.floor((perfilJogador.faseAtual / 10)) > todosCircuitos.length - 1) {
+                alcanceMolde = todosCircuitos.length - 1;
+            } else {
+                alcanceMolde = Math.floor((perfilJogador.faseAtual / 10));
+            }
+        } else {
+            alcanceMolde = todosCircuitos.length - 1;
+        }
+
+        if (circuitoCriado.solucoes_possiveis.length > 0) {
+            leCircuito(circuitoCriado);
+        } else {
+            exibeToast('O circuito gerado não possui soluções possíveis.', 0);
+        }        
     }
 }
 
@@ -881,31 +883,12 @@ function proximaFase() {
     limpaEstrelas();
     temporizador();
 
-    switch(modoJogo) {
-        case 'progressivo':
-            if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[++faseAtualConjuntoExterno]);
-            } else {
-                // geração dinâmica de fases
-                geracaoDinamicaFases();
-            }
-            break;
-        case 'infinito':
-            if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[++faseAtualConjuntoExterno]);
-            } else {
-                // geração dinâmica de fases
-                geracaoDinamicaFases();
-            }
-            break;
-        case 'treino':
-            if (conjuntoExterno) {
-                leCircuito(conjuntoExterno[++faseAtualConjuntoExterno]);
-            } else {
-                // geração dinâmica de fases
-                geracaoDinamicaFases();
-            }
-            break;
+    if (conjuntoExterno) {
+        faseAtualConjuntoExterno++;
+        leCircuito(conjuntoExterno[faseAtualConjuntoExterno]);
+    } else {
+        // geração dinâmica de fases
+        geracaoDinamicaFases();
     }
 }
 
@@ -1430,7 +1413,7 @@ for (let i = 0; i < inputs.length; i++) {
 			}
 			atualizaBateria();
 			if (conjuntoExterno) {
-                propaga(conjuntoExterno[0].lista_elementos);
+                propaga(conjuntoExterno[faseAtualConjuntoExterno].lista_elementos);
             } else {
                 propaga(circuitoCriado.lista_elementos);
             }
@@ -1925,25 +1908,25 @@ function resetaLocalStorage() {
 
 resetaLocalStorage();
 
-// impede o usuário de inspecionar o jogo
-// document.addEventListener('contextmenu', e => {
-//     e.preventDefault();
-// });
+impede o usuário de inspecionar o jogo
+document.addEventListener('contextmenu', e => {
+    e.preventDefault();
+});
 
-// document.onkeydown = function(e) {
-//     if (event.keyCode == 123) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-//         return false;
-//     }
-//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-//         return false;
-//     }
-// }
+document.onkeydown = function(e) {
+    if (event.keyCode == 123) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+        return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+        return false;
+    }
+}
