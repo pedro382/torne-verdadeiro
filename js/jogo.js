@@ -1908,7 +1908,7 @@ function resetaLocalStorage() {
 
 resetaLocalStorage();
 
-impede o usuário de inspecionar o jogo
+// impede o usuário de inspecionar o jogo
 document.addEventListener('contextmenu', e => {
     e.preventDefault();
 });
