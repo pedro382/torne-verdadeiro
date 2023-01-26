@@ -1,3 +1,5 @@
+![Minha imagem](media/logo.png)
+
 # Torne Verdadeiro
 
 Este projeto consiste em um jogo educativo desenvolvido com HTML, CSS e JavaScript puro, para auxiliar no ensino de lógica de circuitos. O objetivo do jogo é ajudar os jogadores a compreender como os circuitos elétricos funcionam e como eles podem ser utilizados para resolver problemas lógicos.
