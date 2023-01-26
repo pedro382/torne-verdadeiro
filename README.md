@@ -31,4 +31,4 @@ Este projeto é um projeto open-source e qualquer contribuição é bem-vinda. S
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE.txt](LICENSE) para mais detalhes.
